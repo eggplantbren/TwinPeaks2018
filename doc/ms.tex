@@ -1,0 +1,46 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage[left=2cm, right=2cm, bottom=3cm, top=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{natbib}
+
+\newcommand{\bell}{\boldsymbol{\ell}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\given}{\,|\,}
+
+\title{TwinPeaks2018}
+\author{Brendon J. Brewer}
+%\date{}
+
+\begin{document}
+\maketitle
+
+%\abstract{\noindent Abstract}
+
+% Need this after the abstract
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
+
+The prior is $\pi(\btheta)$ and the scalars are
+$\left\{ f_i(\btheta) \right\}$
+for $i \in \{1, 2, ..., M\}$. In most examples $M$ will be 2.
+Consider a family of thresholded distributions, indexed by threshold
+values $\bell=\left\{\ell_i\right\}$, proportional to
+\begin{align}
+p(\btheta; \bell) &\propto
+    \pi(\btheta)
+    \prod_{i=1}^M \mathds{1}\left(f_i(\btheta) > \ell_i\right).
+\end{align}
+The normalising constant is the probability in the `upper right corner'
+(in 2D):
+\begin{align}
+X(\bell) &= \int_{f_i(\btheta) > \ell_i, \forall_i} \pi(\btheta) \, d\btheta
+\end{align}
+
+
+\end{document}
+
