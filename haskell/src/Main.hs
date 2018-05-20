@@ -4,11 +4,16 @@ module Main where
 --import Control.Monad.Primitive
 --import qualified Data.Text.IO as TIO
 --import System.IO
---import System.Random.MWC
---import TwinPeaks2018.Model
+import System.Random.MWC
+import TwinPeaks2018.Sampler
+import TwinPeaks2018.Model
 
 -- Main action obv.
 main :: IO ()
-main = do
+main = withSystemRandom . asGenIO $ \rng -> do
+
+    -- Generate a set of particles.
+    particles <- generateParticles 1000 trivialExampleModel rng
+
     return ()
 

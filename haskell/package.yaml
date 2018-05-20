@@ -20,7 +20,7 @@ category:            Science
 description:         Please see the README.
 
 dependencies:
-- base >= 4.7 && < 5
+    - base >= 4.7 && < 5
 
 library:
   source-dirs: lib
@@ -32,6 +32,7 @@ library:
     - primitive
     - text
     - transformers
+    - vector
 
 #  exposed-modules:
 #    - TwinPeaks2018.Scalar
