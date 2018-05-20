@@ -56,7 +56,7 @@ def ucc_grid(particles):
     return { "xx": xx, "yy": yy, "uccs": uccs}
 
 if __name__ == "__main__":
-    num_particles = 1
+    num_particles = 2
 
     # Particles and their real-valued UCCs
     particles = generate(num_particles)
@@ -65,14 +65,15 @@ if __name__ == "__main__":
 
     # Integer UCCs on a grid
     grid = ucc_grid(particles)
-    print((grid["uccs"] >= worst_ucc).sum()*0.005**2)
+#    print("Prior mass remaining:")
+#    print(1.0 - (grid["uccs"] >= worst_ucc).sum()*0.005**2)
 
     # Plot initial particles and grid
     plt.figure(figsize=(7, 6))
     plt.imshow(grid["uccs"], extent=[0.0, 1.0, 0.0, 1.0],
                cmap="Oranges")
     plt.scatter(particles["xs"], particles["ys"],
-                s=10.0*uccs, marker="o", color="k", alpha=0.5)
+                s=20.0*uccs, marker="o", color="k", alpha=0.5)
     plt.axis([0, 1, 0, 1])
     plt.show()
 
