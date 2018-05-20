@@ -27,8 +27,14 @@ library:
   ghc-options:
     - -O2
     - -Wall
-  exposed-modules:
-    - TwinPeaks2018.Scalar
+  dependencies:
+    - mwc-random
+    - primitive
+    - text
+    - transformers
+
+#  exposed-modules:
+#    - TwinPeaks2018.Scalar
 
 executables:
   Main:
