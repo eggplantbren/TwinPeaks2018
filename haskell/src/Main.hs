@@ -13,31 +13,33 @@ main :: IO ()
 main = withSystemRandom . asGenIO $ \rng -> do
 
     -- Do some MCMC exploration of the prior of the trivial example
-    let steps = 10000
     let model = trivialExampleModel
 
     TIO.putStrLn $ header model
 
     -- Initial position
-    x <- fromPrior model rng
-    TIO.putStrLn $ render model x
+    particle <- fromPrior model rng
 
     -- The MCMC loop
-    _ <- priorSteps steps x model rng
+    _ <- explorePrior 1000 particle model rng
 
     return ()
 
 
-priorSteps :: Int                   -- Number of steps to do
-           -> a                     -- Initial state
-           -> Model a               -- Model specification
-           -> Gen RealWorld         -- RNG
-           -> IO a                  -- Updated state
-priorSteps !k particle model rng
-    | k <= 0    = return particle
-    | otherwise = loop
-    where loop = do
-                     (particle', _) <- perturb model particle rng
+explorePrior :: Int                   -- Number of steps to do
+             -> a                     -- Initial state
+             -> Model a               -- Model specification
+             -> Gen RealWorld         -- RNG
+             -> IO a                  -- Updated state
+explorePrior !steps particle model rng
+    | steps <= 0 = do
                      TIO.putStrLn $ render model particle
-                     priorSteps (k-1) particle' model rng
+                     return particle
+    | otherwise  = loop
+      where loop = do
+                     TIO.putStrLn $ render model particle
+                     (proposal, logH) <- perturb model particle rng
+                     u <- uniform rng :: IO Double
+                     let particle' = if u < exp logH then proposal else particle
+                     explorePrior (steps-1) particle' model rng
 
