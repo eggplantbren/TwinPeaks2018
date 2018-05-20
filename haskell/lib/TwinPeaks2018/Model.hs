@@ -23,7 +23,10 @@ data Model a = Model
                    f         :: a -> Double,
                    g         :: a -> Double,
 
-                   -- Header for CSV file output
+                   -- Render to a text value for CSV output
+                   render    :: a -> T.Text,
+
+                   -- Header for CSV output
                    header    :: T.Text
                }
 
@@ -67,11 +70,15 @@ trivialExampleF = fst
 trivialExampleG :: (Double, Double) -> Double
 trivialExampleG = snd
 
+trivialExampleRender :: (Double, Double) -> T.Text
+trivialExampleRender (x, y) = T.pack $ show x ++ "," ++ show y
+
 trivialExampleHeader :: T.Text
 trivialExampleHeader = T.pack "x,y"
 
 -- The full model
-trivialExample :: Model (Double, Double)
-trivialExample = Model trivialExampleFromPrior trivialExamplePerturb
-                       trivialExampleF trivialExampleG trivialExampleHeader
+trivialExampleModel :: Model (Double, Double)
+trivialExampleModel = Model trivialExampleFromPrior trivialExamplePerturb
+                       trivialExampleF trivialExampleG trivialExampleRender
+                       trivialExampleHeader
 

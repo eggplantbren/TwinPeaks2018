@@ -48,6 +48,9 @@ executables:
     - -Wall
     dependencies:
     - TwinPeaks2018
+    - mwc-random
+    - primitive
+    - text
 
 tests:
   TwinPeaks2018-test:
