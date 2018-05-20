@@ -1,6 +1,7 @@
 module Main where
 
-import Lib
+-- Imports
+import TwinPeaks2018.Scalar
 
 main :: IO ()
 main = someFunc
