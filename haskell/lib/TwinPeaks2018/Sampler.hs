@@ -14,13 +14,25 @@ import System.Random.MWC
 import TwinPeaks2018.Model
 import TwinPeaks2018.Scalar
 
--- Represents particles and their metadata
+
+-- TYPES ------------------------
+
+-- Represents a collection of particles and their metadata
 data Particles a = Particles
                    {
                        particles :: !(V.Vector a),
                        fs        :: !(V.Vector Scalar),
                        gs        :: !(V.Vector Scalar)
                    }
+
+
+-- Represents the state of the sampler,
+-- with two collections of particles
+data SamplerState a = SamplerState
+                      {
+                          nsParticles     :: !(Particles a),
+                          shadowParticles :: !(Particles a)
+                      }
 
 
 -- Generate a bunch of particles from the prior
