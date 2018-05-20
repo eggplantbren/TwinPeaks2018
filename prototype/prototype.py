@@ -42,8 +42,8 @@ def ucc_grid(particles):
     Evaluate integer UCC on a grid
     """
     # The grid
-    xx = np.linspace(0.0, 1.0, 1001)
-    yy = np.linspace(0.0, 1.0, 1001)
+    xx = np.linspace(0.0, 1.0, 201)
+    yy = np.linspace(0.0, 1.0, 201)
     [xx, yy] = np.meshgrid(xx, yy[::-1])
 
     # Compute uccs
@@ -56,21 +56,23 @@ def ucc_grid(particles):
     return { "xx": xx, "yy": yy, "uccs": uccs}
 
 if __name__ == "__main__":
-    num_particles = 10
-    rng.seed(0)
+    num_particles = 5
 
     # Particles and their real-valued UCCs
     particles = generate(num_particles)
     uccs = compute_particle_uccs(particles)
+    worst_ucc = uccs.max()
 
     # Integer UCCs on a grid
     grid = ucc_grid(particles)
+    print((grid["uccs"] >= worst_ucc).sum()*0.005**2)
 
     # Plot initial particles and grid
     plt.figure(figsize=(7, 6))
-    plt.imshow(grid["uccs"], extent=[0.0, 1.0, 0.0, 1.0])
+    plt.imshow(grid["uccs"] < worst_ucc, extent=[0.0, 1.0, 0.0, 1.0],
+               cmap="Oranges")
     plt.scatter(particles["xs"], particles["ys"],
-                s=10.0*uccs, marker="o", color="w", alpha=0.5)
+                s=10.0*uccs, marker="o", color="k", alpha=0.5)
     plt.axis([0, 1, 0, 1])
     plt.show()
 
