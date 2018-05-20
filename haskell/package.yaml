@@ -53,12 +53,18 @@ executables:
     - text
 
 tests:
-  TwinPeaks2018-test:
-    main:                Spec.hs
+  ExplorePrior:
+    main:                ExplorePrior.hs
     source-dirs:         test
     ghc-options:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -O2
+    - -Wall
     dependencies:
     - TwinPeaks2018
+    - mwc-random
+    - primitive
+    - text
+
