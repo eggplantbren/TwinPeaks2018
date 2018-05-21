@@ -8,6 +8,7 @@ module TwinPeaks2018.Sampler where
 
 -- Imports
 import Control.Monad.Primitive
+import qualified Data.Text as T
 import qualified Data.Vector as V
 import System.IO
 import System.Random.MWC
@@ -63,4 +64,18 @@ generateParticles numParticles Model {..} rng = do
     putStrLn "done."
 
     return $! Particles {..}
+
+
+-- Nice text output of a Particles object
+particlesToText :: Particles a -> T.Text
+particlesToText Particles {..} =
+    let
+        fs' = V.map fst fs  -- Remove tiebreakers
+        gs' = V.map fst gs  -- Remove tiebreakers
+        scalars = V.toList $ V.zip fs' gs' -- Convert to pairs
+
+        -- Pair -> Text
+        toText (x, y) = T.pack $ show x ++ "," ++ show y ++ "\n"
+    in
+        T.concat $ map toText scalars
 
