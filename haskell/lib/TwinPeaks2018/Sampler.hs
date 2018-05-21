@@ -4,10 +4,13 @@
 
 {-# LANGUAGE RecordWildCards #-}
 
-module TwinPeaks2018.Sampler where
+module TwinPeaks2018.Sampler (generateSampler,
+                              samplerStateToText) where
 
 -- Imports
 import Control.Monad.Primitive
+import Control.Monad.Trans.Class
+import Control.Monad.Trans.Maybe
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import System.IO
@@ -39,14 +42,9 @@ data SamplerState a = SamplerState
 -- Generate a bunch of particles from the prior
 generateParticles :: Int
                   -> Model a
-                  -> Gen RealWorld -> IO (Particles a)
+                  -> Gen RealWorld
+                  -> IO (Particles a)
 generateParticles numParticles Model {..} rng = do
-
-    -- Create and print message
-    let message = "Generating " ++ show numParticles ++ " particles "
-                      ++ "from the prior..."
-    putStr message
-    hFlush stdout
 
     -- Generate the particles and evaluate the scalars
     particles <- V.replicateM numParticles (fromPrior rng)
@@ -61,9 +59,30 @@ generateParticles numParticles Model {..} rng = do
     let fs = V.zipWith (,) fEvals us1
     let gs = V.zipWith (,) gEvals us2
 
-    putStrLn "done."
-
     return $! Particles {..}
+
+
+-- Generate an initial SamplerState.
+generateSampler :: Int
+                -> Model a
+                -> Gen RealWorld
+                -> MaybeT IO (SamplerState a)
+generateSampler numParticles Model {..} rng
+    | numParticles <= 0 = MaybeT . return $ Nothing
+    | otherwise         = lift $ do
+
+        -- Create and print message
+        let message = "Generating initial sampler state\nwith "
+                         ++ show numParticles ++ " NS particles and "
+                         ++ show numParticles ++ " shadow particles..."
+        putStr message
+        hFlush stdout
+
+        nsParticles     <- generateParticles numParticles Model {..} rng
+        shadowParticles <- generateParticles numParticles Model {..} rng
+
+        putStrLn "done."
+        return $! SamplerState {..}
 
 
 -- Nice text output of a Particles object
@@ -78,4 +97,12 @@ particlesToText Particles {..} =
         toText (x, y) = T.pack $ show x ++ "," ++ show y ++ "\n"
     in
         T.concat $ map toText scalars
+
+
+
+-- Nice text output of a SamplerState object
+samplerStateToText :: SamplerState a -> T.Text
+samplerStateToText SamplerState {..} = T.append text1 text2 where
+    text1 = particlesToText nsParticles
+    text2 = particlesToText shadowParticles
 

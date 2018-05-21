@@ -52,6 +52,7 @@ executables:
     - mwc-random
     - primitive
     - text
+    - transformers
 
 tests:
   ExplorePrior:
