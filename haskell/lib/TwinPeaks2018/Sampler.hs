@@ -35,9 +35,12 @@ data Particles a = Particles
 data SamplerState a = SamplerState
                       {
                           nsParticles     :: !(Particles a),
-                          shadowParticles :: !(Particles a)
+                          shadowParticles :: !(Particles a),
+                          nsParticleUccs  :: !(V.Vector Scalar)
                       }
 
+
+-- FUNCTIONS AND ACTIONS ---------------------------
 
 -- Generate a bunch of particles from the prior
 generateParticles :: Int
@@ -56,8 +59,8 @@ generateParticles numParticles Model {..} rng = do
     us2 <- V.replicateM numParticles (uniform rng :: IO Double)
 
     -- Do the pairing
-    let fs = V.zipWith (,) fEvals us1
-    let gs = V.zipWith (,) gEvals us2
+    let fs = V.zip fEvals us1
+    let gs = V.zip gEvals us2
 
     return $! Particles {..}
 
@@ -81,9 +84,35 @@ generateSampler numParticles Model {..} rng
         nsParticles     <- generateParticles numParticles Model {..} rng
         shadowParticles <- generateParticles numParticles Model {..} rng
 
+        -- Partially applied function
+        let rawUcc fVal gVal = particleUcc fVal gVal shadowParticles
+        let rawUccs = V.zipWith rawUcc (fs nsParticles) (gs nsParticles)
+
+        -- Tiebreaker values for the UCCs
+        tieBreakers <- V.replicateM numParticles (uniform rng :: IO Double)
+        let nsParticleUccs = V.zip rawUccs tieBreakers
+
         putStrLn "done."
         return $! SamplerState {..}
 
+
+-- Evaluating this function computes the raw UCC at a given position
+particleUcc :: Scalar
+            -> Scalar
+            -> Particles a          -- The shadow particles
+            -> Double
+particleUcc f g (Particles _ fs gs) =
+    let
+        -- Whether each of the fs and gs is in
+        -- the upper right rectangle of (f, g)
+        upperRight :: V.Vector Bool
+        upperRight = V.zipWith (\f' g' -> (f' > f && g' > g)) fs gs
+
+        toDouble :: Bool -> Double
+        toDouble b = if b then 1.0 else 0.0
+    in
+        V.foldl' (\acc u -> acc + toDouble u) 0.0 upperRight
+        
 
 -- Nice text output of a Particles object
 particlesToText :: Particles a -> T.Text
@@ -99,10 +128,10 @@ particlesToText Particles {..} =
         T.concat $ map toText scalars
 
 
-
 -- Nice text output of a SamplerState object
 samplerStateToText :: SamplerState a -> T.Text
 samplerStateToText SamplerState {..} = T.append text1 text2 where
     text1 = particlesToText nsParticles
     text2 = particlesToText shadowParticles
+
 
