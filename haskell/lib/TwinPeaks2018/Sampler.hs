@@ -114,24 +114,35 @@ particleUcc f g (Particles _ fs gs) =
         V.foldl' (\acc u -> acc + toDouble u) 0.0 upperRight
         
 
--- Nice text output of a Particles object
-particlesToText :: Particles a -> T.Text
-particlesToText Particles {..} =
-    let
-        fs' = V.map fst fs  -- Remove tiebreakers
-        gs' = V.map fst gs  -- Remove tiebreakers
-        scalars = V.toList $ V.zip fs' gs' -- Convert to pairs
-
-        -- Pair -> Text
-        toText (x, y) = T.pack $ show x ++ "," ++ show y ++ "\n"
-    in
-        T.concat $ map toText scalars
-
 
 -- Nice text output of a SamplerState object
 samplerStateToText :: SamplerState a -> T.Text
-samplerStateToText SamplerState {..} = T.append text1 text2 where
-    text1 = particlesToText nsParticles
-    text2 = particlesToText shadowParticles
+samplerStateToText SamplerState {..} =
+    let
+        -- NS particles first
+        fs' = V.map fst (fs nsParticles)  -- Remove tiebreakers
+        gs' = V.map fst (gs nsParticles)  -- Remove tiebreakers
+
+        -- Shadow particles
+        fs'' = V.map fst (fs shadowParticles)
+        gs'' = V.map fst (gs shadowParticles)
+
+        -- Combined
+        fsAll = V.concat [fs', fs'']
+        gsAll = V.concat [gs', gs'']
+
+        -- Pad UCCs with -1s for the shadow particles
+        rawUccsAll = V.concat [V.map fst nsParticleUccs,
+                               V.replicate (V.length nsParticleUccs) (-1.0)]
+
+        -- As triples
+        triples = V.zip3 fsAll gsAll rawUccsAll
+
+        -- Triple -> Text
+        toText (x, y, z) = T.pack $ show x ++ "," ++
+                                    show y ++ "," ++
+                                    (if z==(-1.0) then "NA" else show z) ++ "\n"
+    in
+        T.concat . V.toList $ V.map toText triples
 
 
