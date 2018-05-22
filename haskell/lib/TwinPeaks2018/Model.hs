@@ -55,10 +55,10 @@ trivialExamplePerturb (x, y) rng = do
     choice <- uniformR (0, 1) rng :: IO Int
     (xNew, yNew) <- case choice of
           0 -> do
-                 x' <- trivialExampleWrap <$> (x + ) <$> randh rng
+                 x' <- trivialExampleWrap . (x + ) <$> randh rng
                  return (x', y)
           1 -> do
-                 y' <- trivialExampleWrap <$> (y + ) <$> randh rng
+                 y' <- trivialExampleWrap . (y + ) <$> randh rng
                  return (x, y')
           _ -> return (x, y)
     return ((xNew, yNew), 0.0)
