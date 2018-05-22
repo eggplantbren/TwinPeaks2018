@@ -14,20 +14,20 @@ import TwinPeaks2018.Utils
 data Model a = Model
                {
                    -- Generate from the prior
-                   fromPrior :: Gen RealWorld -> IO a,
+                   fromPrior :: !(Gen RealWorld -> IO a),
 
                    -- Metropolis proposal
-                   perturb   :: a -> Gen RealWorld -> IO (a, Double),
+                   perturb   :: !(a -> Gen RealWorld -> IO (a, Double)),
 
                    -- The scalars
-                   f         :: a -> Double,
-                   g         :: a -> Double,
+                   f         :: !(a -> Double),
+                   g         :: !(a -> Double),
 
                    -- Render to a text value for CSV output
-                   render    :: a -> T.Text,
+                   render    :: !(a -> T.Text),
 
                    -- Header for CSV output
-                   header    :: T.Text
+                   header    :: !(T.Text)
                }
 
 
