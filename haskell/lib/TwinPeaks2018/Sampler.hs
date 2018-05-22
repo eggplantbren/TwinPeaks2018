@@ -5,7 +5,8 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module TwinPeaks2018.Sampler (generateSampler,
-                              samplerStateToText) where
+                              samplerStateToText,
+                              SamplerState(..)) where
 
 -- Imports
 import Control.Monad.Primitive
