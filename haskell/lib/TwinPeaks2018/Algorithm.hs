@@ -14,7 +14,7 @@ import Control.Monad
 import Control.Monad.Primitive
 import qualified Data.Text.IO as TIO
 import qualified Data.Vector as V
-import qualified Data.Vector.Mutable as VM
+--import qualified Data.Vector.Mutable as VM
 import System.IO
 import System.Random.MWC
 import TwinPeaks2018.Model
@@ -54,8 +54,10 @@ update sampler@SamplerState {..} rng = do
     iCopy <- chooseCopy iKill numParticles rng
 
     -- Generate replacement particle
-    replacement <- refresh 1000 (nsParticles V.! iCopy)
-                                theModel rng
+    putStr "    Doing MCMC..."
+    hFlush stdout
+    replacement <- refresh 10000 iKill (nsParticles V.! iCopy) sampler rng
+    putStrLn "done."
 
     -- Close output file
     hClose h
@@ -73,14 +75,48 @@ saveParticle :: Particle a
 saveParticle Particle {..} Model {..} h = TIO.hPutStrLn h $ render coords
 
 
--- Refresh a particle
+-- Refresh a particle using 'steps' metropolis steps
 refresh :: Int
+        -> Int
         -> Particle a
-        -> Model a
+        -> SamplerState a
         -> Gen RealWorld
         -> IO (Particle a)
-refresh steps !particle theModel rng
+refresh steps iKill !particle@(Particle coords fValue gValue uccTb)
+        SamplerState {..} rng
     | steps == 0 = return particle
     | otherwise  = do
-                     refresh (steps-1) particle theModel rng
+                     -- Single ' denotes proposed
+                     -- Double '' denotes actual new state
+                     (coords', logH) <- perturb theModel coords rng
+                     u <- uniform rng :: IO Double
+                     if u >= exp logH then return particle -- Pre-reject
+                     else do
+                            -- Getter for the UCC tiebreaker of a particle
+                            let getUccTiebreaker (Particle _ _ _ t) = t
+
+                            -- Tiebreaker proposals
+                            tbf' <- trivialExampleWrap . (snd fValue + )
+                                                    <$> randh rng
+                            tbg' <- trivialExampleWrap . (snd gValue + )
+                                                    <$> randh rng
+                            tbucc' <- trivialExampleWrap . (uccTb + )
+                                                    <$> randh rng
+                            let fValue' = (f theModel coords', tbf')
+                            let gValue' = (g theModel coords', tbg')
+                            let ucc' = particleUcc
+                                           fValue' gValue' shadowParticles
+
+                            let uccPair' = (ucc', tbucc')
+                            let threshold = (nsParticleUccs V.! iKill,
+                                                getUccTiebreaker $
+                                                    nsParticles V.! iKill)
+
+                            let particle'' = if uccPair' < threshold
+                                             then Particle coords'
+                                                       fValue' gValue' tbucc'
+                                             else particle
+
+                            refresh (steps-1) iKill particle''
+                                        SamplerState {..} rng
 

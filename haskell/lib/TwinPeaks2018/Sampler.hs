@@ -7,6 +7,7 @@
 module TwinPeaks2018.Sampler (generateSampler,
                               samplerStateToText,
                               Particle(..),
+                              particleUcc,
                               SamplerState(..)) where
 
 -- Imports
@@ -28,7 +29,8 @@ data Particle a = Particle
                   {
                       coords :: !a,
                       fValue :: !Scalar,
-                      gValue :: !Scalar
+                      gValue :: !Scalar,
+                      uccTiebreaker :: !Double
                   }
 
 -- A collection of particles
@@ -43,7 +45,7 @@ data SamplerState a = SamplerState
                           numParticles    :: !Int,
                           nsParticles     :: !(Particles a),
                           shadowParticles :: !(Particles a),
-                          nsParticleUccs  :: !(V.Vector Scalar)
+                          nsParticleUccs  :: !(V.Vector Int)
                       }
 
 
@@ -52,11 +54,11 @@ data SamplerState a = SamplerState
 -- Extraction of scalars from a collection of particles
 getFValues :: Particles a
            -> V.Vector Scalar
-getFValues = V.map (\(Particle _ f _ ) -> f)
+getFValues = V.map (\(Particle _ f _ _) -> f)
 
 getGValues :: Particles a
            -> V.Vector Scalar
-getGValues = V.map (\(Particle _ _ g ) -> g)
+getGValues = V.map (\(Particle _ _ g _) -> g)
 
 
 -- Generate a bunch of particles from the prior
@@ -71,16 +73,17 @@ generateParticles num Model {..} rng = do
     let fEvals = V.map f coords
     let gEvals = V.map g coords
 
-    -- Need tiebreakers to pair with the scalars
+    -- Need tiebreakers to pair with the scalars and the UCCs
     us1 <- V.replicateM num (uniform rng :: IO Double)
     us2 <- V.replicateM num (uniform rng :: IO Double)
+    tbs <- V.replicateM num (uniform rng :: IO Double)
 
     -- Do the pairing
     let fs = V.zip fEvals us1
     let gs = V.zip gEvals us2
 
-    return $! V.zipWith3 (\c fVal gVal -> Particle c fVal gVal)
-                         coords fs gs
+    return $! V.zipWith4 (\c fVal gVal tb -> Particle c fVal gVal tb)
+              coords fs gs tbs
 
 
 
@@ -88,7 +91,7 @@ generateParticles num Model {..} rng = do
 particleUcc :: Scalar
             -> Scalar
             -> Particles a          -- The shadow particles
-            -> Double
+            -> Int
 particleUcc f g shadowParticles =
     let
         -- Grab f and g values of shadow particles
@@ -100,10 +103,10 @@ particleUcc f g shadowParticles =
         upperRight :: V.Vector Bool
         upperRight = V.zipWith (\f' g' -> (f' > f && g' > g)) fs gs
 
-        toDouble :: Bool -> Double
-        toDouble b = if b then 1.0 else 0.0
+        toInt :: Bool -> Int
+        toInt b = if b then 1 else 0
     in
-        V.foldl' (\acc u -> acc + toDouble u) 0.0 upperRight
+        V.foldl' (\acc u -> acc + toInt u) 0 upperRight
 
 
 
@@ -130,16 +133,12 @@ generateSampler numParticles Model {..} rng
         shadowParticles <- generateParticles numParticles Model {..} rng
 
         -- Partially applied function
-        let rawUcc fVal gVal = particleUcc fVal gVal shadowParticles
+        let ucc fVal gVal = particleUcc fVal gVal shadowParticles
 
         -- Grab f and g values of shadow particles
         let fs = getFValues shadowParticles
         let gs = getGValues shadowParticles
-        let rawUccs = V.zipWith rawUcc fs gs
-
-        -- Tiebreaker values for the UCCs
-        tieBreakers <- V.replicateM numParticles (uniform rng :: IO Double)
-        let nsParticleUccs = V.zip rawUccs tieBreakers
+        let nsParticleUccs = V.zipWith ucc fs gs
 
         putStrLn "done."
         putStrLn "done.\n"
@@ -165,8 +164,8 @@ samplerStateToText SamplerState {..} =
         gsAll = V.concat [gs', gs'']
 
         -- Pad UCCs with -1s for the shadow particles
-        rawUccsAll = V.concat [V.map fst nsParticleUccs,
-                               V.replicate (V.length nsParticleUccs) (-1.0)]
+        rawUccsAll = V.concat [nsParticleUccs,
+                               V.replicate numParticles (-1)]
 
         -- As triples
         triples = V.zip3 fsAll gsAll rawUccsAll
@@ -174,7 +173,7 @@ samplerStateToText SamplerState {..} =
         -- Triple -> Text
         toText (x, y, z) = T.pack $ show x ++ "," ++
                                     show y ++ "," ++
-                                    (if z==(-1.0) then "NA" else show z) ++ "\n"
+                                    (if z==(-1) then "NA" else show z) ++ "\n"
     in
         T.concat . V.toList $ V.map toText triples
 
