@@ -37,7 +37,7 @@ update sampler@SamplerState {..} rng = do
 
     -- Which particle to kill
     let iKill = findWorst sampler
-    let  kill = particles nsParticles V.! iKill
+    let  kill = nsParticles V.! iKill
 
     -- Open the output file
     h <- openFile "output/output.csv" $ if iteration==0
@@ -53,7 +53,7 @@ update sampler@SamplerState {..} rng = do
     copy <- chooseCopy iKill numParticles rng
 
     -- Generate replacement particle
-    replacement <- refresh nsparticles rng
+--    replacement <- refresh nsparticles rng
 
     -- Close output file
     hClose h
@@ -64,9 +64,9 @@ update sampler@SamplerState {..} rng = do
 
 
 -- Write a particle to disk
-saveParticle :: a
+saveParticle :: Particle a
              -> Model a
              -> Handle
              -> IO ()
-saveParticle particle Model {..} h = TIO.hPutStrLn h $ render particle
+saveParticle Particle {..} Model {..} h = TIO.hPutStrLn h $ render coords
 
