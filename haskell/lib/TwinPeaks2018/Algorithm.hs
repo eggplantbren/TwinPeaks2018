@@ -7,14 +7,14 @@
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module TwinPeaks2018.Algorithm (update) where
+module TwinPeaks2018.Algorithm (nestedSampling) where
 
 -- Imports
 import Control.Monad
 import Control.Monad.Primitive
 import qualified Data.Text.IO as TIO
 import qualified Data.Vector as V
---import qualified Data.Vector.Mutable as VM
+import qualified Data.Vector.Mutable as VM
 import System.IO
 import System.Random.MWC
 import TwinPeaks2018.Model
@@ -24,6 +24,13 @@ import TwinPeaks2018.Utils
 -- Find the index of the worst particle
 findWorst :: SamplerState a -> Int
 findWorst SamplerState {..} = V.maxIndex nsParticleUccs
+
+nestedSampling :: Int -> SamplerState a -> Gen RealWorld -> IO (SamplerState a)
+nestedSampling steps sampler rng
+    | steps == 0 = return sampler
+    | otherwise  = do
+                       sampler' <- update sampler rng
+                       nestedSampling (steps-1) sampler' rng
 
 -- One iteration of Nested Sampling
 update :: SamplerState a
@@ -59,11 +66,26 @@ update sampler@SamplerState {..} rng = do
     replacement <- refresh 10000 iKill (nsParticles V.! iCopy) sampler rng
     putStrLn "done."
 
+    -- Do the replacement
+    mvec <- V.unsafeThaw nsParticles
+    _ <- VM.write mvec iKill replacement
+    nsParticles' <- V.unsafeFreeze mvec
+
+    -- Do replacement of Particle UCC
+    mvec2 <- V.unsafeThaw nsParticleUccs
+    let uccOf (Particle _ f g _) = particleUcc f g shadowParticles
+    _ <- VM.write mvec2 iKill $ uccOf replacement
+    nsParticleUccs' <- V.unsafeFreeze mvec2
+
+    -- Create new sampler
+    let sampler' = SamplerState theModel iteration' numParticles
+                                nsParticles' shadowParticles nsParticleUccs'
+
     -- Close output file
     hClose h
     putStrLn "done.\n"
 
-    return $! sampler
+    return $! sampler'
 
 
 

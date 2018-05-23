@@ -1,6 +1,7 @@
 module Main where
 
 -- Imports
+import Control.Monad
 import Control.Monad.Trans.Maybe
 import System.Random.MWC
 import TwinPeaks2018.Algorithm
@@ -18,7 +19,7 @@ main = withSystemRandom . asGenIO $ \rng -> do
     case maybeSampler of
         Nothing -> putStrLn "Error creating sampler."
         Just s  -> do
-                     _ <- update s rng
+                     _ <- nestedSampling 2000 s rng
                      return ()
     return ()
 
