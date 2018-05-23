@@ -78,6 +78,13 @@ D_{\rm KL}\left(p(x; x^*) \,||\, p_{\rm NS}\right)
 Do a change of variables to make $X$ the integrand. Its prior is uniform
 because $X$ is a cumulative probability.
 
+\begin{align}
+D_{\rm KL}\left(p(x; x^*) \,||\, p_{\rm NS}\right)
+    &= \log C + \int_{0}^{X^*} \frac{1}{X^*}
+            \log \left[\frac{X}{X^*}\right] \, dX
+\end{align}
+
+
 \section{Nested Sampling distribution --- TwinPeaks case}
 
 Consider the following distribution:
