@@ -13,6 +13,7 @@ import Control.Monad
 import Control.Monad.Primitive
 import qualified Data.Text.IO as TIO
 import qualified Data.Vector as V
+import qualified Data.Vector.Mutable as VM
 import System.IO
 import System.Random.MWC
 import TwinPeaks2018.Model
@@ -22,10 +23,6 @@ import TwinPeaks2018.Utils
 -- Find the index of the worst particle
 findWorst :: SamplerState a -> Int
 findWorst SamplerState {..} = V.maxIndex nsParticleUccs
-
-
-
-
 
 -- One iteration of Nested Sampling
 update :: SamplerState a
@@ -51,11 +48,12 @@ update sampler@SamplerState {..} rng = do
 
     -- Write that particle to disk
     saveParticle kill theModel h
-    saveParticle kill theModel h
-
 
     -- Choose copy to replace it with
     copy <- chooseCopy iKill numParticles rng
+
+    -- Generate replacement particle
+    replacement <- refresh nsparticles rng
 
     -- Close output file
     hClose h
