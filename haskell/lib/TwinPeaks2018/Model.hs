@@ -27,7 +27,7 @@ data Model a = Model
                    render    :: !(a -> T.Text),
 
                    -- Header for CSV output
-                   header    :: !(T.Text)
+                   header    :: !T.Text
                }
 
 

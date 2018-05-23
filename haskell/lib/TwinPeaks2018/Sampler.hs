@@ -5,6 +5,7 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module TwinPeaks2018.Sampler (generateSampler,
+                              particles,
                               samplerStateToText,
                               SamplerState(..)) where
 
@@ -35,6 +36,9 @@ data Particles a = Particles
 -- with two collections of particles
 data SamplerState a = SamplerState
                       {
+                          theModel        :: !(Model a),
+                          iteration       :: !Int,
+                          numParticles    :: !Int,
                           nsParticles     :: !(Particles a),
                           shadowParticles :: !(Particles a),
                           nsParticleUccs  :: !(V.Vector Scalar)
@@ -76,11 +80,14 @@ generateSampler numParticles Model {..} rng
     | otherwise         = lift $ do
 
         -- Create and print message
-        let message = "Generating initial sampler state\nwith "
+        putStrLn "Generating initial sampler state..."
+        putStr $ "    Generating "
                          ++ show numParticles ++ " NS particles and "
                          ++ show numParticles ++ " shadow particles..."
-        putStr message
         hFlush stdout
+
+        let iteration = 0
+        let theModel = Model {..}
 
         nsParticles     <- generateParticles numParticles Model {..} rng
         shadowParticles <- generateParticles numParticles Model {..} rng
@@ -94,6 +101,7 @@ generateSampler numParticles Model {..} rng
         let nsParticleUccs = V.zip rawUccs tieBreakers
 
         putStrLn "done."
+        putStrLn "done.\n"
         return $! SamplerState {..}
 
 

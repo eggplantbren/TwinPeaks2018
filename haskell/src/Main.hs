@@ -2,8 +2,8 @@ module Main where
 
 -- Imports
 import Control.Monad.Trans.Maybe
-import qualified Data.Text.IO as TIO
 import System.Random.MWC
+import TwinPeaks2018.Algorithm
 import TwinPeaks2018.Sampler
 import TwinPeaks2018.Model
 
@@ -17,6 +17,8 @@ main = withSystemRandom . asGenIO $ \rng -> do
     -- If it succeeded, print particle scalars
     case maybeSampler of
         Nothing -> putStrLn "Error creating sampler."
-        Just s  -> TIO.putStrLn $ samplerStateToText s
+        Just s  -> do
+                     _ <- update s rng
+                     return ()
     return ()
 
