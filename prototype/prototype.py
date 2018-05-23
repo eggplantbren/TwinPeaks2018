@@ -93,11 +93,13 @@ class Sampler:
             self.shadow_particles[i, :] = particle
             self.shadow_tbs[i] = tb
 
+        self.calculate_uccs()
+
         return result
 
     def explore(self, particle, tb, ucc, threshold):
 
-        for i in range(1000):
+        for i in range(100):
             proposal = particle.copy()
             proposal[0] = dnest4.wrap(proposal[0] + dnest4.randh(), 0.0, 1.0)
             proposal[1] = dnest4.wrap(proposal[1] + dnest4.randh(), 0.0, 1.0)
@@ -117,7 +119,7 @@ if __name__ == "__main__":
 
 #    plt.scatter(sampler.shadow_particles[:,0], sampler.shadow_particles[:,1],
 #                marker="o", color="k", alpha=0.2)
-    for i in range(0, 500):
+    for i in range(0, 1000):
         result = sampler.update()
         plt.scatter(result[0], result[1], marker=".", color="r", alpha=0.3)
         print(i+1)
