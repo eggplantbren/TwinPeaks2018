@@ -4,6 +4,7 @@
     that update a SamplerState, and so on.
 -}
 
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE RecordWildCards #-}
 
 module TwinPeaks2018.Algorithm (update) where
@@ -50,10 +51,11 @@ update sampler@SamplerState {..} rng = do
     saveParticle kill theModel h
 
     -- Choose copy to replace it with
-    copy <- chooseCopy iKill numParticles rng
+    iCopy <- chooseCopy iKill numParticles rng
 
     -- Generate replacement particle
---    replacement <- refresh nsparticles rng
+    replacement <- refresh 1000 (nsParticles V.! iCopy)
+                                theModel rng
 
     -- Close output file
     hClose h
@@ -69,4 +71,16 @@ saveParticle :: Particle a
              -> Handle
              -> IO ()
 saveParticle Particle {..} Model {..} h = TIO.hPutStrLn h $ render coords
+
+
+-- Refresh a particle
+refresh :: Int
+        -> Particle a
+        -> Model a
+        -> Gen RealWorld
+        -> IO (Particle a)
+refresh steps !particle theModel rng
+    | steps == 0 = return particle
+    | otherwise  = do
+                     refresh (steps-1) particle theModel rng
 
