@@ -48,6 +48,38 @@ D_{\rm KL}\left(p(x, y; x^*, y^*) \,||\, \pi(x, y)\right) &=
 \end{align}
 
 \section{Nested Sampling distribution}
+Consider the one-scalar situation (i.e., $f(x) \equiv$ log likelihood),
+which is the case in standard NS. The Nested Sampling distribution is
+\begin{align}
+p_{\rm NS}(x) &= \frac{\pi(x)}{C X(x)}.
+\end{align}
+This is the distribution that `stretches out' the prior (which is a
+reflected exponential for $\ln X$) into a uniform distribution for $\ln X$.
+\begin{align}
+p_{\rm NS}(x) &= \frac{\pi(x)}{C X(x)}.
+\end{align}
+
+The KL divergence from $p_{\rm NS}$ to a constrained distribution
+$p(x; x^*) = \pi(x)\mathds{1}(x > x^*)/X(x^*)$ is
+\begin{align}
+D_{\rm KL}\left(p(x; x^*) \,||\, p_{\rm NS}\right)
+    &= \int p(x; x^*)
+            \log \left[\frac{p_{\rm NS}}{p_{\rm NS}}\right] \, dx \\
+    &= \int \pi(x)\mathds{1}(x > x^*)/X(x^*)
+            \log \left[\frac{\pi(x)\mathds{1}(x > x^*)/X(x^*)}
+                            {\frac{\pi(x)}{C X(x)}}\right] \, dx \\
+    &= \int \pi(x)\mathds{1}(x > x^*)/X(x^*)
+            \log \left[\frac{\pi(x)\mathds{1}(x > x^*)/X(x^*)}
+                            {\frac{\pi(x)}{C X(x)}}\right] \, dx \\
+    &= \log C + \int_{x^*}^{\infty} \frac{\pi(x)}{X(x^*)}
+            \log \left[\frac{X(x)}{X(x^*)}\right] \, dx
+\end{align}
+
+Do a change of variables to make $X$ the integrand. Its prior is uniform
+because $X$ is a cumulative probability.
+
+\section{Nested Sampling distribution --- TwinPeaks case}
+
 Consider the following distribution:
 \begin{align}
 p_{\rm NS}(x, y) &= \frac{\pi(x, y)}{C X(x, y)}.
