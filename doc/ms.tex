@@ -26,20 +26,57 @@
 \setlength{\parskip}{8pt}
 
 The prior is $\pi(\btheta)$ and the scalars are
-$\left\{ f_i(\btheta) \right\}$
-for $i \in \{1, 2, ..., M\}$. In most examples $M$ will be 2.
+$f(\btheta)$ and $g(\btheta)$. Letting $x=f(\btheta)$ and $y=g(\btheta)$,
+the implied prior for $x$ and $y$ will be written $\pi(x, y)$.
+
 Consider a family of thresholded distributions, indexed by threshold
-values $\bell=\left\{\ell_i\right\}$, proportional to
+values $(x^*, y^*)$, given by
 \begin{align}
-p(\btheta; \bell) &\propto
-    \pi(\btheta)
-    \prod_{i=1}^M \mathds{1}\left(f_i(\btheta) > \ell_i\right).
+p(x, y; x^*, y^*) &= \frac{\pi(x, y)\mathds{1}(x > x^*, y > y^*)}
+                          {X(x^*, y^*)}
 \end{align}
-The normalising constant is the probability in the `upper right corner'
-(in 2D):
+The normalising constant is the probability in the `upper right corner':
 \begin{align}
-X(\bell) &= \int_{f_i(\btheta) > \ell_i, \forall_i} \pi(\btheta) \, d\btheta
+X(x^*, y^*) &= \int_{y^*}^{\infty} \int_{x^*}^{\infty} \pi(x, y) \, dx \, dy.
 \end{align}
+
+The Kullback-Leibler divergence from the prior to a thresholded distribution
+is
+\begin{align}
+D_{\rm KL}\left(p(x, y; x^*, y^*) \,||\, \pi(x, y)\right) &=
+    \log X(x^*, y^*).
+\end{align}
+
+\section{Nested Sampling distribution}
+Consider the following distribution:
+\begin{align}
+p_{\rm NS}(x, y) &= \frac{\pi(x, y)}{C X(x, y)}.
+\end{align}
+Compared to the prior $\pi$, this puts more weight at high values of
+$x$ and $y$.
+
+The KL divergence from $p_{\rm NS}$ to $p(x, y ; x^*, y^*)$ is
+\begin{align}
+D_{\rm KL}\left(p(x, y; x^*, y^*) \,||\, p_{\rm NS}(x, y)\right)
+&=
+\int_{y^*}^{\infty} \int_{x^*}^{\infty}
+    \frac{\pi(x, y)}{X(x^*, y^*)}
+    \log \left[\frac{C X(x, y)}{X(x^*, y^*)}\right]
+    \, dx \, dy \\
+&=
+\frac{1}{X(x^*, y^*)}
+\int_{y^*}^{\infty} \int_{x^*}^{\infty}
+    \pi(x, y)
+    \log \left[\frac{C X(x, y)}{X(x^*, y^*)}\right]
+    \, dx \, dy \\
+&=
+\frac{\int_{y^*}^{\infty} \int_{x^*}^{\infty}
+     \pi(x, y)
+     \log \left[C X(x, y)\right]
+     \, dx \, dy - X(x^*, y^*)\log X(x^*, y^*)}
+     {X(x^*, y^*)}
+\end{align}
+
 
 
 \end{document}
