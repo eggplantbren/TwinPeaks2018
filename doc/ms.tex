@@ -72,17 +72,27 @@ D_{\rm KL}\left(p(x; x^*) \,||\, p_{\rm NS}\right)
             \log \left[\frac{\pi(x)\mathds{1}(x > x^*)/X(x^*)}
                             {\frac{\pi(x)}{C X(x)}}\right] \, dx \\
     &= \log C + \int_{x^*}^{\infty} \frac{\pi(x)}{X(x^*)}
-            \log \left[\frac{X(x)}{X(x^*)}\right] \, dx
+            \log \left[\frac{X(x)}{X(x^*)}\right] \, dx.
 \end{align}
 
-Do a change of variables to make $X$ the integrand. Its prior is uniform
-because $X$ is a cumulative probability.
-
+Let's see how this varies as you change the thresholded distribution
+by varying $x^*$:
 \begin{align}
-D_{\rm KL}\left(p(x; x^*) \,||\, p_{\rm NS}\right)
-    &= \log C + \int_{0}^{X^*} \frac{1}{X^*}
-            \log \left[\frac{X}{X^*}\right] \, dX
+\frac{d}{dx^*} D_{\rm KL}\left(p(x; x^*) \,||\, p_{\rm NS}\right)
+    &= \frac{d}{dx^*} \log C +
+        \frac{d}{dx^*}\int_{x^*}^{\infty} \frac{\pi(x)}{X(x^*)}
+            \log \left[\frac{X(x)}{X(x^*)}\right] \, dx \\
+    &= \frac{d}{dx^*}\int_{x^*}^{\infty} \frac{\pi(x)}{X(x^*)}
+            \log \left[\frac{X(x)}{X(x^*)}\right] \, dx \\
+    &= \frac{\pi(x^*)}{X(x^*)}
+            \log \left[\frac{X(x^*)}{X(x^*)}\right] \, dx \\
+    &= 0.
 \end{align}
+That is, it doesn't change! The KL divergence
+{\em from the distribution actually sampled} to
+{\em any thresholded distribution} is the same!
+
+
 
 
 \section{Nested Sampling distribution --- TwinPeaks case}
