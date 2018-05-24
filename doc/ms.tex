@@ -84,7 +84,7 @@ by varying $x^*$:
             \log \left[\frac{X(x)}{X(x^*)}\right] \, dx \\
     &= \frac{d}{dx^*}\int_{x^*}^{\infty} \frac{\pi(x)}{X(x^*)}
             \log \left[\frac{X(x)}{X(x^*)}\right] \, dx \\
-    &= \frac{\pi(x^*)}{X(x^*)}
+    &= -\frac{\pi(x^*)}{X(x^*)}
             \log \left[\frac{X(x^*)}{X(x^*)}\right] \, dx \\
     &= 0.
 \end{align}
@@ -111,20 +111,30 @@ D_{\rm KL}\left(p(x, y; x^*, y^*) \,||\, p_{\rm NS}(x, y)\right)
 \int_{y^*}^{\infty} \int_{x^*}^{\infty}
     \frac{\pi(x, y)}{X(x^*, y^*)}
     \log \left[\frac{C X(x, y)}{X(x^*, y^*)}\right]
-    \, dx \, dy \\
-&=
-\frac{1}{X(x^*, y^*)}
-\int_{y^*}^{\infty} \int_{x^*}^{\infty}
-    \pi(x, y)
-    \log \left[\frac{C X(x, y)}{X(x^*, y^*)}\right]
-    \, dx \, dy \\
-&=
-\frac{\int_{y^*}^{\infty} \int_{x^*}^{\infty}
-     \pi(x, y)
-     \log \left[C X(x, y)\right]
-     \, dx \, dy - X(x^*, y^*)\log X(x^*, y^*)}
-     {X(x^*, y^*)}
+    \, dx \, dy
 \end{align}
+
+Let's take partial derivatives (I'm not 100\% sure of some
+of the steps here):
+\begin{align}
+\frac{\partial}{\partial x^*}
+D_{\rm KL}\left(p(x, y; x^*, y^*) \,||\, p_{\rm NS}(x, y)\right)
+&= \frac{\partial}{\partial x^*}
+\int_{y^*}^{\infty} \int_{x^*}^{\infty}
+    \frac{\pi(x, y)}{X(x^*, y^*)}
+    \log \left[\frac{X(x, y)}{X(x^*, y^*)}\right]
+    \, dx \, dy \\
+&= \int_{y^*}^{\infty} \frac{\partial}{\partial x^*} \int_{x^*}^{\infty}
+    \frac{\pi(x, y)}{X(x^*, y^*)}
+    \log \left[\frac{X(x, y)}{X(x^*, y^*)}\right]
+    \, dx \, dy \\
+&= \int_{y^*}^{\infty}
+    \frac{\pi(x^*, y)}{X(x^*, y^*)}
+    \log \left[\frac{X(x^*, y)}{X(x^*, y^*)}\right]
+    \, dy \\
+\end{align}
+The derivative gets rid of the $C$.
+
 
 
 
