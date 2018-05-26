@@ -5,3 +5,4 @@ __pycache__
 .stack-work
 TwinPeaks2018.cabal
 main
+ns-smc/output/*.csv

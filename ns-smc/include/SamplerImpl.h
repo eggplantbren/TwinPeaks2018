@@ -49,23 +49,24 @@ template<typename T>
 void Sampler<T>::save_particle(size_t k) const
 {
     // Open CSV file
-    std::fstream fout("output.txt", (iteration==1)?
-                                    (std::ios::out):
-                                    (std::ios::out | std::ios::app));
-
-    // Print header
-    if(iteration == 1)
-        fout << "# iteration logl" << std::endl;
+    std::fstream fout("output/particles_info.csv", (iteration==1)?
+                                                   (std::ios::out):
+                                                   (std::ios::out
+                                                            | std::ios::app));
 
     // Use a good precision
     fout << std::setprecision(12);
     std::cout << std::setprecision(12);
+
+    // Print header
+    if(iteration == 1)
+        fout << "iteration,logl" << std::endl;
+
+    // Write the particle info to the file
+    fout << iteration << ',' << logls[k] << std::endl;
+
     std::cout << "Iteration " << iteration << ". ln(L) = ";
     std::cout << logls[k] << "." << std::endl;
-
-    // Write the particle to the file
-    particles[k].print(fout);
-    fout << std::endl;
 
     fout.close();
 }
@@ -104,7 +105,7 @@ void Sampler<T>::replace(size_t k, RNG& rng)
         }
     }
 
-    std::cout << "done." << std::endl;
+    std::cout << "done.\n" << std::endl;
 }
 
 

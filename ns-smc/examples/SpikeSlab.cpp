@@ -1,5 +1,6 @@
 #include "SpikeSlab.h"
 #include "Utils.h"
+#include <sstream>
 
 namespace TwinPeaks2018
 {
@@ -48,13 +49,24 @@ double SpikeSlab::log_likelihood() const
 
 void SpikeSlab::print(std::ostream& out) const
 {
-    for(const double& x: xs)
-        out << x << ' ';
+    for(size_t i=0; i<xs.size(); ++i)
+    {
+        out << xs[i];
+        if(i != (xs.size() - 1))
+            out << ',';
+    }
 }
 
 std::string SpikeSlab::description() const
 {
-    return std::string("Each column is one of the 20 parameters.");
+    std::stringstream ss;
+    for(size_t i=0; i<xs.size(); ++i)
+    {
+        ss << "xs[" << i << ']';
+        if(i != (xs.size() - 1))
+            ss << ',';
+    }
+    return ss.str();
 }
 
 } // namespace TwinPeaks2018

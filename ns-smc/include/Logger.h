@@ -31,6 +31,9 @@ class Logger
 
         // Change the verbosity level
         void set_verbosity(Verbosity&& _verbosity);
+
+        // TODO: Actually use the logger
+
 };
 
 
