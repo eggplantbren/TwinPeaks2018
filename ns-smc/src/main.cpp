@@ -13,7 +13,9 @@ int main()
 
     // Make a sampler
     Sampler<SpikeSlab> sampler(100);
-    sampler.do_iteration(rng);
+
+    for(int i=0; i<10000; ++i)
+        sampler.do_iteration(rng);
 
     return 0;
 }

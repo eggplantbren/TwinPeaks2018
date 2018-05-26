@@ -26,6 +26,15 @@ class Sampler
         // Generate initial particles
         void initialize(RNG& rng);
 
+        // Find worst particle and return its index
+        size_t find_worst() const;
+
+        // Save the kth particle to disk
+        void save_particle(size_t k) const;
+
+        // Replace the kth particle (must be the worst!)
+        void replace(size_t k, RNG& rng);
+
     public:
 
         // Constructor
