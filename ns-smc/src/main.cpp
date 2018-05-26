@@ -20,7 +20,7 @@ int main()
     for(int i=0; i<1000000; ++i)
     {
         // Make a sampler and run it
-        Sampler<SpikeSlab> sampler(1000);
+        Sampler<SpikeSlab> sampler(100);
         sampler.run_to_depth(100.0, rng);
         fout << sampler.get_lnz_estimate() << std::endl;
     }
