@@ -5,6 +5,7 @@ WARN = -Wall -Wextra -pedantic
 CXXFLAGS = -std=c++11 $(INCLUDE) $(OPTIM) $(WARN)
 
 default:
+	$(CXX) $(CXXFLAGS) -c src/Logger.cpp
 	$(CXX) $(CXXFLAGS) -c src/RNG.cpp
 	$(CXX) $(CXXFLAGS) -c src/Utils.cpp
 
