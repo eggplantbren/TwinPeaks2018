@@ -32,7 +32,7 @@ double SpikeSlab::log_likelihood() const
     static constexpr double u_inv = 1.0/u;
     static constexpr double v_inv = 1.0/v;
     static constexpr double C = log(1.0/sqrt(2*M_PI));
-    static constexpr double shift = 0.0;
+    static constexpr double shift = 0.031;
     static constexpr double log_half = log(0.5);
 
     double logl1 = xs.size()*(C - log(u));
