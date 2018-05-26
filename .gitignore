@@ -4,3 +4,4 @@ doc/ms.pdf
 __pycache__
 .stack-work
 TwinPeaks2018.cabal
+main
