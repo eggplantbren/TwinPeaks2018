@@ -23,6 +23,9 @@ class Sampler
         // Current iteration
         unsigned int iteration;
 
+        // Estimate of ln(Z)
+        double lnz_estimate;
+
         // Generate initial particles
         void initialize(RNG& rng);
 
@@ -43,6 +46,8 @@ class Sampler
         // Do one iteration
         void do_iteration(RNG& rng);
 
+        // Getter
+        double get_lnz_estimate() const;
 
 };
 

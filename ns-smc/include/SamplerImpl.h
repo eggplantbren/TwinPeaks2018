@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <iostream>
 #include <stdexcept>
+#include "Utils.h"
 
 namespace TwinPeaks2018
 {
@@ -13,6 +14,7 @@ Sampler<T>::Sampler(size_t _num_particles)
 ,particles(num_particles)
 ,logls(num_particles)
 ,iteration(0)
+,lnz_estimate(-1E300)
 {
     if(num_particles <= 1)
         throw std::invalid_argument("Must use two or more particles.");
@@ -56,7 +58,6 @@ void Sampler<T>::save_particle(size_t k) const
 
     // Use a good precision
     fout << std::setprecision(12);
-    std::cout << std::setprecision(12);
 
     // Print header
     if(iteration == 1)
@@ -64,9 +65,6 @@ void Sampler<T>::save_particle(size_t k) const
 
     // Write the particle info to the file
     fout << iteration << ',' << logls[k] << std::endl;
-
-    std::cout << "Iteration " << iteration << ". ln(L) = ";
-    std::cout << logls[k] << "." << std::endl;
 
     fout.close();
 }
@@ -124,6 +122,20 @@ void Sampler<T>::do_iteration(RNG& rng)
     // Find worst particle
     size_t kill = find_worst();
 
+    // Update ln(Z) estimate
+    double ln_compression_ratio = log((double)num_particles
+                                                        /(num_particles + 1));
+    double lnx_left  = iteration*ln_compression_ratio;
+    double lnx_right = (iteration - 1)*ln_compression_ratio;
+    double ln_prior_mass = logdiffexp(lnx_right, lnx_left);
+    lnz_estimate = logsumexp(lnz_estimate, ln_prior_mass + logls[kill]);
+
+    // Print stuff
+    std::cout << std::setprecision(12);
+    std::cout << "Iteration " << iteration << ". ln(L) = ";
+    std::cout << logls[kill] << ". ";
+    std::cout << "ln(Z) = " << lnz_estimate << '.' << std::endl;
+
     // Save to file
     save_particle(kill);
 
@@ -131,6 +143,12 @@ void Sampler<T>::do_iteration(RNG& rng)
     replace(kill, rng);
 
     ++iteration;
+}
+
+template<typename T>
+double Sampler<T>::get_lnz_estimate() const
+{
+    return lnz_estimate;
 }
 
 } // namespace TwinPeaks2018
