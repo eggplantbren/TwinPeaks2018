@@ -146,6 +146,14 @@ void Sampler<T>::do_iteration(RNG& rng)
 }
 
 template<typename T>
+void Sampler<T>::run_to_depth(double depth, RNG& rng)
+{
+    unsigned int iterations = depth*num_particles;
+    for(unsigned int i=0; i<iterations; ++i)
+        do_iteration(rng);
+}
+
+template<typename T>
 double Sampler<T>::get_lnz_estimate() const
 {
     return lnz_estimate;

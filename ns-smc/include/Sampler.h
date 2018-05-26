@@ -38,13 +38,16 @@ class Sampler
         // Replace the kth particle (must be the worst!)
         void replace(size_t k, RNG& rng);
 
+        // Do one iteration
+        void do_iteration(RNG& rng);
+
     public:
 
         // Constructor
         Sampler(size_t _num_particles);
 
-        // Do one iteration
-        void do_iteration(RNG& rng);
+        // Run to a given depth
+        void run_to_depth(double depth, RNG& rng);
 
         // Getter
         double get_lnz_estimate() const;
