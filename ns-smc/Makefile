@@ -6,5 +6,6 @@ CXXFLAGS = $(INCLUDE) $(OPTIM) $(WARN)
 
 default:
 	$(CXX) $(CXXFLAGS) -c src/RNG.cpp
+	$(CXX) $(CXXFLAGS) -c include/Sampler.h
 	$(CXX) $(CXXFLAGS) -c src/Utils.cpp
 
