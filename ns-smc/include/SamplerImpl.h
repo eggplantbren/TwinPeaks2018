@@ -37,7 +37,7 @@ template<typename T>
 void Sampler<T>::do_iteration(RNG& rng)
 {
     if(iteration == 0)
-        initialize();
+        initialize(rng);
 
 
     ++iteration;
