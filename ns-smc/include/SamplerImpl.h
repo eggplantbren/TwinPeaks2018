@@ -123,10 +123,10 @@ void Sampler<T>::do_iteration(RNG& rng)
     size_t kill = find_worst();
 
     // Update ln(Z) estimate
-    double ln_compression_ratio = log((double)num_particles
-                                                        /(num_particles + 1));
-    double lnx_left  = iteration*ln_compression_ratio;
-    double lnx_right = (iteration - 1)*ln_compression_ratio;
+    double ln_compression_ratio = log(((double)num_particles - 1.0)
+                                                        /num_particles);
+    double lnx_right = (iteration-1)*ln_compression_ratio;
+    double lnx_left = iteration*ln_compression_ratio;
     double ln_prior_mass = logdiffexp(lnx_right, lnx_left);
     lnz_estimate = logsumexp(lnz_estimate, ln_prior_mass + logls[kill]);
 
