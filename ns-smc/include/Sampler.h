@@ -40,7 +40,7 @@ class Sampler
         void replace(size_t k, RNG& rng);
 
         // Do one iteration
-        void do_iteration(RNG& rng);
+        void do_iteration(RNG& rng, bool replace_dead_particle=true);
 
     public:
 

@@ -111,7 +111,7 @@ void Sampler<T>::replace(size_t k, RNG& rng)
 
 
 template<typename T>
-void Sampler<T>::do_iteration(RNG& rng)
+void Sampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
 {
     // Do initialization if necessary
     if(iteration == 0)
@@ -141,7 +141,8 @@ void Sampler<T>::do_iteration(RNG& rng)
     save_particle(kill, ln_prior_mass);
 
     // Replace particle
-    replace(kill, rng);
+    if(replace_dead_particle)
+        replace(kill, rng);
 
     ++iteration;
 }
@@ -151,7 +152,7 @@ void Sampler<T>::run_to_depth(double depth, RNG& rng)
 {
     unsigned int iterations = depth*num_particles;
     for(unsigned int i=0; i<iterations; ++i)
-        do_iteration(rng);
+        do_iteration(rng, i != (iterations-1));
 }
 
 template<typename T>
