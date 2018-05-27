@@ -19,7 +19,7 @@ int main()
     for(int i=0; i<100; ++i)
     {
         SwitchSampler<TwoScalars> sampler
-                        (Config::global_config.get_num_particles(), i==0);
+                        (i+1, Config::global_config.get_num_particles());
         sampler.run_to_depth(Config::global_config.get_depth(), rng);
     }
 

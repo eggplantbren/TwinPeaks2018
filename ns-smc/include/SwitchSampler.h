@@ -15,8 +15,8 @@ class SwitchSampler
 {
     private:
 
-        // Whether it's the first run
-        bool first_run;
+        // The ID of the run
+        unsigned int id;
 
         // The number of particles and the implied compression factor
         size_t num_particles;
@@ -50,7 +50,7 @@ class SwitchSampler
     public:
 
         // Constructor
-        SwitchSampler(size_t _num_particles, bool _first_run=true);
+        SwitchSampler(unsigned int _id, size_t _num_particles);
 
         // Run to a given depth
         void run_to_depth(double depth, RNG& rng);

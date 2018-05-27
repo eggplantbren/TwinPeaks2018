@@ -11,8 +11,8 @@ namespace TwinPeaks2018
 
 // Constructor
 template<typename T>
-SwitchSampler<T>::SwitchSampler(size_t _num_particles, bool _first_run)
-:first_run(_first_run)
+SwitchSampler<T>::SwitchSampler(unsigned int _id, size_t _num_particles)
+:id(_id)
 ,num_particles(_num_particles)
 ,ln_compression_ratio(log(((double)num_particles - 1.0)/num_particles))
 ,direction(2)
@@ -68,7 +68,7 @@ template<typename T>
 void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
 {
     // Open CSV file
-    std::fstream fout("output/particles_info.csv", (iteration==1 && first_run)?
+    std::fstream fout("output/particles_info.csv", (iteration==1 && id == 1)?
                                                    (std::ios::out):
                                                    (std::ios::out
                                                             | std::ios::app));
@@ -77,19 +77,20 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
     fout << std::setprecision(12);
 
     // Print header
-    if(iteration == 1 && first_run)
-        fout << "ln_prior_mass,f,g" << std::endl;
+    if(iteration == 1 && id == 1)
+        fout << "run_id,iteration,ln_prior_mass,f,g" << std::endl;
 
     // Write the particle info to the file
+    fout << id << ',' << iteration << ',';
     fout << ln_prior_mass << ',' << fs[k] << ',' << gs[k] << std::endl;
     fout.close();
 
     // Now do the particle itself
-    fout.open("output/particles.csv", (iteration==1 && first_run)?
+    fout.open("output/particles.csv", (iteration==1 && id == 1)?
                                       (std::ios::out):
                                       (std::ios::out | std::ios::app));
     // Print header
-    if(iteration == 1 && first_run)
+    if(iteration == 1 && id == 1)
         fout << T::description() << std::endl;
     fout << particles[k] << std::endl;
     fout.close();
