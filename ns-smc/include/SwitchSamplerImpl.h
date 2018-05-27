@@ -77,7 +77,7 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
     fout << std::setprecision(12);
 
     // Print header
-    if(iteration == 1)
+    if(iteration == 1 && first_run)
         fout << "ln_prior_mass,f,g" << std::endl;
 
     // Write the particle info to the file
@@ -89,7 +89,7 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
                                       (std::ios::out):
                                       (std::ios::out | std::ios::app));
     // Print header
-    if(iteration == 1)
+    if(iteration == 1 && first_run)
         fout << T::description() << std::endl;
     fout << particles[k] << std::endl;
     fout.close();
