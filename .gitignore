@@ -7,3 +7,4 @@ TwinPeaks2018.cabal
 main
 ns-smc/output/*.csv
 logfile
+libtwinpeaks2018.a

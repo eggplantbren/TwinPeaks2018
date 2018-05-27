@@ -5,14 +5,19 @@ WARN = -Wall -Wextra -pedantic
 CXXFLAGS = -std=c++11 $(INCLUDE) $(OPTIM) $(WARN)
 
 default:
-	$(CXX) $(CXXFLAGS) -c src/Logger.cpp
+	@echo "Compiling library source files..."
 	$(CXX) $(CXXFLAGS) -c src/RNG.cpp
 	$(CXX) $(CXXFLAGS) -c src/Utils.cpp
 
-	$(CXX) $(CXXFLAGS) -c examples/SpikeSlab.cpp
-	$(CXX) $(CXXFLAGS) -c src/main.cpp
+	@echo "Making static library..."
+	ar rcs libtwinpeaks2018.a *.o
 
-	$(CXX) $(CXXFLAGS) -o main *.o
+	@echo "Compiling examples..."
+	$(CXX) $(CXXFLAGS) -c examples/SpikeSlab.cpp
+
+	@echo "Building binaries..."
+	$(CXX) $(CXXFLAGS) -c src/main.cpp
+	$(CXX) -L . -o main *.o -ltwinpeaks2018
 
 	rm -f *.o
 

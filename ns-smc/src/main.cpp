@@ -1,6 +1,5 @@
 #include <ctime>
 #include <iostream>
-#include "Logger.h"
 #include "RNG.h"
 #include "Sampler.h"
 #include "SpikeSlab.h"
@@ -11,9 +10,6 @@ int main()
 {
     // Make an RNG
     RNG rng(time(0));
-
-    // Choose the verbosity level of the logger
-    Logger::logger.set_verbosity(Verbosity::high);
 
     // Make a sampler and run it
     Sampler<SpikeSlab> sampler(100);
