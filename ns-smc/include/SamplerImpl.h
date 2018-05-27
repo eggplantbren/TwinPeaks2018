@@ -101,6 +101,7 @@ void Sampler<T>::replace(size_t k, RNG& rng)
     logls[k] = logls[copy];
 
     // Do MCMC
+    unsigned int accepted = 0;
     for(unsigned int i=0; i<Config::global_config.get_mcmc_steps(); ++i)
     {
         T proposal = particles[k];
@@ -110,10 +111,13 @@ void Sampler<T>::replace(size_t k, RNG& rng)
         {
             particles[k] = proposal;
             logls[k] = logl;
+            ++accepted;
         }
     }
 
-    std::cout << "done.\n" << std::endl;
+    std::cout << "done.\n";
+    std::cout << "    Acceptance ratio = " << accepted << '/';
+    std::cout << Config::global_config.get_mcmc_steps() << ".\n" << std::endl;
 }
 
 
