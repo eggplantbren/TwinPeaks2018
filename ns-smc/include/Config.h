@@ -33,6 +33,12 @@ class Config
         // Load from a YAML file.
         void load(const char* filename);
 
+        // Getters
+        unsigned int get_rng_seed() const { return rng_seed; }
+        size_t get_num_particles() const { return num_particles; }
+        unsigned int get_mcmc_steps() const { return mcmc_steps; }
+        double get_depth() const { return depth; }
+
 };
 
 } // namespace TwinPeaks2018

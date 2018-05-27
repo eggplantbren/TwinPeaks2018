@@ -13,11 +13,11 @@ int main()
     Config::global_config.load("config.yaml");
 
     // Make an RNG
-    RNG rng(time(0));
+    RNG rng(Config::global_config.get_rng_seed());
 
     // Make a sampler and run it
-    Sampler<SpikeSlab> sampler(100);
-    sampler.run_to_depth(100.0, rng);
+    Sampler<SpikeSlab> sampler(Config::global_config.get_num_particles());
+    sampler.run_to_depth(Config::global_config.get_depth(), rng);
     std::cout << "ln(Z) = " << sampler.get_lnz_estimate() << ".\n";
 
     return 0;
