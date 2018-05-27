@@ -75,10 +75,7 @@ void Sampler<T>::save_particle(size_t k, double ln_prior_mass) const
     // Print header
     if(iteration == 1)
         fout << T::description() << std::endl;
-
-    particles[k].print(fout);
-    fout << std::endl;
-
+    fout << particles[k] << std::endl;
     fout.close();
 }
 

@@ -32,12 +32,15 @@ class SpikeSlab
         // Likelihood function
         double log_likelihood() const;
 
-        // Print to stream
-        void print(std::ostream& out) const;
-
         // Return string with column information
         static std::string description();
+
+        friend std::ostream& operator << (std::ostream& out,
+                                          const SpikeSlab& s);
 };
+
+std::ostream& operator << (std::ostream& out,
+                           const SpikeSlab& s);
 
 } // namespace TwinPeaks2018
 

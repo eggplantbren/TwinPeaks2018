@@ -47,14 +47,15 @@ double SpikeSlab::log_likelihood() const
     return logsumexp(logl1 + log_half, logl2 + log_half);
 }
 
-void SpikeSlab::print(std::ostream& out) const
+std::ostream& operator << (std::ostream& out, const SpikeSlab& s)
 {
-    for(size_t i=0; i<xs.size(); ++i)
+    for(size_t i=0; i<s.xs.size(); ++i)
     {
-        out << xs[i];
-        if(i != (xs.size() - 1))
+        out << s.xs[i];
+        if(i != (s.xs.size() - 1))
             out << ',';
     }
+    return out;
 }
 
 std::string SpikeSlab::description()
