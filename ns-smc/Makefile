@@ -2,7 +2,7 @@ CXX = g++
 INCLUDE = -I include -I examples
 OPTIM = -O3 -DNDEBUG
 WARN = -Wall -Wextra -pedantic
-CXXFLAGS = -std=c++17 $(INCLUDE) $(OPTIM) $(WARN)
+CXXFLAGS = -std=c++11 $(INCLUDE) $(OPTIM) $(WARN)
 LINK = -ltwinpeaks2018 -lyaml-cpp
 
 default:
