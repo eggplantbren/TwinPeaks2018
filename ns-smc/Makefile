@@ -15,6 +15,7 @@ default:
 	ar rcs libtwinpeaks2018.a *.o
 
 	@echo "Compiling examples..."
+	$(CXX) $(CXXFLAGS) -c examples/Rosenbrock.cpp
 	$(CXX) $(CXXFLAGS) -c examples/SpikeSlab.cpp
 
 	@echo "Building binaries..."
