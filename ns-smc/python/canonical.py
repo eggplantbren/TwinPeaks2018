@@ -57,6 +57,8 @@ if __name__ == "__main__":
     print("ln(Z) = {ln_Z}.".format(ln_Z=result["ln_Z"]))
     print("H = {H} nats.".format(H=result["H"]))
 
-    # For the example, the true value of ln(Z) is -88.0867
-    # and H is 44.7534.
+    print("\nFor the example, the true value of ln(Z) is -88.0867 and H is 44.7534.")
+    plot_trajectories()
+
+
 
