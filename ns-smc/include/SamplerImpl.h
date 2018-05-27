@@ -11,6 +11,7 @@ namespace TwinPeaks2018
 template<typename T>
 Sampler<T>::Sampler(size_t _num_particles)
 :num_particles(_num_particles)
+,ln_compression_ratio(log(((double)num_particles - 1.0)/num_particles))
 ,particles(num_particles)
 ,logls(num_particles)
 ,iteration(0)
@@ -48,7 +49,7 @@ size_t Sampler<T>::find_worst() const
 }
 
 template<typename T>
-void Sampler<T>::save_particle(size_t k) const
+void Sampler<T>::save_particle(size_t k, double ln_prior_mass) const
 {
     // Open CSV file
     std::fstream fout("output/particles_info.csv", (iteration==1)?
@@ -61,10 +62,10 @@ void Sampler<T>::save_particle(size_t k) const
 
     // Print header
     if(iteration == 1)
-        fout << "iteration,logl" << std::endl;
+        fout << "ln_prior_mass,ln_l" << std::endl;
 
     // Write the particle info to the file
-    fout << iteration << ',' << logls[k] << std::endl;
+    fout << ln_prior_mass << ',' << logls[k] << std::endl;
 
     fout.close();
 }
@@ -123,10 +124,8 @@ void Sampler<T>::do_iteration(RNG& rng)
     size_t kill = find_worst();
 
     // Update ln(Z) estimate
-    double ln_compression_ratio = log(((double)num_particles - 1.0)
-                                                        /num_particles);
-    double lnx_right = (iteration-1)*ln_compression_ratio;
     double lnx_left = iteration*ln_compression_ratio;
+    double lnx_right = (iteration-1)*ln_compression_ratio;
     double ln_prior_mass = logdiffexp(lnx_right, lnx_left);
     lnz_estimate = logsumexp(lnz_estimate, ln_prior_mass + logls[kill]);
 
@@ -139,7 +138,7 @@ void Sampler<T>::do_iteration(RNG& rng)
     std::cout << "ln(Z) = " << lnz_estimate << '.' << std::endl;
 
     // Save to file
-    save_particle(kill);
+    save_particle(kill, ln_prior_mass);
 
     // Replace particle
     replace(kill, rng);

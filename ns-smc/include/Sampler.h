@@ -13,8 +13,9 @@ class Sampler
 {
     private:
 
-        // The number of particles
+        // The number of particles and the implied compression factor
         size_t num_particles;
+        double ln_compression_ratio;
 
         // Particles and their log likelihoods
         std::vector<T> particles;
@@ -33,7 +34,7 @@ class Sampler
         size_t find_worst() const;
 
         // Save the kth particle to disk
-        void save_particle(size_t k) const;
+        void save_particle(size_t k, double ln_prior_mass) const;
 
         // Replace the kth particle (must be the worst!)
         void replace(size_t k, RNG& rng);
