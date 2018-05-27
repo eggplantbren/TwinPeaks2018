@@ -10,6 +10,8 @@ import pandas as pd
 
 # Load and plot trajectories
 particles_info = pd.read_csv("../output/particles_info.csv")
+print("Found {reps} switch sampler reps."\
+                .format(reps=particles_info["run_id"].max()))
 
 def plot_trajectories():
     """
