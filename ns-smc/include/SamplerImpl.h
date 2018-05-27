@@ -66,6 +66,18 @@ void Sampler<T>::save_particle(size_t k, double ln_prior_mass) const
 
     // Write the particle info to the file
     fout << ln_prior_mass << ',' << logls[k] << std::endl;
+    fout.close();
+
+    // Now do the particle itself
+    fout.open("output/particles.csv", (iteration==1)?
+                                      (std::ios::out):
+                                      (std::ios::out | std::ios::app));
+    // Print header
+    if(iteration == 1)
+        fout << T::description() << std::endl;
+
+    particles[k].print(fout);
+    fout << std::endl;
 
     fout.close();
 }

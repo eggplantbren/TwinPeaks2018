@@ -18,7 +18,8 @@ int main()
     // Make a sampler and run it
     Sampler<SpikeSlab> sampler(Config::global_config.get_num_particles());
     sampler.run_to_depth(Config::global_config.get_depth(), rng);
-    std::cout << "ln(Z) = " << sampler.get_lnz_estimate() << ".\n";
+
+    std::cout << "\nln(Z) = " << sampler.get_lnz_estimate() << ".\n";
 
     return 0;
 }

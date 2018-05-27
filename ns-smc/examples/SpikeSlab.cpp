@@ -6,7 +6,7 @@ namespace TwinPeaks2018
 {
 
 SpikeSlab::SpikeSlab()
-:xs(20)
+:xs(N)
 {
 
 }
@@ -57,13 +57,13 @@ void SpikeSlab::print(std::ostream& out) const
     }
 }
 
-std::string SpikeSlab::description() const
+std::string SpikeSlab::description()
 {
     std::stringstream ss;
-    for(size_t i=0; i<xs.size(); ++i)
+    for(size_t i=0; i<N; ++i)
     {
         ss << "xs[" << i << ']';
-        if(i != (xs.size() - 1))
+        if(i != (N - 1))
             ss << ',';
     }
     return ss.str();
