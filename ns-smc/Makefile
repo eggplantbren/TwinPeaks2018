@@ -17,6 +17,7 @@ default:
 	@echo "Compiling examples..."
 	$(CXX) $(CXXFLAGS) -c examples/Rosenbrock.cpp
 	$(CXX) $(CXXFLAGS) -c examples/SpikeSlab.cpp
+	$(CXX) $(CXXFLAGS) -c examples/TwoScalars.cpp
 
 	@echo "Building binaries..."
 	$(CXX) $(CXXFLAGS) -c src/main.cpp
