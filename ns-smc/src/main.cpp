@@ -15,8 +15,9 @@ int main()
     // Make an RNG
     RNG rng(Config::global_config.get_rng_seed());
 
-    // Make a sampler and run it 100 times
-    for(int i=0; i<100; ++i)
+    // Make a sampler and run it many times
+    for(unsigned int i=0; i<Config::global_config.get_switch_sampler_reps();
+                                                                        ++i)
     {
         SwitchSampler<TwoScalars> sampler
                         (i+1, Config::global_config.get_num_particles());

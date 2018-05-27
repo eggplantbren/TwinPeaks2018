@@ -14,6 +14,7 @@ Config::Config()
 ,mcmc_steps(1000)
 ,thin(1)
 ,num_threads(1)
+,switch_sampler_reps(100)
 ,depth(1E12)
 {
 
@@ -33,6 +34,7 @@ void Config::load(const char* filename)
     num_particles = file["num_particles"].as<size_t>();
     mcmc_steps = file["mcmc_steps"].as<unsigned int>();
     num_threads = file["num_threads"].as<unsigned int>();
+    switch_sampler_reps = file["switch_sampler_reps"].as<unsigned int>();
     depth = (file["depth"].as<std::string>() == "auto")
             ?(1E12)
             :(file["depth"].as<double>());
@@ -42,6 +44,7 @@ void Config::load(const char* filename)
                 || mcmc_steps <= 0
                 || num_threads == 0
                 || num_threads > 24
+                || switch_sampler_reps < 1
                 || depth < 5.0)
     {
         throw
