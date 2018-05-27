@@ -8,6 +8,8 @@ namespace TwinPeaks2018
 {
 
 // Sampler over space T.
+// This is just unbiased Nested Sampling (with the (N-1)/N) compression ratios
+// == NS/SMC.
 template<typename T>
 class Sampler
 {
