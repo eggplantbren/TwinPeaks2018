@@ -132,8 +132,10 @@ void Sampler<T>::do_iteration(RNG& rng)
 
     // Print stuff
     std::cout << std::setprecision(12);
-    std::cout << "Iteration " << iteration << ". ln(L) = ";
-    std::cout << logls[kill] << ". ";
+    std::cout << "Iteration " << iteration << ".\n";
+    std::cout << "    ";
+    std::cout << "ln(X) = " << (-(double)iteration/num_particles) << ", ";
+    std::cout << "ln(L) = " << logls[kill] << ", ";
     std::cout << "ln(Z) = " << lnz_estimate << '.' << std::endl;
 
     // Save to file
