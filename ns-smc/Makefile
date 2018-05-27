@@ -2,10 +2,12 @@ CXX = g++
 INCLUDE = -I include -I examples
 OPTIM = -O3 -DNDEBUG
 WARN = -Wall -Wextra -pedantic
-CXXFLAGS = -std=c++11 $(INCLUDE) $(OPTIM) $(WARN)
+CXXFLAGS = -std=c++17 $(INCLUDE) $(OPTIM) $(WARN)
+LINK = -ltwinpeaks2018 -lyaml-cpp
 
 default:
 	@echo "Compiling library source files..."
+	$(CXX) $(CXXFLAGS) -c src/Config.cpp
 	$(CXX) $(CXXFLAGS) -c src/RNG.cpp
 	$(CXX) $(CXXFLAGS) -c src/Utils.cpp
 
@@ -17,7 +19,8 @@ default:
 
 	@echo "Building binaries..."
 	$(CXX) $(CXXFLAGS) -c src/main.cpp
-	$(CXX) -L . -o main *.o -ltwinpeaks2018
+	$(CXX) -L . -o main *.o $(LINK)
 
+	@echo "Tidying up..."
 	rm -f *.o
 

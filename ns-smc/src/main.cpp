@@ -1,5 +1,6 @@
 #include <ctime>
 #include <iostream>
+#include "Config.h"
 #include "RNG.h"
 #include "Sampler.h"
 #include "SpikeSlab.h"
@@ -8,6 +9,9 @@ using namespace TwinPeaks2018;
 
 int main()
 {
+    // Load the configuration
+    Config::global_config.load("config.yaml");
+
     // Make an RNG
     RNG rng(time(0));
 
