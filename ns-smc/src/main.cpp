@@ -15,15 +15,10 @@ int main()
     // Choose the verbosity level of the logger
     Logger::logger.set_verbosity(Verbosity::high);
 
-    std::fstream fout("lnz_estimates.txt", std::ios::out);
-    fout << std::setprecision(12);
-    for(int i=0; i<1000000; ++i)
-    {
-        // Make a sampler and run it
-        Sampler<SpikeSlab> sampler(100);
-        sampler.run_to_depth(100.0, rng);
-        fout << sampler.get_lnz_estimate() << std::endl;
-    }
+    // Make a sampler and run it
+    Sampler<SpikeSlab> sampler(100);
+    sampler.run_to_depth(100.0, rng);
+    std::cout << "ln(Z) = " << sampler.get_lnz_estimate() << ".\n";
 
     return 0;
 }
