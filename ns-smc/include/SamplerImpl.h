@@ -101,7 +101,7 @@ void Sampler<T>::replace(size_t k, RNG& rng)
     logls[k] = logls[copy];
 
     // Do MCMC
-    for(unsigned int i=0; i<1000; ++i)
+    for(unsigned int i=0; i<Config::global_config.get_mcmc_steps(); ++i)
     {
         T proposal = particles[k];
         double logH = proposal.perturb(rng);
