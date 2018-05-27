@@ -1,7 +1,9 @@
+#include <algorithm>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <stdexcept>
+#include "Config.h"
 #include "Utils.h"
 
 namespace TwinPeaks2018
@@ -9,13 +11,16 @@ namespace TwinPeaks2018
 
 // Constructor
 template<typename T>
-SwitchSampler<T>::SwitchSampler(size_t _num_particles)
-:num_particles(_num_particles)
+SwitchSampler<T>::SwitchSampler(size_t _num_particles, bool _first_run)
+:first_run(_first_run)
+,num_particles(_num_particles)
 ,ln_compression_ratio(log(((double)num_particles - 1.0)/num_particles))
+,direction(2)
+,threshold(2, -1E300)
 ,particles(num_particles)
-,logls(num_particles)
+,fs(num_particles)
+,gs(num_particles)
 ,iteration(0)
-,lnz_estimate(-1E300)
 {
     if(num_particles <= 1)
         throw std::invalid_argument("Must use two or more particles.");
@@ -25,25 +30,36 @@ SwitchSampler<T>::SwitchSampler(size_t _num_particles)
 template<typename T>
 void SwitchSampler<T>::initialize(RNG& rng)
 {
-    std::cout << "# Generating " << num_particles << " particles...";
+    std::cout << "Generating " << num_particles << " particles...";
     std::cout << std::flush;
 
     for(size_t i=0; i<num_particles; ++i)
     {
         particles[i].from_prior(rng);
-        logls[i] = particles[i].log_likelihood();
+        fs[i] = particles[i].f();
+        gs[i] = particles[i].g();
     }
-
     std::cout << "done." << std::endl;
+
+    // Generate direction
+    for(double& d: direction)
+        d = exp(3.0*rng.randn());
+    double d_max = *max_element(direction.begin(), direction.end());
+    for(double& d: direction)
+        d /= d_max;    
+
+    std::cout << "Direction = [" << direction[0] << ", ";
+    std::cout << direction[1] << ']' << std::endl;
 }
 
 
 template<typename T>
-size_t SwitchSampler<T>::find_worst() const
+size_t SwitchSampler<T>::find_worst(size_t scalar) const
 {
+    const auto& scalars = (scalar == 0)?(fs):(gs);
     size_t worst = 0;
     for(size_t i=1; i<num_particles; ++i)
-        if(logls[i] < logls[worst])
+        if(scalars[i] < scalars[worst])
             worst = i;
     return worst;
 }
@@ -52,7 +68,7 @@ template<typename T>
 void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
 {
     // Open CSV file
-    std::fstream fout("output/particles_info.csv", (iteration==1)?
+    std::fstream fout("output/particles_info.csv", (iteration==1 && first_run)?
                                                    (std::ios::out):
                                                    (std::ios::out
                                                             | std::ios::app));
@@ -62,14 +78,14 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
 
     // Print header
     if(iteration == 1)
-        fout << "ln_prior_mass,ln_l" << std::endl;
+        fout << "ln_prior_mass,f,g" << std::endl;
 
     // Write the particle info to the file
-    fout << ln_prior_mass << ',' << logls[k] << std::endl;
+    fout << ln_prior_mass << ',' << fs[k] << ',' << gs[k] << std::endl;
     fout.close();
 
     // Now do the particle itself
-    fout.open("output/particles.csv", (iteration==1)?
+    fout.open("output/particles.csv", (iteration==1 && first_run)?
                                       (std::ios::out):
                                       (std::ios::out | std::ios::app));
     // Print header
@@ -84,9 +100,6 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
 {
     std::cout << "    Replacing dead particle..." << std::flush;
 
-    // Save threshold
-    double threshold = logls[k];
-
     // Choose particle to clone
     int copy;
     while(true)
@@ -98,25 +111,34 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
 
     // Clone
     particles[k] = particles[copy];
-    logls[k] = logls[copy];
+    fs[k] = fs[copy];
+    gs[k] = gs[copy];
 
     // Do MCMC
-    for(unsigned int i=0; i<1000; ++i)
+    unsigned int accepted = 0;
+    for(unsigned int i=0; i<Config::global_config.get_mcmc_steps(); ++i)
     {
         T proposal = particles[k];
         double logH = proposal.perturb(rng);
-        double logl = proposal.log_likelihood();
-        if(rng.rand() <= exp(logH) && logl > threshold)
+        double f = proposal.f();
+        double g = proposal.g();
+
+        if((rng.rand() <= exp(logH)) &&
+           (f > threshold[0])        &&
+           (g > threshold[1]))
         {
             particles[k] = proposal;
-            logls[k] = logl;
+            fs[k] = f;
+            gs[k] = g;
+            ++accepted;
         }
     }
 
+    std::cout << "done. ";
+    std::cout << "Acceptance ratio = " << accepted << '/';
+    std::cout << Config::global_config.get_mcmc_steps() << ".\n" << std::endl;
     std::cout << "done.\n" << std::endl;
 }
-
-
 
 
 template<typename T>
@@ -129,25 +151,37 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
         ++iteration;
     }
 
-    // Find worst particle
-    size_t kill = find_worst();
+    // Choose scalar to ascend
+    size_t scalar;
+    while(true)
+    {
+        scalar = rng.rand_int(2);
+        if(rng.rand() <= direction[scalar])
+            break;
+    }
 
-    // Update ln(Z) estimate
+    // Find worst particle
+    size_t kill = find_worst(scalar);
+
+    // Assign prior mass
     double lnx_left = iteration*ln_compression_ratio;
     double lnx_right = (iteration-1)*ln_compression_ratio;
     double ln_prior_mass = logdiffexp(lnx_right, lnx_left);
-    lnz_estimate = logsumexp(lnz_estimate, ln_prior_mass + logls[kill]);
 
     // Print stuff
     std::cout << std::setprecision(12);
     std::cout << "Iteration " << iteration << ".\n";
     std::cout << "    ";
-    std::cout << "ln(X) = " << (-(double)iteration/num_particles) << ", ";
-    std::cout << "ln(L) = " << logls[kill] << ", ";
-    std::cout << "ln(Z) = " << lnz_estimate << '.' << std::endl;
+    std::cout << "ln(X) = " << (-(double)iteration/num_particles) << '.';
+    std::cout << std::endl;
 
     // Save to file
     save_particle(kill, ln_prior_mass);
+
+    // Update threshold
+    threshold[scalar] = (scalar==0)?(fs[kill]):(gs[kill]);
+    std::cout << "    New threshold = [";
+    std::cout << threshold[0] << ", " << threshold[1] << "]." << std::endl;
 
     // Replace particle
     if(replace_dead_particle)
@@ -162,12 +196,6 @@ void SwitchSampler<T>::run_to_depth(double depth, RNG& rng)
     unsigned int iterations = depth*num_particles;
     for(unsigned int i=0; i<iterations; ++i)
         do_iteration(rng, i != (iterations-1));
-}
-
-template<typename T>
-double SwitchSampler<T>::get_lnz_estimate() const
-{
-    return lnz_estimate;
 }
 
 } // namespace TwinPeaks2018

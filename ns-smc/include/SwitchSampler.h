@@ -15,25 +15,28 @@ class SwitchSampler
 {
     private:
 
+        // Whether it's the first run
+        bool first_run;
+
         // The number of particles and the implied compression factor
         size_t num_particles;
         double ln_compression_ratio;
+        std::vector<double> direction;
+        std::vector<double> threshold;
 
-        // Particles and their log likelihoods
+        // Particles and their scalars
         std::vector<T> particles;
-        std::vector<double> logls;
+        std::vector<double> fs;
+        std::vector<double> gs;
 
         // Current iteration
         unsigned int iteration;
-
-        // Estimate of ln(Z)
-        double lnz_estimate;
 
         // Generate initial particles
         void initialize(RNG& rng);
 
         // Find worst particle and return its index
-        size_t find_worst() const;
+        size_t find_worst(size_t scalar) const;
 
         // Save the kth particle to disk
         void save_particle(size_t k, double ln_prior_mass) const;
@@ -47,7 +50,7 @@ class SwitchSampler
     public:
 
         // Constructor
-        SwitchSampler(size_t _num_particles);
+        SwitchSampler(size_t _num_particles, bool _first_run=true);
 
         // Run to a given depth
         void run_to_depth(double depth, RNG& rng);

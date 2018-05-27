@@ -33,7 +33,7 @@ double TwoScalars::f() const
 
     double result = 0.0;
     for(double x: xs)
-        x += -0.5*pow((x - center)*inv_width, 2);
+        result += -0.5*pow((x - center)*inv_width, 2);
 
     return result;
 }
@@ -46,7 +46,7 @@ double TwoScalars::g() const
 
     double result = 0.0;
     for(double x: xs)
-        x += -0.5*pow((x - center)*inv_width, 2);
+        result += -0.5*pow((x - center)*inv_width, 2);
 
     return result;
 }
