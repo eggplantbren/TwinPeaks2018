@@ -35,9 +35,7 @@ void Config::load(const char* filename)
     mcmc_steps = file["mcmc_steps"].as<unsigned int>();
     num_threads = file["num_threads"].as<unsigned int>();
     switch_sampler_reps = file["switch_sampler_reps"].as<unsigned int>();
-    depth = (file["depth"].as<std::string>() == "auto")
-            ?(1E12)
-            :(file["depth"].as<double>());
+    depth = file["depth"].as<double>();
 
     // Check for non-stupid values
     if(num_particles <= 1
