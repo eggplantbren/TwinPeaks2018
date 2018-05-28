@@ -189,7 +189,9 @@ bool SwitchSampler<T>::satisfies_threshold(const std::vector<double>& ss,
                                            const std::vector<double>& tbs) const
 {
     for(size_t i=0; i<ss.size(); ++i)
-        if(is_below({ss[i], tbs[i]}, {threshold[i], tiebreakers_threshold[i]}))
+        if(is_below(std::tuple<double, double>{ss[i], tbs[i]},
+                    std::tuple<double, double>{threshold[i],
+                                               tiebreakers_threshold[i]}))
             return false;
     return true;
 }
