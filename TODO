@@ -1,5 +1,4 @@
 * Parallelise
-* Include tiebreakers
 * Plot logZ/H/<f>/<g> maps
 * Implement more examples
 * Implement thinning
@@ -8,6 +7,7 @@
 
 COMPLETED:
 
+* Include tiebreakers
 * Remove dnest4 dependency in Python code
 * Generalise to more than two scalars
 
