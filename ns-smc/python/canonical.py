@@ -6,6 +6,7 @@ of a canonical distribution.
 import dnest4.classic as dn4
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.random as rng
 import pandas as pd
 
 # Load and plot trajectories
@@ -82,16 +83,20 @@ def create_canonical(result, outfile="../output/canonical_particles.csv"):
 
     # Indices of particles
     indices = []
-    while true:
+    attempts = 0
+    while True:
+        attempts += 1
+        print(attempts)
+
         k = rng.randint(len(ln_W))
         p = np.exp(ln_W[k] - max_ln_W)
         if rng.rand() <= p:
             indices.append(k)
         if len(indices) >= int(result["ESS"]):
             break
+
     indices = np.sort(np.array(indices))
 
-    # TODO: Finish this
 
 
 if __name__ == "__main__":
@@ -102,6 +107,7 @@ if __name__ == "__main__":
 
     print("\nFor the example, the true value of ln(Z) is " + \
           "-3318.62, and H is 318.623 nats.")
+
     h = plot_trajectories()
     plt.show()
 

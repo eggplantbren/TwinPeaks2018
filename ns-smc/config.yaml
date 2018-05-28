@@ -1,6 +1,6 @@
 # Configuration file for TwinPeaks2018
 ---
-num_particles: 100
+num_particles: 10
 mcmc_steps: 1000
 num_threads: 1
 depth: 500.0               # TODO: Implement "auto" option
