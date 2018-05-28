@@ -3,11 +3,11 @@ Use the output of a SwitchSampler run to get the properties
 of a canonical distribution.
 """
 
-import dnest4.classic as dn4
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.random as rng
 import pandas as pd
+from utils import logsumexp
 
 # Load and plot trajectories
 particles_info = pd.read_csv("../output/particles_info.csv")
@@ -53,11 +53,11 @@ def get_canonical(temperatures=[1.0, 1.0], truncate=True, plot=False):
                     .format(reps=run_ids[-1]))
 
     ln_w = subset["ln_prior_mass"]\
-                   - dn4.logsumexp(subset["ln_prior_mass"])
+                   - logsumexp(subset["ln_prior_mass"])
     ln_s = subset["f"]/temperatures[0]\
             + subset["g"]/temperatures[1]
     ln_prod = ln_w + ln_s
-    ln_Z = dn4.logsumexp(ln_prod)
+    ln_Z = logsumexp(ln_prod)
     ln_W = ln_prod - ln_Z
     W = np.exp(ln_W)
 
