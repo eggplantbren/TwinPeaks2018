@@ -3,6 +3,6 @@
 num_particles: 100
 mcmc_steps: 1000
 num_threads: 1
-depth: 500.0
+depth: 50.0
 rng_seed: "auto"           # Can be "auto" or a non-negative integer
-switch_sampler_reps: 1000  # Number of repetitions if doing switch sampling
+switch_sampler_reps: 1000  # Number of repetitions of switch sampling

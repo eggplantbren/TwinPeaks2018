@@ -107,7 +107,7 @@ if __name__ == "__main__":
     print("ESS = {ESS}.".format(ESS=result["ESS"]))
 
     print("\nFor the example, the true value of ln(Z) is " + \
-          "-3318.62, and H is 318.623 nats.")
+          "-331.862, and H is 31.8623 nats.")
 
     h = plot_trajectories()
     plt.show()
