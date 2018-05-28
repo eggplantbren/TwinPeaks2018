@@ -1,4 +1,6 @@
 #include "Utils.h"
+#include <iomanip>
+#include <sstream>
 
 namespace TwinPeaks2018
 {
@@ -171,6 +173,25 @@ double r8poly_value(int n, double a[], double x)
     for (i=n-1; 0<=i; i--)
         value = value * x + a[i];
     return value;
+}
+
+std::string render(const std::vector<double>& vec, bool verbose)
+{
+    std::stringstream ss;
+    ss << std::setprecision(12);
+
+    if(verbose)
+        ss << "[";
+    for(size_t i=0; i<vec.size(); ++i)
+    {
+        ss << vec[i];
+        if(i != (vec.size()-1))
+            ss << ',' << ((verbose)?(" "):(""));
+    }
+    if(verbose)
+        ss << ']';
+
+    return ss.str();
 }
 
 } // namespace TwinPeaks2018

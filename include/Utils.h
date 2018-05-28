@@ -6,6 +6,7 @@
 #include <cmath>
 #include <cassert>
 #include <stdexcept>
+#include <string>
 
 // Useful functions, copied from DNest4
 
@@ -28,6 +29,9 @@ double logdiffexp(double a, double b);
 double normal_cdf(double x);
 double normal_inverse_cdf(double p);
 double r8poly_value(int n, double a[], double x);
+
+// Render a vector of doubles as a string
+std::string render(const std::vector<double>& vec, bool verbose=true);
 
 // Argsort from
 // http://stackoverflow.com/questions/1577475/c-sorting-and-keeping-track-of-indexes
