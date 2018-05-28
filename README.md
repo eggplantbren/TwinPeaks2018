@@ -12,7 +12,9 @@ file for details.
 
 # Dependencies
 
-* Python 3 and some packages (Anaconda will do)
+* Python 3 and some packages (numpy, matploblib, and pandas).
+  [Anaconda](https://www.anaconda.com)
+  is a good Python distribution that includes these.
 * [yaml-cpp](https://github.com/jbeder/yaml-cpp) and its dependency
   [boost](https://boost.org)
 
