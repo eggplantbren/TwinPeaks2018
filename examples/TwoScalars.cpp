@@ -50,6 +50,12 @@ double TwoScalars::g() const
     return result;
 }
 
+std::vector<double> TwoScalars::scalars() const
+{
+    return {f(), g()};
+}
+
+
 std::ostream& operator << (std::ostream& out, const TwoScalars& s)
 {
     for(size_t i=0; i<s.xs.size(); ++i)

@@ -11,6 +11,10 @@ namespace TwinPeaks2018
 
 class TwoScalars
 {
+    // Number of scalars
+    public:
+        static constexpr size_t num_scalars = 2;
+
     private:
 
         // Dimensionality
@@ -18,6 +22,10 @@ class TwoScalars
 
         // The coordinates
         std::vector<double> xs;
+
+        // The two scalars
+        double f() const;
+        double g() const;
 
     public:
         // Constructor only gives size of params
@@ -30,8 +38,7 @@ class TwoScalars
         double perturb(TwinPeaks2018::RNG& rng);
 
         // Scalars
-        double f() const;
-        double g() const;
+        std::vector<double> scalars() const;
 
         // Return string with column information
         static std::string description();
