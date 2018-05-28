@@ -12,7 +12,7 @@ from utils import logsumexp
 # Load and plot trajectories
 particles_info = pd.read_csv("../output/particles_info.csv")
 
-def plot_trajectories(scalars=[0, 1]):
+def plot_particle_scalars(scalars=[0, 1]):
     """
     Plot particle scalars
     """
@@ -116,7 +116,6 @@ if __name__ == "__main__":
     print("\nFor the example, the true value of ln(Z) is " + \
           "-331.862, and H is 31.8623 nats.")
 
-    h = plot_trajectories()
+    h = plot_particle_scalars()
     plt.show()
-
 
