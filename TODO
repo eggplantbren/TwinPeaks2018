@@ -3,11 +3,11 @@
 * Plot logZ/H/<f>/<g> maps
 * Implement more examples
 * Implement thinning
-* Generalise to more than two scalars?
 * Finish canonical.create_canonical()
 * Make a Python package
 
 COMPLETED:
 
 * Remove dnest4 dependency in Python code
+* Generalise to more than two scalars
 
