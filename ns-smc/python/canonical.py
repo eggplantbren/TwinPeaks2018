@@ -17,8 +17,17 @@ def plot_trajectories():
     """
     Plot particle gs vs. fs
     """
-    plt.plot(particles_info["f"],
-             particles_info["g"], ".", alpha=0.2, markersize=1)
+
+    # Thin if the data frame is big
+    thin = 1
+    if particles_info.shape[0] > 100000:
+        thin = particles_info.shape[0] // 100000
+
+    indices = np.arange(0, 100000, step=thin)
+
+    plt.plot(particles_info["f"][indices],
+             particles_info["g"][indices], ".", alpha=0.2, markersize=1)
+
     plt.show()
 
 
