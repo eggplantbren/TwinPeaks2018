@@ -1,12 +1,14 @@
 #ifndef TwinPeaks2018_Utils_h
 #define TwinPeaks2018_Utils_h
 
-#include <vector>
 #include <algorithm>
 #include <cmath>
 #include <cassert>
+#include <iomanip>
+#include <sstream>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 // Useful functions, copied from DNest4
 
@@ -27,8 +29,26 @@ double logsumexp(const std::vector<double>& logv);
 double logsumexp(double a, double b);
 double logdiffexp(double a, double b);
 
-// Render a vector of doubles as a string
-std::string render(const std::vector<double>& vec, bool verbose=true);
+// Render a vector as a string
+template<typename T>
+std::string render(const std::vector<T>& vec, bool verbose=true)
+{
+    std::stringstream ss;
+    ss << std::setprecision(12);
+
+    if(verbose)
+        ss << "[";
+    for(size_t i=0; i<vec.size(); ++i)
+    {
+        ss << vec[i];
+        if(i != (vec.size()-1))
+            ss << ',' << ((verbose)?(" "):(""));
+    }
+    if(verbose)
+        ss << ']';
+
+    return ss.str();
+}
 
 // Argsort from
 // http://stackoverflow.com/questions/1577475/c-sorting-and-keeping-track-of-indexes

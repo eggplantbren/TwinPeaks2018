@@ -1,6 +1,4 @@
 #include "Utils.h"
-#include <iomanip>
-#include <sstream>
 
 namespace TwinPeaks2018
 {
@@ -69,25 +67,6 @@ double logdiffexp(double a, double b)
     a -= biggest;
     b -= biggest;
     return log(exp(a) - exp(b)) + biggest;
-}
-
-std::string render(const std::vector<double>& vec, bool verbose)
-{
-    std::stringstream ss;
-    ss << std::setprecision(12);
-
-    if(verbose)
-        ss << "[";
-    for(size_t i=0; i<vec.size(); ++i)
-    {
-        ss << vec[i];
-        if(i != (vec.size()-1))
-            ss << ',' << ((verbose)?(" "):(""));
-    }
-    if(verbose)
-        ss << ']';
-
-    return ss.str();
 }
 
 } // namespace TwinPeaks2018
