@@ -27,7 +27,7 @@ double TwoScalars::perturb(RNG& rng)
 
 double TwoScalars::f() const
 {
-    static constexpr double center = 0.5;
+    static constexpr double center = 0.3;
     static constexpr double width = 0.01;
     static constexpr double inv_width = 1.0/width;
 
@@ -40,13 +40,12 @@ double TwoScalars::f() const
 
 double TwoScalars::g() const
 {
-    static constexpr double center = 0.4;
     static constexpr double width = 0.01;
     static constexpr double inv_width = 1.0/width;
 
     double result = 0.0;
     for(double x: xs)
-        result += -0.5*pow((x - center)*inv_width, 2);
+        result += -x*inv_width;
 
     return result;
 }

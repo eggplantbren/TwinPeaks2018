@@ -51,7 +51,6 @@ def get_canonical(temperatures=[1.0, 1.0], truncate=True, plot=False):
     print("Found {reps} switch sampler reps."\
                     .format(reps=run_ids[-1]))
 
-    temperatures = [10.0, 20.0]
     ln_w = subset["ln_prior_mass"]\
                    - dn4.logsumexp(subset["ln_prior_mass"])
     ln_s = subset["f"]/temperatures[0]\
@@ -96,13 +95,13 @@ def create_canonical(result, outfile="../output/canonical_particles.csv"):
 
 
 if __name__ == "__main__":
-    result = get_canonical([10.0, 20.0])
+    result = get_canonical()
     print("ln(Z) = {ln_Z}.".format(ln_Z=result["ln_Z"]))
     print("H = {H} nats.".format(H=result["H"]))
-    print("ESS = {ESS}".format(ESS=result["ESS"]))
+    print("ESS = {ESS}.".format(ESS=result["ESS"]))
 
     print("\nFor the example, the true value of ln(Z) is " + \
-          "-44.0434 and H is 22.3767.")
+          "-3318.62, and H is 318.623 nats.")
     h = plot_trajectories()
     plt.show()
 
