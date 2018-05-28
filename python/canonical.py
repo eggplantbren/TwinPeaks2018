@@ -40,11 +40,11 @@ def get_canonical(temperatures=[1.0, 1.0], truncate=True, plot=False):
 
     run_ids = np.arange(min(particles_info["run_id"]),
                         max(particles_info["run_id"] + 1))
-    if truncate and len(run_ids) > 1:
-        if np.sum(particles_info["run_id"] == run_ids[0]) != \
-           np.sum(particles_info["run_id"] == run_ids[-1]):
-            which = np.nonzero(particles_info["run_id"] != run_ids[-1])[0]
-            subset = particles_info.iloc[which, :]
+    if truncate and len(run_ids) > 1 and \
+        (np.sum(particles_info["run_id"] == run_ids[0]) != \
+         np.sum(particles_info["run_id"] == run_ids[-1])):
+        which = np.nonzero(particles_info["run_id"] != run_ids[-1])[0]
+        subset = particles_info.iloc[which, :]
         run_ids = run_ids[0:-1]
     else:
         subset = particles_info
