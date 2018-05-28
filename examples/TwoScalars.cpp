@@ -58,25 +58,20 @@ std::vector<double> TwoScalars::scalars() const
 
 std::ostream& operator << (std::ostream& out, const TwoScalars& s)
 {
-    for(size_t i=0; i<s.xs.size(); ++i)
-    {
-        out << s.xs[i];
-        if(i != (s.xs.size() - 1))
-            out << ',';
-    }
+    out << render(s.xs, false);
     return out;
 }
 
 std::string TwoScalars::description()
 {
-    std::stringstream ss;
+    std::vector<std::string> colnames;
     for(size_t i=0; i<N; ++i)
     {
-        ss << "xs[" << i << ']';
-        if(i != (N - 1))
-            ss << ',';
+        std::stringstream ss;
+        ss << "xs[" << i << "]";
+        colnames.emplace_back(ss.str());
     }
-    return ss.str();
+    return render(colnames, false);
 }
 
 } // namespace TwinPeaks2018
