@@ -43,7 +43,7 @@ void SwitchSampler<T>::initialize(RNG& rng)
 
     // Generate direction
     for(double& d: direction)
-        d = exp(3.0*rng.randn());
+        d = exp(3.0*rng.randt2());
     double d_max = *max_element(direction.begin(), direction.end());
     for(double& d: direction)
         d /= d_max;    
