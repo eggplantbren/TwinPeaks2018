@@ -12,10 +12,11 @@ from utils import logsumexp
 # Load and plot trajectories
 particles_info = pd.read_csv("../output/particles_info.csv")
 
-def plot_trajectories():
+def plot_trajectories(scalars=[0, 1]):
     """
-    Plot particle gs vs. fs (assumes two scalars)
+    Plot particle scalars
     """
+    assert len(scalars)==2
 
     # Thin if the data frame is big
     thin = 1
@@ -25,11 +26,15 @@ def plot_trajectories():
     # Use random thinning to avoid putting artifacts into the plot
     indices = rng.randint(particles_info.shape[0], size=30000)
 
+    names = ["scalars[{i}]".format(i=scalars[0]),
+             "scalars[{j}]".format(j=scalars[1])]
+
     h = plt.figure()
-    plt.plot(particles_info["scalars[0]"][indices],
-             particles_info["scalars[1]"][indices], ".", alpha=0.2, markersize=1)
-    plt.xlabel("$f$")
-    plt.ylabel("$g$")
+    plt.plot(particles_info[names[0]][indices],
+             particles_info[names[1]][indices],
+             ".", alpha=0.2, markersize=1)
+    plt.xlabel(names[0])
+    plt.ylabel(names[1])
     return h
 
 
