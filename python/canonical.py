@@ -14,7 +14,7 @@ particles_info = pd.read_csv("../output/particles_info.csv")
 
 def plot_trajectories():
     """
-    Plot particle gs vs. fs
+    Plot particle gs vs. fs (assumes two scalars)
     """
 
     # Thin if the data frame is big
@@ -55,8 +55,10 @@ def get_canonical(temperatures=[1.0, 1.0], truncate=True, plot=False):
 
     ln_w = subset["ln_prior_mass"]\
                    - logsumexp(subset["ln_prior_mass"])
-    ln_s = subset["scalars[0]"]/temperatures[0]\
-            + subset["scalars[1]"]/temperatures[1]
+    ln_s = np.zeros(subset.shape[0])
+    for i in range(len(temperatures)):
+        ln_s += subset["scalars[{i}]".format(i=i)]/temperatures[i]
+
     ln_prod = ln_w + ln_s
     ln_Z = logsumexp(ln_prod)
     ln_W = ln_prod - ln_Z
