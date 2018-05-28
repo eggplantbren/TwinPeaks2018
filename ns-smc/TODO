@@ -1,0 +1,6 @@
+* Parallelise both the NS sampler and the Switch Sampler
+* Include tiebreakers in both samplers
+* Plot logZ/H/<f>/<g> maps
+* Implement more examples
+* Implement thinning
+* Implement depth="auto" for NS
