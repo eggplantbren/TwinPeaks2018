@@ -19,10 +19,11 @@ def plot_trajectories():
 
     # Thin if the data frame is big
     thin = 1
-    if particles_info.shape[0] > 100000:
-        thin = particles_info.shape[0] // 100000
+    if particles_info.shape[0] > 30000:
+        thin = particles_info.shape[0] // 30000
 
-    indices = np.arange(0, particles_info.shape[0], step=thin)
+    # Use random thinning to avoid putting artifacts into the plot
+    indices = rng.randint(particles_info.shape[0], size=30000)
 
     h = plt.figure()
     plt.plot(particles_info["f"][indices],
