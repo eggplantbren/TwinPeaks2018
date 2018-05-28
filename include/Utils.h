@@ -26,9 +26,6 @@ double logsumexp(double* logv, int n);
 double logsumexp(const std::vector<double>& logv);
 double logsumexp(double a, double b);
 double logdiffexp(double a, double b);
-double normal_cdf(double x);
-double normal_inverse_cdf(double p);
-double r8poly_value(int n, double a[], double x);
 
 // Render a vector of doubles as a string
 std::string render(const std::vector<double>& vec, bool verbose=true);
