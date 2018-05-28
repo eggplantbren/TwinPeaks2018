@@ -26,8 +26,8 @@ def plot_trajectories():
     indices = rng.randint(particles_info.shape[0], size=30000)
 
     h = plt.figure()
-    plt.plot(particles_info["f"][indices],
-             particles_info["g"][indices], ".", alpha=0.2, markersize=1)
+    plt.plot(particles_info["scalars[0]"][indices],
+             particles_info["scalars[1]"][indices], ".", alpha=0.2, markersize=1)
     plt.xlabel("$f$")
     plt.ylabel("$g$")
     return h
@@ -55,8 +55,8 @@ def get_canonical(temperatures=[1.0, 1.0], truncate=True, plot=False):
 
     ln_w = subset["ln_prior_mass"]\
                    - logsumexp(subset["ln_prior_mass"])
-    ln_s = subset["f"]/temperatures[0]\
-            + subset["g"]/temperatures[1]
+    ln_s = subset["scalars[0]"]/temperatures[0]\
+            + subset["scalars[1]"]/temperatures[1]
     ln_prod = ln_w + ln_s
     ln_Z = logsumexp(ln_prod)
     ln_W = ln_prod - ln_Z
