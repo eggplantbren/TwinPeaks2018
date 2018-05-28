@@ -171,7 +171,7 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
 
     // Print stuff
     std::cout << std::setprecision(12);
-    std::cout << "Run " << id << ", ";
+    std::cout << "Rep " << id << ", ";
     std::cout << "iteration " << iteration << ".\n";
     std::cout << "    ";
     std::cout << "ln(X) = " << (-(double)iteration/num_particles) << '.';
