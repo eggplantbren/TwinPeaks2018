@@ -2,9 +2,7 @@ doc/ms.aux
 doc/ms.log
 doc/ms.pdf
 __pycache__
-.stack-work
-TwinPeaks2018.cabal
 main
-ns-smc/output/*.csv
+output/*.csv
 logfile
 libtwinpeaks2018.a
