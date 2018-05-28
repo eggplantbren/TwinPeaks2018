@@ -1,7 +1,8 @@
 TwinPeaks2018
 =============
 
-Yet another attempt.
+A new and (hopefully) correct implementation of TwinPeaks
+using the SwitchSampling idea.
 
 (c) 2018 Brendon J. Brewer.
 
