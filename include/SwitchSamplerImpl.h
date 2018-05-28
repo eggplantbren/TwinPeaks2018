@@ -15,11 +15,10 @@ SwitchSampler<T>::SwitchSampler(unsigned int _id, size_t _num_particles)
 :id(_id)
 ,num_particles(_num_particles)
 ,ln_compression_ratio(log(((double)num_particles - 1.0)/num_particles))
-,direction(2)
-,threshold(2, -1E300)
+,direction(T::num_scalars)
+,threshold(T::num_scalars, -1E300)
 ,particles(num_particles)
-,fs(num_particles)
-,gs(num_particles)
+,scalars(num_particles, std::vector<double>(T::num_scalars))
 ,iteration(0)
 {
     if(num_particles <= 1)
@@ -36,8 +35,7 @@ void SwitchSampler<T>::initialize(RNG& rng)
     for(size_t i=0; i<num_particles; ++i)
     {
         particles[i].from_prior(rng);
-        fs[i] = particles[i].f();
-        gs[i] = particles[i].g();
+        scalars[i] = particles[i].scalars();
     }
     std::cout << "done." << std::endl;
 
@@ -48,18 +46,16 @@ void SwitchSampler<T>::initialize(RNG& rng)
     for(double& d: direction)
         d /= d_max;    
 
-    std::cout << "Direction = [" << direction[0] << ", ";
-    std::cout << direction[1] << ']' << std::endl;
+    std::cout << "Direction = " << render(direction) << "." << std::endl;
 }
 
 
 template<typename T>
 size_t SwitchSampler<T>::find_worst(size_t scalar) const
 {
-    const auto& scalars = (scalar == 0)?(fs):(gs);
     size_t worst = 0;
     for(size_t i=1; i<num_particles; ++i)
-        if(scalars[i] < scalars[worst])
+        if(scalars[i][scalar] < scalars[worst][scalar])
             worst = i;
     return worst;
 }
@@ -78,11 +74,21 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
 
     // Print header
     if(iteration == 1 && id == 1)
-        fout << "run_id,iteration,ln_prior_mass,f,g" << std::endl;
+    {
+        fout << "run_id,iteration,ln_prior_mass,";
+        for(size_t i=0; i<T::num_scalars; ++i)
+        {
+            fout << "scalars[" << i << ']';
+            if(i != (T::num_scalars - 1))
+                fout << ',';
+        }
+        fout << std::endl;
+    }
 
     // Write the particle info to the file
     fout << id << ',' << iteration << ',';
-    fout << ln_prior_mass << ',' << fs[k] << ',' << gs[k] << std::endl;
+    fout << ln_prior_mass << ',';
+    fout << render(scalars[k], false) << std::endl;
     fout.close();
 
     // Now do the particle itself
@@ -112,8 +118,7 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
 
     // Clone
     particles[k] = particles[copy];
-    fs[k] = fs[copy];
-    gs[k] = gs[copy];
+    scalars[k] = scalars[copy];
 
     // Do MCMC
     unsigned int accepted = 0;
@@ -121,16 +126,12 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
     {
         T proposal = particles[k];
         double logH = proposal.perturb(rng);
-        double f = proposal.f();
-        double g = proposal.g();
+        auto s = proposal.scalars();
 
-        if((rng.rand() <= exp(logH)) &&
-           (f > threshold[0])        &&
-           (g > threshold[1]))
+        if((rng.rand() <= exp(logH)) && satisfies_threshold(s))
         {
             particles[k] = proposal;
-            fs[k] = f;
-            gs[k] = g;
+            scalars[k] = s;
             ++accepted;
         }
     }
@@ -140,6 +141,17 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
     std::cout << Config::global_config.get_mcmc_steps() << ".\n" << std::endl;
     std::cout << "done.\n" << std::endl;
 }
+
+
+template<typename T>
+bool SwitchSampler<T>::satisfies_threshold(const std::vector<double>& ss) const
+{
+    for(size_t i=0; i<ss.size(); ++i)
+        if(ss[i] <= threshold[i])
+            return false;
+    return true;
+}
+
 
 
 template<typename T>
@@ -181,9 +193,9 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     save_particle(kill, ln_prior_mass);
 
     // Update threshold
-    threshold[scalar] = (scalar==0)?(fs[kill]):(gs[kill]);
-    std::cout << "    New threshold = [";
-    std::cout << threshold[0] << ", " << threshold[1] << "]." << std::endl;
+    threshold[scalar] = scalars[kill][scalar];
+    std::cout << "    New threshold = " << render(threshold) << ".";
+    std::cout << std::endl;
 
     // Replace particle
     if(replace_dead_particle)

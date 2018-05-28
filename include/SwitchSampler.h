@@ -26,8 +26,7 @@ class SwitchSampler
 
         // Particles and their scalars
         std::vector<T> particles;
-        std::vector<double> fs;
-        std::vector<double> gs;
+        std::vector<std::vector<double>> scalars;
 
         // Current iteration
         unsigned int iteration;
@@ -47,6 +46,9 @@ class SwitchSampler
         // Do one iteration
         void do_iteration(RNG& rng, bool replace_dead_particle=true);
 
+        // Test against threshold
+        bool satisfies_threshold(const std::vector<double>& ss) const;
+
     public:
 
         // Constructor
@@ -54,9 +56,6 @@ class SwitchSampler
 
         // Run to a given depth
         void run_to_depth(double depth, RNG& rng);
-
-        // Getter
-        double get_lnz_estimate() const;
 
 };
 
