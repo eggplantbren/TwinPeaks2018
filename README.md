@@ -1,5 +1,6 @@
 TwinPeaks2018
 =============
+[![Build Status](https://travis-ci.org/eggplantbren/TwinPeaks2018.svg?branch=master)](https://travis-ci.org/eggplantbren/TwinPeaks2018)
 
 A new and (hopefully) correct implementation of TwinPeaks
 using the SwitchSampling idea.
