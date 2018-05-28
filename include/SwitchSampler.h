@@ -1,6 +1,7 @@
 #ifndef TwinPeaks2018_SwitchSampler_h
 #define TwinPeaks2018_SwitchSampler_h
 
+#include <tuple>
 #include <vector>
 #include "RNG.h"
 
@@ -23,10 +24,12 @@ class SwitchSampler
         double ln_compression_ratio;
         std::vector<double> direction;
         std::vector<double> threshold;
+        std::vector<double> tiebreakers_threshold;
 
         // Particles and their scalars
         std::vector<T> particles;
         std::vector<std::vector<double>> scalars;
+        std::vector<std::vector<double>> tiebreakers;
 
         // Current iteration
         unsigned int iteration;
@@ -47,7 +50,12 @@ class SwitchSampler
         void do_iteration(RNG& rng, bool replace_dead_particle=true);
 
         // Test against threshold
-        bool satisfies_threshold(const std::vector<double>& ss) const;
+        bool satisfies_threshold(const std::vector<double>& ss,
+                                 const std::vector<double>& tbs) const;
+
+        // Test whether one tuple is below another
+        static bool is_below(const std::tuple<double, double>& s_tb1,
+                             const std::tuple<double, double>& s_tb2);
 
     public:
 

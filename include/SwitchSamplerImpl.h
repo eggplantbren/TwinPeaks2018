@@ -17,8 +17,10 @@ SwitchSampler<T>::SwitchSampler(unsigned int _id, size_t _num_particles)
 ,ln_compression_ratio(log(((double)num_particles - 1.0)/num_particles))
 ,direction(T::num_scalars)
 ,threshold(T::num_scalars, -1E300)
+,tiebreakers_threshold(T::num_scalars, 0.0)
 ,particles(num_particles)
 ,scalars(num_particles, std::vector<double>(T::num_scalars))
+,tiebreakers(num_particles, std::vector<double>(T::num_scalars))
 ,iteration(0)
 {
     if(num_particles <= 1)
@@ -36,6 +38,8 @@ void SwitchSampler<T>::initialize(RNG& rng)
     {
         particles[i].from_prior(rng);
         scalars[i] = particles[i].scalars();
+        for(double& tb: tiebreakers[i])
+            tb = rng.rand();
     }
     std::cout << "done." << std::endl;
 
@@ -54,11 +58,39 @@ template<typename T>
 size_t SwitchSampler<T>::find_worst(size_t scalar) const
 {
     size_t worst = 0;
+    auto worst_stb = std::tuple<double, double>(scalars[worst][scalar],
+                                                tiebreakers[worst][scalar]);
+
     for(size_t i=1; i<num_particles; ++i)
-        if(scalars[i][scalar] < scalars[worst][scalar])
+    {
+        auto current_stb = std::tuple<double, double>(scalars[i][scalar],
+                                                      tiebreakers[i][scalar]);
+        if(is_below(current_stb, worst_stb))
+        {
             worst = i;
+            worst_stb = current_stb;
+        }
+    }
+
     return worst;
 }
+
+template<typename T>
+bool SwitchSampler<T>::is_below(const std::tuple<double, double>& s_tb1,
+                                const std::tuple<double, double>& s_tb2)
+{
+    // Unpack tuples
+    double s1, s2, tb1, tb2;
+    std::tie(s1, tb1) = s_tb1;
+    std::tie(s2, tb2) = s_tb2;
+
+    if(s1 < s2)
+        return true;
+    if(s1 == s2 && tb1 < tb2)
+        return true;
+    return false;
+}
+
 
 template<typename T>
 void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
@@ -119,6 +151,7 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
     // Clone
     particles[k] = particles[copy];
     scalars[k] = scalars[copy];
+    tiebreakers[k] = tiebreakers[copy];
 
     // Do MCMC
     unsigned int accepted = 0;
@@ -126,12 +159,17 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
     {
         T proposal = particles[k];
         double logH = proposal.perturb(rng);
-        auto s = proposal.scalars();
+        auto ss = proposal.scalars();
+        auto tbs = tiebreakers[copy];
+        int which = rng.rand_int(tbs.size());
+        tbs[which] += rng.randh();
+        wrap(tbs[which], 0.0, 1.0);
 
-        if((rng.rand() <= exp(logH)) && satisfies_threshold(s))
+        if((rng.rand() <= exp(logH)) && satisfies_threshold(ss, tbs))
         {
             particles[k] = proposal;
-            scalars[k] = s;
+            scalars[k] = ss;
+            tiebreakers[k] = tbs;
             ++accepted;
         }
     }
@@ -144,14 +182,14 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
 
 
 template<typename T>
-bool SwitchSampler<T>::satisfies_threshold(const std::vector<double>& ss) const
+bool SwitchSampler<T>::satisfies_threshold(const std::vector<double>& ss,
+                                           const std::vector<double>& tbs) const
 {
     for(size_t i=0; i<ss.size(); ++i)
-        if(ss[i] <= threshold[i])
+        if(is_below({ss[i], tbs[i]}, {threshold[i], tiebreakers_threshold[i]}))
             return false;
     return true;
 }
-
 
 
 template<typename T>
@@ -194,6 +232,7 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
 
     // Update threshold
     threshold[scalar] = scalars[kill][scalar];
+    tiebreakers_threshold[scalar] = tiebreakers[kill][scalar];
     std::cout << "    New threshold = " << render(threshold) << ".";
     std::cout << std::endl;
 
