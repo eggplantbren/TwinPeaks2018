@@ -14,7 +14,7 @@ class TwoScalars
     private:
 
         // Dimensionality
-        static constexpr size_t N = 20;
+        static constexpr size_t N = 10;
 
         // The coordinates
         std::vector<double> xs;

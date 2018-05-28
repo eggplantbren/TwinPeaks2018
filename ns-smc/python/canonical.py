@@ -25,11 +25,12 @@ def plot_trajectories():
 
     indices = np.arange(0, particles_info.shape[0], step=thin)
 
+    h = plt.figure()
     plt.plot(particles_info["f"][indices],
              particles_info["g"][indices], ".", alpha=0.2, markersize=1)
     plt.xlabel("$f$")
     plt.ylabel("$g$")
-    plt.show()
+    return h
 
 
 
@@ -55,6 +56,7 @@ def get_canonical(temperatures=[1.0, 1.0], plot=False):
     result["ln_Z"] = ln_Z
     result["ln_W"] = ln_W
     result["H"] = np.sum(W*(ln_s - ln_Z))
+    result["ESS"] = np.exp(-np.sum(W*ln_W))
 
     if plot:
         plt.plot(logW)
@@ -62,13 +64,37 @@ def get_canonical(temperatures=[1.0, 1.0], plot=False):
 
     return result
 
+def create_canonical(result, outfile="../output/canonical_particles.csv"):
+    """
+    Create and save samples from the canonical distribution.
+    Argument: a dictionary as output by get_canonical().
+    """
+    ln_W = result["ln_W"]
+    max_ln_W = np.max(ln_W)
+
+    # Indices of particles
+    indices = []
+    while true:
+        k = rng.randint(len(ln_W))
+        p = np.exp(ln_W[k] - max_ln_W)
+        if rng.rand() <= p:
+            indices.append(k)
+        if len(indices) >= int(result["ESS"]):
+            break
+    indices = np.sort(np.array(indices))
+
+    # TODO: Finish this
+
+
 if __name__ == "__main__":
     result = get_canonical([10.0, 20.0])
     print("ln(Z) = {ln_Z}.".format(ln_Z=result["ln_Z"]))
     print("H = {H} nats.".format(H=result["H"]))
+    print("ESS = {ESS}".format(ESS=result["ESS"]))
 
-    print("\nFor the example, the true value of ln(Z) is -88.0867 and H is 44.7534.")
-    plot_trajectories()
-
+    print("\nFor the example, the true value of ln(Z) is " + \
+          "-44.0434 and H is 22.3767.")
+    h = plot_trajectories()
+    plt.show()
 
 
