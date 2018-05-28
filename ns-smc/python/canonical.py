@@ -23,11 +23,12 @@ def plot_trajectories():
     if particles_info.shape[0] > 100000:
         thin = particles_info.shape[0] // 100000
 
-    indices = np.arange(0, 100000, step=thin)
+    indices = np.arange(0, particles_info.shape[0], step=thin)
 
     plt.plot(particles_info["f"][indices],
              particles_info["g"][indices], ".", alpha=0.2, markersize=1)
-
+    plt.xlabel("$f$")
+    plt.ylabel("$g$")
     plt.show()
 
 
