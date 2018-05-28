@@ -4,3 +4,7 @@
 * Implement more examples
 * Implement thinning
 * Implement depth="auto" for NS
+* Generalise to more than two scalars?
+* Finish canonical.create_canonical()
+* Remove dnest4 dependency in Python code
+* Make a Python package
