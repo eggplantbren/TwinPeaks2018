@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <iostream>
 #include <stdexcept>
+#include <sstream>
 #include "Config.h"
 #include "Utils.h"
 
@@ -107,14 +108,16 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
     // Print header
     if(iteration == 1 && id == 1)
     {
-        fout << "run_id,iteration,ln_prior_mass,";
+        // Column names
+        std::vector<std::string> header = {"run_id", "iteration",
+                                           "ln_prior_mass"};
         for(size_t i=0; i<T::num_scalars; ++i)
         {
-            fout << "scalars[" << i << ']';
-            if(i != (T::num_scalars - 1))
-                fout << ',';
+            std::stringstream temp;
+            temp << "scalars[" << i << ']';
+            header.push_back(temp.str());
         }
-        fout << std::endl;
+        fout << render(header, false) << std::endl;
     }
 
     // Write the particle info to the file
