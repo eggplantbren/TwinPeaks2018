@@ -13,7 +13,7 @@ file for details.
 # Dependencies
 
 * Python 3 and some packages (Anaconda will do)
-* yaml-cpp (https://github.com/jbeder/yaml-cpp)
+* yaml-cpp (https://github.com/jbeder/yaml-cpp) and its dependencies
 
 You can probably get these from your operating system's package manager.
 You'll also need the C++ header files, which are sometimes put into a
