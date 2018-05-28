@@ -10,8 +10,6 @@ import pandas as pd
 
 # Load and plot trajectories
 particles_info = pd.read_csv("../output/particles_info.csv")
-print("Found {reps} switch sampler reps."\
-                .format(reps=particles_info["run_id"].max()))
 
 def plot_trajectories():
     """
@@ -34,19 +32,30 @@ def plot_trajectories():
 
 
 
-def get_canonical(temperatures=[1.0, 1.0], plot=False):
+def get_canonical(temperatures=[1.0, 1.0], truncate=True, plot=False):
     """
     Obtain the properties of a single canonical distribution.
     """
 
     run_ids = np.arange(min(particles_info["run_id"]),
                         max(particles_info["run_id"] + 1))
+    if truncate and len(run_ids) > 1:
+        if np.sum(particles_info["run_id"] == run_ids[0]) != \
+           np.sum(particles_info["run_id"] == run_ids[-1]):
+            which = np.nonzero(particles_info["run_id"] != run_ids[-1])[0]
+            subset = particles_info.iloc[which, :]
+        run_ids = run_ids[0:-1]
+    else:
+        subset = particles_info
+
+    print("Found {reps} switch sampler reps."\
+                    .format(reps=run_ids[-1]))
 
     temperatures = [10.0, 20.0]
-    ln_w = particles_info["ln_prior_mass"]\
-                   - dn4.logsumexp(particles_info["ln_prior_mass"])
-    ln_s = particles_info["f"]/temperatures[0]\
-            + particles_info["g"]/temperatures[1]
+    ln_w = subset["ln_prior_mass"]\
+                   - dn4.logsumexp(subset["ln_prior_mass"])
+    ln_s = subset["f"]/temperatures[0]\
+            + subset["g"]/temperatures[1]
     ln_prod = ln_w + ln_s
     ln_Z = dn4.logsumexp(ln_prod)
     ln_W = ln_prod - ln_Z
