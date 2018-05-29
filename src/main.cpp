@@ -1,17 +1,17 @@
 #include <ctime>
 #include <iostream>
 #include "Config.h"
+#include "All.h"
 #include "RNG.h"
 #include "RNGPool.h"
 #include "SwitchSampler.h"
-#include "TwoScalars.h"
 
 using namespace TwinPeaks2018;
 
 int main()
 {
     // Which example?
-    using Example = TwoScalars;
+    using Example = SpikeSlab;
 
     // Load the configuration
     Config::global_config.load("config.yaml");
