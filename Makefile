@@ -9,6 +9,7 @@ default:
 	@echo "Compiling library source files..."
 	$(CXX) $(CXXFLAGS) -c src/Config.cpp
 	$(CXX) $(CXXFLAGS) -c src/RNG.cpp
+	$(CXX) $(CXXFLAGS) -c src/RNGPool.cpp
 	$(CXX) $(CXXFLAGS) -c src/Utils.cpp
 
 	@echo "Making static library..."
