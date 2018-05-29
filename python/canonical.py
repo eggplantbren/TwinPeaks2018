@@ -60,7 +60,6 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     return h
 
 
-
 def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
     """
     Obtain the properties of a single canonical distribution.
@@ -91,6 +90,7 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
 
     return result
 
+
 def create_canonical(particles_info,
                      result, outfile="../output/canonical_particles.csv"):
     """
@@ -117,27 +117,42 @@ def create_canonical(particles_info,
     indices = np.sort(np.array(indices))
 
 
-def evaluate_temperature_grid(particles_info, T_min, T_max):
+def evaluate_temperature_grid(particles_info, limits):
     """
     Evaluate logZ and H on a temperature grid.
     """
-    ln_Z = np.empty((51, 51))
-    H = np.empty((51, 51))
+    T0_min, T0_max, T1_min, T1_max = limits
 
-    T0 = 10.0**np.linspace(np.log10(T_min[0]),
-                                        np.log10(T_max[0]), ln_Z.shape[0])
-    T1 = 10.0**np.linspace(np.log10(T_min[1]),
-                                        np.log10(T_max[1]), ln_Z.shape[1])
+    # Set up results grids
+    ln_Z = np.empty((21, 21))
+    H = np.empty((21, 21))
+
+    # Temperature grids
+    T0 = 10.0**np.linspace(np.log10(T0_min),
+                                        np.log10(T0_max), ln_Z.shape[0])
+    T1 = 10.0**np.linspace(np.log10(T0_min),
+                                        np.log10(T0_max), ln_Z.shape[1])
     [T0, T1] = np.meshgrid(T0, T1)
 
-    for i in ln_Z.shape[0]:
-        for j in ln_Z.shape[1]:
+    for i in range(ln_Z.shape[0]):
+        for j in range(ln_Z.shape[1]):
             results = get_canonical(particles_info,
                                     temperatures=[T0[i, j], T1[i, j]])
             ln_Z[i, j] = results["ln_Z"]
             H[i, j] = results["H"]
+        print(i+1)
 
-    plt.imshow(ln_Z, origin="lower")
+    plt.subplot(1, 2, 1)
+    plt.imshow(ln_Z, origin="lower", extent=np.log10(limits))
+    plt.xlabel("log10(T_0)")
+    plt.xlabel("log10(T_1)")
+    plt.title("ln_Z")
+
+    plt.subplot(1, 2, 2)
+    plt.imshow(H, origin="lower", extent=np.log10(limits))
+    plt.xlabel("log10(T_0)")
+    plt.xlabel("log10(T_1)")
+    plt.title("H")
     plt.show()
 
 
@@ -158,4 +173,6 @@ if __name__ == "__main__":
 
     h = plot_particle_scalars(particles_info)
     plt.show()
+
+    evaluate_temperature_grid(particles_info, [0.01, 100.0, 0.01, 100.0])
 
