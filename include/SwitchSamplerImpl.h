@@ -259,6 +259,13 @@ void SwitchSampler<T>::run_to_depth(double depth, RNG& rng)
     unsigned int iterations = depth*num_particles;
     for(unsigned int i=0; i<iterations; ++i)
         do_iteration(rng, i != (iterations-1));
+
+    files_mutex.lock();
+    std::fstream fout("output/completed_reps.txt",
+                                            std::ios::out | std::ios::app);
+    fout << id << std::endl;
+    fout.close();
+    files_mutex.unlock();
 }
 
 template<typename T>
@@ -321,6 +328,9 @@ void prepare_output_files()
     auto desc = T::description();
     if(desc.size() > 0)
         fout << desc << std::endl;
+    fout.close();
+
+    fout.open("output/completed_reps.txt", std::ios::out);
     fout.close();
 }
 

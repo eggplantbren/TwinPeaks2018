@@ -9,10 +9,32 @@ import numpy.random as rng
 import pandas as pd
 from utils import logsumexp
 
-# Load and plot trajectories
-particles_info = pd.read_csv("../output/particles_info.csv")
 
-def plot_particle_scalars(scalars=[0, 1]):
+def load_particles_info(filename="../output/particles_info.csv"):
+    """
+    Load all the particles_info file, and return a data frame containing
+    only complete runs (unless there aren't any, in which case it just
+    returns whatever it's got).
+    """
+
+    particles_info = pd.read_csv(filename)
+
+    completed_reps = np.loadtxt("../output/completed_reps.txt")
+    if len(completed_reps) == 0:
+        print("There are no completed reps.")
+        return particles_info
+
+    print("Found {n} completed reps.".format(n=len(completed_reps)))
+
+    # Mark completed reps for keeping
+    keep = np.zeros(particles_info.shape[0], dtype="bool")
+    for r in completed_reps:
+        keep[particles_info["run_id"] == r] = True
+    indices = np.nonzero(keep)[0]
+    return particles_info.iloc[keep, :]
+
+
+def plot_particle_scalars(particles_info, scalars=[0, 1]):
     """
     Plot particle scalars
     """
@@ -39,24 +61,18 @@ def plot_particle_scalars(scalars=[0, 1]):
 
 
 
-def get_canonical(temperatures=[1.0, 1.0], plot=False):
+def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
     """
     Obtain the properties of a single canonical distribution.
     """
-
-    subset = particles_info # Might need to remove incomplete reps though
-
     rep_ids = np.arange(min(particles_info["run_id"]),
                         max(particles_info["run_id"] + 1))
 
-    print("Found {reps} switch sampler reps."\
-                    .format(reps=np.max(rep_ids)))
-
-    ln_w = subset["ln_prior_mass"]\
-                   - logsumexp(subset["ln_prior_mass"])
-    ln_s = np.zeros(subset.shape[0])
+    ln_w = particles_info["ln_prior_mass"]\
+                   - logsumexp(particles_info["ln_prior_mass"])
+    ln_s = np.zeros(particles_info.shape[0])
     for i in range(len(temperatures)):
-        ln_s += subset["scalars[{i}]".format(i=i)]/temperatures[i]
+        ln_s += particles_info["scalars[{i}]".format(i=i)]/temperatures[i]
 
     ln_prod = ln_w + ln_s
     ln_Z = logsumexp(ln_prod)
@@ -75,7 +91,8 @@ def get_canonical(temperatures=[1.0, 1.0], plot=False):
 
     return result
 
-def create_canonical(result, outfile="../output/canonical_particles.csv"):
+def create_canonical(particles_info,
+                     result, outfile="../output/canonical_particles.csv"):
     """
     Create and save samples from the canonical distribution.
     Argument: a dictionary as output by get_canonical().
@@ -102,7 +119,13 @@ def create_canonical(result, outfile="../output/canonical_particles.csv"):
 
 
 if __name__ == "__main__":
-    result = get_canonical()
+
+    # Load the results
+    particles_info = load_particles_info()
+
+    # Compute the properties of a canonical distribution.
+    result = get_canonical(particles_info)
+
     print("ln(Z) = {ln_Z}.".format(ln_Z=result["ln_Z"]))
     print("H = {H} nats.".format(H=result["H"]))
     print("ESS = {ESS}.".format(ESS=result["ESS"]))
@@ -110,6 +133,6 @@ if __name__ == "__main__":
     print("\nFor the example, the true value of ln(Z) is " + \
           "-8073.72, and H is 63.7246 nats.")
 
-    h = plot_particle_scalars()
+    h = plot_particle_scalars(particles_info)
     plt.show()
 

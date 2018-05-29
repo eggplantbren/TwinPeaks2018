@@ -4,5 +4,6 @@ doc/ms.pdf
 __pycache__
 main
 output/*.csv
+output/*.txt
 logfile
 libtwinpeaks2018.a
