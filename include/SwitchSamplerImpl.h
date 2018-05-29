@@ -108,13 +108,13 @@ bool SwitchSampler<T>::is_below(const std::tuple<double, double>& s_tb1,
 template<typename T>
 void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
 {
+    particles_info_file_mutex.lock();
+
     // Open CSV file
     std::fstream fout("output/particles_info.csv", (iteration==1 && id == 1)?
                                                    (std::ios::out):
                                                    (std::ios::out
                                                             | std::ios::app));
-
-    particles_info_file_mutex.lock();
 
     // Use a good precision
     fout << std::setprecision(12);
