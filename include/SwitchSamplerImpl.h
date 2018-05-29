@@ -14,10 +14,7 @@ namespace TwinPeaks2018
 
 // These are static
 template<typename T>
-std::mutex SwitchSampler<T>::particles_file_mutex;
-
-template<typename T>
-std::mutex SwitchSampler<T>::particles_info_file_mutex;
+std::mutex SwitchSampler<T>::files_mutex;
 
 template<typename T>
 std::mutex SwitchSampler<T>::stdout_mutex;
@@ -119,7 +116,7 @@ bool SwitchSampler<T>::is_below(const std::tuple<double, double>& s_tb1,
 template<typename T>
 void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
 {
-    particles_info_file_mutex.lock();
+    files_mutex.lock();
 
     // Open CSV file
     std::fstream fout("output/particles_info.csv", (iteration==1 && id == 1)?
@@ -151,10 +148,7 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
     fout << render(scalars[k], false) << std::endl;
     fout.close();
 
-    particles_info_file_mutex.unlock();
-
     // Now do the particle itself
-    particles_file_mutex.lock();
     fout.open("output/particles.csv", (iteration==1 && id == 1)?
                                       (std::ios::out):
                                       (std::ios::out | std::ios::app));
@@ -163,7 +157,8 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
         fout << T::description() << std::endl;
     fout << particles[k] << std::endl;
     fout.close();
-    particles_file_mutex.unlock();
+
+    files_mutex.unlock();
 }
 
 template<typename T>

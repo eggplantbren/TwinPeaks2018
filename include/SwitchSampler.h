@@ -19,8 +19,7 @@ class SwitchSampler
     private:
 
         // Mutexes
-        static std::mutex particles_file_mutex;
-        static std::mutex particles_info_file_mutex;
+        static std::mutex files_mutex;
         static std::mutex stdout_mutex;
 
         // The ID of the run
