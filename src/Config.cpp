@@ -41,12 +41,10 @@ void Config::load(const char* filename)
     if(num_particles <= 1
                 || mcmc_steps <= 0
                 || num_threads == 0
-                || num_threads > 24
-                || switch_sampler_reps < 1
-                || depth < 5.0)
+                || switch_sampler_reps < 1)
     {
         throw
-          std::domain_error("Warning: Unusual values in configuration file.");
+          std::domain_error("Warning: Invalid values in configuration file.");
     }
 }
 

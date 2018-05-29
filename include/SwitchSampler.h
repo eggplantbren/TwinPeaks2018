@@ -1,6 +1,7 @@
 #ifndef TwinPeaks2018_SwitchSampler_h
 #define TwinPeaks2018_SwitchSampler_h
 
+#include <mutex>
 #include <tuple>
 #include <vector>
 #include "RNG.h"
@@ -15,6 +16,11 @@ template<typename T>
 class SwitchSampler
 {
     private:
+
+        // Mutexes
+        static std::mutex particles_file_mutex;
+        static std::mutex particles_info_file_mutex;
+        static std::mutex stdout_mutex;
 
         // The ID of the run
         unsigned int id;
@@ -74,7 +80,7 @@ void do_rep(unsigned int id, RNG& rng);
 // Function that creates and executes several SwitchSampler reps.
 // Does as many reps as there are RNGs.
 template<typename T>
-void do_batch(unsigned int first_id, RNGPool& rngs);
+RNGPool do_batch(unsigned int first_id, RNGPool& rngs);
 
 } // namespace TwinPeaks2018
 

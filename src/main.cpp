@@ -28,11 +28,11 @@ int main()
 
     for(unsigned int i=0; i<num_batches; ++i)
     {
-        unsigned int first = num_threads*i;
-        unsigned int last  = num_threads*i + num_threads - 1;
+        unsigned int first = num_threads*i + 1;
+        unsigned int last  = num_threads*i + num_threads;
         if(last > num_reps)
             last = num_reps;
-        do_batch<Example>(first, last, rngs);
+        rngs = do_batch<Example>(first, last, rngs);
     }
 
     return 0;

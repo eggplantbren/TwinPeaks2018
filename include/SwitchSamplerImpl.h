@@ -1,14 +1,26 @@
 #include <algorithm>
 #include <fstream>
+#include <functional>
 #include <iomanip>
 #include <iostream>
 #include <stdexcept>
 #include <sstream>
+#include <thread>
 #include "Config.h"
 #include "Utils.h"
 
 namespace TwinPeaks2018
 {
+
+// These are static
+template<typename T>
+std::mutex SwitchSampler<T>::particles_file_mutex;
+
+template<typename T>
+std::mutex SwitchSampler<T>::particles_info_file_mutex;
+
+template<typename T>
+std::mutex SwitchSampler<T>::stdout_mutex;
 
 // Constructor
 template<typename T>
@@ -102,6 +114,8 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
                                                    (std::ios::out
                                                             | std::ios::app));
 
+    particles_info_file_mutex.lock();
+
     // Use a good precision
     fout << std::setprecision(12);
 
@@ -126,7 +140,10 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
     fout << render(scalars[k], false) << std::endl;
     fout.close();
 
+    particles_info_file_mutex.unlock();
+
     // Now do the particle itself
+    particles_file_mutex.lock();
     fout.open("output/particles.csv", (iteration==1 && id == 1)?
                                       (std::ios::out):
                                       (std::ios::out | std::ios::app));
@@ -135,12 +152,15 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
         fout << T::description() << std::endl;
     fout << particles[k] << std::endl;
     fout.close();
+    particles_file_mutex.unlock();
 }
 
 template<typename T>
 void SwitchSampler<T>::replace(size_t k, RNG& rng)
 {
+    stdout_mutex.lock();
     std::cout << "    Replacing dead particle..." << std::flush;
+    stdout_mutex.unlock();
 
     // Choose particle to clone
     int copy;
@@ -177,10 +197,12 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
         }
     }
 
+    stdout_mutex.lock();
     std::cout << "done. ";
     std::cout << "Acceptance ratio = " << accepted << '/';
     std::cout << Config::global_config.get_mcmc_steps() << ".\n" << std::endl;
     std::cout << "done.\n" << std::endl;
+    stdout_mutex.unlock();
 }
 
 
@@ -203,7 +225,10 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     // Do initialization if necessary
     if(iteration == 0)
     {
+        stdout_mutex.lock();
         initialize(rng);
+        stdout_mutex.unlock();
+
         ++iteration;
     }
 
@@ -225,12 +250,14 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     double ln_prior_mass = logdiffexp(lnx_right, lnx_left);
 
     // Print stuff
+    stdout_mutex.lock();
     std::cout << std::setprecision(12);
     std::cout << "Rep " << id << ", ";
     std::cout << "iteration " << iteration << ".\n";
     std::cout << "    ";
     std::cout << "ln(X) = " << (-(double)iteration/num_particles) << '.';
     std::cout << std::endl;
+    stdout_mutex.unlock();
 
     // Save to file
     save_particle(kill, ln_prior_mass);
@@ -238,8 +265,11 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     // Update threshold
     threshold[scalar] = scalars[kill][scalar];
     tiebreakers_threshold[scalar] = tiebreakers[kill][scalar];
+
+    stdout_mutex.lock();
     std::cout << "    New threshold = " << render(threshold) << ".";
     std::cout << std::endl;
+    stdout_mutex.unlock();
 
     // Replace particle
     if(replace_dead_particle)
@@ -256,7 +286,6 @@ void SwitchSampler<T>::run_to_depth(double depth, RNG& rng)
         do_iteration(rng, i != (iterations-1));
 }
 
-
 template<typename T>
 void do_rep(unsigned int id, RNG& rng)
 {
@@ -265,13 +294,33 @@ void do_rep(unsigned int id, RNG& rng)
 }
 
 template<typename T>
-void do_batch(unsigned int first_id, unsigned int last_id, RNGPool& rngs)
+RNGPool do_batch(unsigned int first_id, unsigned int last_id, RNGPool& rngs)
 {
     if(last_id < first_id || rngs.size() < (last_id - first_id + 1))
         throw std::invalid_argument("Invalid input to do_reps.");
 
-    for(size_t i=0; i<rngs.size(); ++i)
-        do_rep<T>(first_id + i + 1, rngs[i]);
+    #ifdef NO_THREADS
+        int k = 0;
+        for(unsigned int i=first_id; i<=last_id; ++i)
+        {
+            do_rep<T>(i, rngs[k]);
+            ++k;
+        }
+    #else
+        // Set up and run the threads
+        std::vector<std::thread> threads;
+        int k = 0;
+        for(unsigned int i=first_id; i<=last_id; ++i)
+        {
+		    auto func = std::bind(do_rep<T>, i, std::ref(rngs[k]));
+            threads.emplace_back(std::thread(func));
+            ++k;
+        }
+        for(auto& thread: threads)
+            thread.join();
+    #endif
+
+    return rngs;
 }
 
 } // namespace TwinPeaks2018

@@ -3,7 +3,7 @@ INCLUDE = -I include -I examples
 OPTIM = -O3 -DNDEBUG
 WARN = -Wall -Wextra -pedantic
 CXXFLAGS = -std=c++11 $(INCLUDE) $(OPTIM) $(WARN)
-LINK = -ltwinpeaks2018 -lyaml-cpp
+LINK = -ltwinpeaks2018 -lpthread -lyaml-cpp
 
 default:
 	@echo "Compiling library source files..."
@@ -21,7 +21,7 @@ default:
 
 	@echo "Building binaries..."
 	$(CXX) $(CXXFLAGS) -c src/main.cpp
-	$(CXX) -L . -o main *.o $(LINK)
+	$(CXX) -pthread -L . -o main *.o $(LINK)
 
 	@echo "Tidying up..."
 	rm -f *.o
