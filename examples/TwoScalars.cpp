@@ -40,13 +40,9 @@ double TwoScalars::f() const
 
 double TwoScalars::g() const
 {
-    static constexpr double width = 0.01;
-    static constexpr double inv_width = 1.0/width;
-
     double result = 0.0;
     for(double x: xs)
-        result += -x*inv_width;
-
+        result += -2000*x;
     return result;
 }
 

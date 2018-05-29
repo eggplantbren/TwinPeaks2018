@@ -108,7 +108,7 @@ if __name__ == "__main__":
     print("ESS = {ESS}.".format(ESS=result["ESS"]))
 
     print("\nFor the example, the true value of ln(Z) is " + \
-          "-663.724, and H is 63.7240 nats.")
+          "-8073.72, and H is 63.7246 nats.")
 
     h = plot_particle_scalars()
     plt.show()
