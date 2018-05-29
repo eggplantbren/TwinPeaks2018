@@ -89,6 +89,10 @@ void do_rep(unsigned int id, RNG& rng);
 template<typename T>
 RNGPool do_batch(unsigned int first_id, RNGPool& rngs);
 
+// Minimalistic function to launch TwinPeaks.
+template<typename T>
+void run_switch_sampler();
+
 } // namespace TwinPeaks2018
 
 #include "SwitchSamplerImpl.h"
