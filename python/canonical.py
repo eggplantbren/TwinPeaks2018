@@ -117,6 +117,29 @@ def create_canonical(particles_info,
     indices = np.sort(np.array(indices))
 
 
+def evaluate_temperature_grid(particles_info, T_min, T_max):
+    """
+    Evaluate logZ and H on a temperature grid.
+    """
+    ln_Z = np.empty((51, 51))
+    H = np.empty((51, 51))
+
+    T0 = 10.0**np.linspace(np.log10(T_min[0]),
+                                        np.log10(T_max[0]), ln_Z.shape[0])
+    T1 = 10.0**np.linspace(np.log10(T_min[1]),
+                                        np.log10(T_max[1]), ln_Z.shape[1])
+    [T0, T1] = np.meshgrid(T0, T1)
+
+    for i in ln_Z.shape[0]:
+        for j in ln_Z.shape[1]:
+            results = get_canonical(particles_info,
+                                    temperatures=[T0[i, j], T1[i, j]])
+            ln_Z[i, j] = results["ln_Z"]
+            H[i, j] = results["H"]
+
+    plt.imshow(ln_Z, origin="lower")
+    plt.show()
+
 
 if __name__ == "__main__":
 
