@@ -256,5 +256,13 @@ void SwitchSampler<T>::run_to_depth(double depth, RNG& rng)
         do_iteration(rng, i != (iterations-1));
 }
 
+
+template<typename T>
+void do_rep(unsigned int id, RNG& rng)
+{
+    SwitchSampler<T> sampler(id, Config::global_config.get_num_particles());
+    sampler.run_to_depth(Config::global_config.get_depth(), rng);
+}
+
 } // namespace TwinPeaks2018
 

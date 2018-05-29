@@ -67,6 +67,11 @@ class SwitchSampler
 
 };
 
+
+// Function that creates and executes a SwitchSampler.
+template<typename T>
+void do_rep(unsigned int id, RNG& rng);
+
 } // namespace TwinPeaks2018
 
 #include "SwitchSamplerImpl.h"
