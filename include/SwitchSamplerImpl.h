@@ -44,11 +44,8 @@ SwitchSampler<T>::SwitchSampler(unsigned int _id, size_t _num_particles)
 template<typename T>
 void SwitchSampler<T>::initialize(RNG& rng)
 {
-    stdout_mutex.lock();
-    std::cout << "Rep " << id << ":\n";
-    std::cout << "    Generating " << num_particles << " particles...";
-    std::cout << std::flush;
-    stdout_mutex.unlock();
+    messages << "Rep " << id << ":\n";
+    messages << "    Generating " << num_particles << " particles...";
 
     for(size_t i=0; i<num_particles; ++i)
     {
@@ -57,9 +54,8 @@ void SwitchSampler<T>::initialize(RNG& rng)
         for(double& tb: tiebreakers[i])
             tb = rng.rand();
     }
-    stdout_mutex.lock();
-    std::cout << "done." << std::endl;
-    stdout_mutex.unlock();
+
+    messages << "done." << std::endl;
 
     // Generate direction
     for(double& d: direction)
@@ -68,8 +64,16 @@ void SwitchSampler<T>::initialize(RNG& rng)
     for(double& d: direction)
         d /= d_max;    
 
+    messages << "    Direction = " << render(direction) << ".\n" << std::endl;
+    print_messages();
+}
+
+template<typename T>
+void SwitchSampler<T>::print_messages()
+{
     stdout_mutex.lock();
-    std::cout << "    Direction = " << render(direction) << ".\n" << std::endl;
+    std::cout << messages.str() << std::flush;
+    messages = std::stringstream();
     stdout_mutex.unlock();
 }
 
@@ -165,9 +169,7 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
 template<typename T>
 void SwitchSampler<T>::replace(size_t k, RNG& rng)
 {
-    stdout_mutex.lock();
-    std::cout << "    Replacing dead particle..." << std::flush;
-    stdout_mutex.unlock();
+    messages << "    Replacing dead particle...";
 
     // Choose particle to clone
     int copy;
@@ -204,12 +206,10 @@ void SwitchSampler<T>::replace(size_t k, RNG& rng)
         }
     }
 
-    stdout_mutex.lock();
-    std::cout << "done. ";
-    std::cout << "Acceptance ratio = " << accepted << '/';
-    std::cout << Config::global_config.get_mcmc_steps() << ".\n" << std::endl;
-    std::cout << "done.\n" << std::endl;
-    stdout_mutex.unlock();
+    messages << "done. ";
+    messages << "Acceptance ratio = " << accepted << '/';
+    messages << Config::global_config.get_mcmc_steps() << '.' << std::endl;
+    messages << "done.\n" << std::endl;
 }
 
 
@@ -254,14 +254,12 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     double ln_prior_mass = logdiffexp(lnx_right, lnx_left);
 
     // Print stuff
-    stdout_mutex.lock();
-    std::cout << std::setprecision(12);
-    std::cout << "Rep " << id << ", ";
-    std::cout << "iteration " << iteration << ".\n";
-    std::cout << "    ";
-    std::cout << "ln(X) = " << (-(double)iteration/num_particles) << '.';
-    std::cout << std::endl;
-    stdout_mutex.unlock();
+    messages << std::setprecision(12);
+    messages << "Rep " << id << ", ";
+    messages << "iteration " << iteration << ".\n";
+    messages << "    ";
+    messages << "ln(X) = " << (-(double)iteration/num_particles) << '.';
+    messages << std::endl;
 
     // Save to file
     save_particle(kill, ln_prior_mass);
@@ -270,15 +268,14 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     threshold[scalar] = scalars[kill][scalar];
     tiebreakers_threshold[scalar] = tiebreakers[kill][scalar];
 
-    stdout_mutex.lock();
-    std::cout << "    New threshold = " << render(threshold) << ".";
-    std::cout << std::endl;
-    stdout_mutex.unlock();
+    messages << "    New threshold = " << render(threshold) << '.';
+    messages << std::endl;
 
     // Replace particle
     if(replace_dead_particle)
         replace(kill, rng);
 
+    print_messages();
     ++iteration;
 }
 

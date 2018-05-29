@@ -2,6 +2,7 @@
 #define TwinPeaks2018_SwitchSampler_h
 
 #include <mutex>
+#include <sstream>
 #include <tuple>
 #include <vector>
 #include "RNG.h"
@@ -39,6 +40,12 @@ class SwitchSampler
 
         // Current iteration
         unsigned int iteration;
+
+        // Push messages into here and periodically print them to stdout
+        std::stringstream messages;
+
+        // Print messages to screen and clear it
+        void print_messages();
 
         // Generate initial particles
         void initialize(RNG& rng);
