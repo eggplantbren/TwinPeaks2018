@@ -73,7 +73,7 @@ void SwitchSampler<T>::print_messages()
 {
     stdout_mutex.lock();
     std::cout << messages.str() << std::flush;
-    messages = std::stringstream();
+    messages.str(std::string());
     stdout_mutex.unlock();
 }
 
