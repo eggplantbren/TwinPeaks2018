@@ -1,4 +1,3 @@
-* Make sense of stdout messages when running in parallel
 * Plot logZ/H/<f>/<g> maps
 * Implement more examples
 * Implement thinning
@@ -11,3 +10,4 @@ COMPLETED:
 * Remove dnest4 dependency in Python code
 * Generalise to more than two scalars
 * Parallelise
+* Make sense of stdout messages when running in parallel
