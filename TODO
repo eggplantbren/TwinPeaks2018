@@ -1,6 +1,5 @@
 * Plot logZ/H/<f>/<g> maps
 * Implement more examples
-* Implement thinning
 * Finish canonical.create_canonical()
 * Make a Python package
 
@@ -11,3 +10,4 @@ COMPLETED:
 * Generalise to more than two scalars
 * Parallelise
 * Make sense of stdout messages when running in parallel
+* Implement thinning

@@ -38,6 +38,7 @@ class Config
         unsigned int get_rng_seed() const { return rng_seed; }
         size_t get_num_particles() const { return num_particles; }
         unsigned int get_mcmc_steps() const { return mcmc_steps; }
+        unsigned int get_thin() const { return thin; }
         unsigned int get_num_threads() const { return num_threads; }
         unsigned int get_switch_sampler_reps() const
         { return switch_sampler_reps; }

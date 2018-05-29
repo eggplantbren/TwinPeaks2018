@@ -119,28 +119,11 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
     files_mutex.lock();
 
     // Open CSV file
-    std::fstream fout("output/particles_info.csv", (iteration==1 && id == 1)?
-                                                   (std::ios::out):
-                                                   (std::ios::out
-                                                            | std::ios::app));
+    std::fstream fout("output/particles_info.csv",
+                      std::ios::out | std::ios::app);
 
     // Use a good precision
     fout << std::setprecision(12);
-
-    // Print header
-    if(iteration == 1 && id == 1)
-    {
-        // Column names
-        std::vector<std::string> header = {"run_id", "iteration",
-                                           "ln_prior_mass"};
-        for(size_t i=0; i<T::num_scalars; ++i)
-        {
-            std::stringstream temp;
-            temp << "scalars[" << i << ']';
-            header.push_back(temp.str());
-        }
-        fout << render(header, false) << std::endl;
-    }
 
     // Write the particle info to the file
     fout << id << ',' << iteration << ',';
@@ -149,12 +132,7 @@ void SwitchSampler<T>::save_particle(size_t k, double ln_prior_mass) const
     fout.close();
 
     // Now do the particle itself
-    fout.open("output/particles.csv", (iteration==1 && id == 1)?
-                                      (std::ios::out):
-                                      (std::ios::out | std::ios::app));
-    // Print header
-    if(iteration == 1 && id == 1)
-        fout << T::description() << std::endl;
+    fout.open("output/particles.csv", std::ios::out | std::ios::app);
     fout << particles[k] << std::endl;
     fout.close();
 
@@ -257,7 +235,8 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     messages << std::endl;
 
     // Save to file
-    save_particle(kill, ln_prior_mass);
+    if(rng.rand() <= 1.0/Config::global_config.get_thin()) // Random thinning
+        save_particle(kill, ln_prior_mass);
 
     // Update threshold
     threshold[scalar] = scalars[kill][scalar];
@@ -319,10 +298,39 @@ RNGPool do_batch(unsigned int first_id, unsigned int last_id, RNGPool& rngs)
     return rngs;
 }
 
+template<typename T>
+void prepare_output_files()
+{
+    // Clear the output files and write the headers
+    std::fstream fout;
+    fout.open("output/particles_info.csv", std::ios::out);
+
+    // Column names
+    std::vector<std::string> header = {"run_id", "iteration",
+                                       "ln_prior_mass"};
+    for(size_t i=0; i<T::num_scalars; ++i)
+    {
+        std::stringstream temp;
+        temp << "scalars[" << i << ']';
+        header.push_back(temp.str());
+    }
+    fout << render(header, false) << std::endl;
+    fout.close();
+
+    fout.open("output/particles.csv", std::ios::out);
+    auto desc = T::description();
+    if(desc.size() > 0)
+        fout << desc << std::endl;
+    fout.close();
+}
+
 
 template<typename T>
 void run_switch_sampler()
 {
+    // Prepare the output files
+    prepare_output_files<T>();
+
     // Make a collection of RNGs
     unsigned int num_threads = Config::global_config.get_num_threads();
     unsigned int num_reps = Config::global_config.get_switch_sampler_reps();

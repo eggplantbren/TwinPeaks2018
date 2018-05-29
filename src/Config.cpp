@@ -33,6 +33,7 @@ void Config::load(const char* filename)
 
     num_particles = file["num_particles"].as<size_t>();
     mcmc_steps = file["mcmc_steps"].as<unsigned int>();
+    thin = file["thin"].as<unsigned int>();
     num_threads = file["num_threads"].as<unsigned int>();
     switch_sampler_reps = file["switch_sampler_reps"].as<unsigned int>();
     depth = file["depth"].as<double>();
@@ -40,6 +41,7 @@ void Config::load(const char* filename)
     // Check for non-stupid values
     if(num_particles <= 1
                 || mcmc_steps <= 0
+                || thin == 0
                 || num_threads == 0
                 || switch_sampler_reps < 1)
     {

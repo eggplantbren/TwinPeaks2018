@@ -92,6 +92,10 @@ RNGPool do_batch(unsigned int first_id, RNGPool& rngs);
 template<typename T>
 void run_switch_sampler();
 
+// Clears files and writes the first column.
+template<typename T>
+void prepare_output_files();
+
 } // namespace TwinPeaks2018
 
 #include "SwitchSamplerImpl.h"
