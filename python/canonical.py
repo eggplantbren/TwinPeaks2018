@@ -24,7 +24,7 @@ def load_particles_info(filename="../output/particles_info.csv"):
         print("There are no completed reps.")
         return particles_info
 
-    print("Found {n} completed reps.".format(n=len(completed_reps)))
+    print("Found {n} completed reps.\n".format(n=len(completed_reps)))
 
     # Mark completed reps for keeping
     keep = np.zeros(particles_info.shape[0], dtype="bool")
@@ -124,8 +124,11 @@ def evaluate_temperature_grid(particles_info, limits):
     T0_min, T0_max, T1_min, T1_max = limits
 
     # Set up results grids
-    ln_Z = np.empty((21, 21))
-    H = np.empty((21, 21))
+    ln_Z = np.empty((51, 51))
+    H = np.empty((51, 51))
+
+    print("Computing temperature grid. It takes a long time", end="",
+          flush=True)
 
     # Temperature grids
     T0 = 10.0**np.linspace(np.log10(T0_min),
@@ -134,14 +137,16 @@ def evaluate_temperature_grid(particles_info, limits):
                                         np.log10(T0_max), ln_Z.shape[1])
     [T0, T1] = np.meshgrid(T0, T1)
 
+    # Compute over the grid
     for i in range(ln_Z.shape[0]):
         for j in range(ln_Z.shape[1]):
             results = get_canonical(particles_info,
                                     temperatures=[T0[i, j], T1[i, j]])
             ln_Z[i, j] = results["ln_Z"]
             H[i, j] = results["H"]
-        print(i+1)
+            print(".", end="", flush=True)
 
+    # Plot the results
     plt.subplot(1, 2, 1)
     plt.imshow(ln_Z, origin="lower", extent=np.log10(limits))
     plt.xlabel("log10(T_0)")
@@ -166,10 +171,10 @@ if __name__ == "__main__":
 
     print("ln(Z) = {ln_Z}.".format(ln_Z=result["ln_Z"]))
     print("H = {H} nats.".format(H=result["H"]))
-    print("ESS = {ESS}.".format(ESS=result["ESS"]))
+    print("ESS = {ESS}.\n".format(ESS=result["ESS"]))
 
-    print("\nFor the example, the true value of ln(Z) is " + \
-          "-8073.72, and H is 63.7246 nats.")
+    print("For the example, the true value of ln(Z) is " + \
+          "-8073.72, and H is 63.7246 nats.\n")
 
     h = plot_particle_scalars(particles_info)
     plt.show()
