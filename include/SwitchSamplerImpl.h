@@ -264,5 +264,15 @@ void do_rep(unsigned int id, RNG& rng)
     sampler.run_to_depth(Config::global_config.get_depth(), rng);
 }
 
+template<typename T>
+void do_batch(unsigned int first_id, unsigned int last_id, RNGPool& rngs)
+{
+    if(last_id < first_id || rngs.size() < (last_id - first_id + 1))
+        throw std::invalid_argument("Invalid input to do_reps.");
+
+    for(size_t i=0; i<rngs.size(); ++i)
+        do_rep<T>(first_id + i + 1, rngs[i]);
+}
+
 } // namespace TwinPeaks2018
 

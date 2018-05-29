@@ -1,6 +1,7 @@
 #include "RNG.h"
 #include "Utils.h"
 #include <cmath>
+#include <iostream>
 
 namespace TwinPeaks2018
 {
