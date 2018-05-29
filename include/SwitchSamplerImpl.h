@@ -44,8 +44,11 @@ SwitchSampler<T>::SwitchSampler(unsigned int _id, size_t _num_particles)
 template<typename T>
 void SwitchSampler<T>::initialize(RNG& rng)
 {
-    std::cout << "Generating " << num_particles << " particles...";
+    stdout_mutex.lock();
+    std::cout << "Rep " << id << ":\n";
+    std::cout << "    Generating " << num_particles << " particles...";
     std::cout << std::flush;
+    stdout_mutex.unlock();
 
     for(size_t i=0; i<num_particles; ++i)
     {
@@ -54,7 +57,9 @@ void SwitchSampler<T>::initialize(RNG& rng)
         for(double& tb: tiebreakers[i])
             tb = rng.rand();
     }
+    stdout_mutex.lock();
     std::cout << "done." << std::endl;
+    stdout_mutex.unlock();
 
     // Generate direction
     for(double& d: direction)
@@ -63,7 +68,9 @@ void SwitchSampler<T>::initialize(RNG& rng)
     for(double& d: direction)
         d /= d_max;    
 
-    std::cout << "Direction = " << render(direction) << "." << std::endl;
+    stdout_mutex.lock();
+    std::cout << "    Direction = " << render(direction) << ".\n" << std::endl;
+    stdout_mutex.unlock();
 }
 
 
@@ -225,10 +232,7 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     // Do initialization if necessary
     if(iteration == 0)
     {
-        stdout_mutex.lock();
         initialize(rng);
-        stdout_mutex.unlock();
-
         ++iteration;
     }
 
