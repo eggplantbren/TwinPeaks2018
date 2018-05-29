@@ -39,24 +39,18 @@ def plot_particle_scalars(scalars=[0, 1]):
 
 
 
-def get_canonical(temperatures=[1.0, 1.0], truncate=True, plot=False):
+def get_canonical(temperatures=[1.0, 1.0], plot=False):
     """
     Obtain the properties of a single canonical distribution.
     """
 
-    run_ids = np.arange(min(particles_info["run_id"]),
+    subset = particles_info # Might need to remove incomplete reps though
+
+    rep_ids = np.arange(min(particles_info["run_id"]),
                         max(particles_info["run_id"] + 1))
-    if truncate and len(run_ids) > 1 and \
-        (np.sum(particles_info["run_id"] == run_ids[0]) != \
-         np.sum(particles_info["run_id"] == run_ids[-1])):
-        which = np.nonzero(particles_info["run_id"] != run_ids[-1])[0]
-        subset = particles_info.iloc[which, :]
-        run_ids = run_ids[0:-1]
-    else:
-        subset = particles_info
 
     print("Found {reps} switch sampler reps."\
-                    .format(reps=run_ids[-1]))
+                    .format(reps=np.max(rep_ids)))
 
     ln_w = subset["ln_prior_mass"]\
                    - logsumexp(subset["ln_prior_mass"])
