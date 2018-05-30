@@ -1,4 +1,3 @@
-* Plot logZ/H/<f>/<g> maps
 * Implement more examples
 * Finish canonical.create_canonical()
 * Make a Python package
@@ -11,3 +10,4 @@ COMPLETED:
 * Parallelise
 * Make sense of stdout messages when running in parallel
 * Implement thinning
+* Plot logZ/H/<f>/<g> maps
