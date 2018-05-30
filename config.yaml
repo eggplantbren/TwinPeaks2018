@@ -6,4 +6,4 @@ thin: 100
 num_threads: 8
 depth: 500.0
 rng_seed: "auto"           # Can be "auto" or a non-negative integer
-switch_sampler_reps: 100   # Number of repetitions of switch sampling
+switch_sampler_reps: 1000   # Number of repetitions of switch sampling
