@@ -150,10 +150,9 @@ def evaluate_temperature_grid(particles_info, limits):
             H[i, j] = results["H"]
 
             # Compute expectations
-            ln_W = results["ln_W"]
-            S0[i, j] = logsumexp(ln_W + particles_info["scalars[0]"])
-            S1[i, j] = logsumexp(ln_W + particles_info["scalars[1]"])
-
+            W = np.exp(results["ln_W"])
+            S0[i, j] = np.sum(W*particles_info["scalars[0]"])
+            S1[i, j] = np.sum(W*particles_info["scalars[1]"])
             print(".", end="", flush=True)
     print("")
 
