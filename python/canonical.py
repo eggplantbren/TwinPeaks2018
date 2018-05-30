@@ -195,10 +195,10 @@ if __name__ == "__main__":
     print("ESS = {ESS}.\n".format(ESS=result["ESS"]))
 
     print("For the example, the true value of ln(Z) is " + \
-          "-8073.72, and H is 63.7246 nats.\n")
+          "-216.865, and H is 129.017 nats.\n")
 
     h = plot_particle_scalars(particles_info)
     plt.show()
 
-    evaluate_temperature_grid(particles_info, [0.1, 10.0, 0.1, 10.0])
+    evaluate_temperature_grid(particles_info, [0.1, 100.0, 0.1, 100.0])
 

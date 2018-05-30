@@ -19,22 +19,28 @@ void TwoScalars::from_prior(RNG& rng)
 
 double TwoScalars::perturb(RNG& rng)
 {
-    int which = rng.rand_int(xs.size());
-    xs[which] += rng.randh();
-    wrap(xs[which], 0.0, 1.0);
+    int which;
+
+    int num;
+    if(rng.rand() <= 0.5)
+        num = 1;
+    else
+        num = (int)pow((double)N, rng.rand());
+    for(int i=0; i<num; ++i)
+    {
+        which = rng.rand_int(xs.size());
+        xs[which] += rng.randh();
+        wrap(xs[which], 0.0, 1.0);
+    }
+
     return 0.0;
 }
 
 double TwoScalars::f() const
 {
-    static constexpr double center = 0.3;
-    static constexpr double width = 0.01;
-    static constexpr double inv_width = 1.0/width;
-
     double result = 0.0;
     for(double x: xs)
-        result += -0.5*pow((x - center)*inv_width, 2);
-
+        result += -pow((x - 0.5)/0.1, 2);
     return result;
 }
 
@@ -42,7 +48,7 @@ double TwoScalars::g() const
 {
     double result = 0.0;
     for(double x: xs)
-        result += -2000*x;
+        result += -pow(sin(10*M_PI*x), 2);
     return result;
 }
 
