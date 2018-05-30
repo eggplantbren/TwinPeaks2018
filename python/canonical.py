@@ -117,17 +117,17 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
 #    indices = np.sort(np.array(indices))
 
 
-def evaluate_temperature_grid(particles_info, limits):
+def evaluate_temperature_grid(particles_info, limits, n=51):
     """
     Evaluate logZ and H on a temperature grid.
     """
     T0_min, T0_max, T1_min, T1_max = limits
 
     # Set up results grids
-    ln_Z = np.empty((51, 51))
-    H = np.empty((51, 51))
-    S0 = np.empty((51, 51))
-    S1 = np.empty((51, 51))
+    ln_Z = np.empty((n, n))
+    H = np.empty((n, n))
+    S0 = np.empty((n, n))
+    S1 = np.empty((n, n))
 
     print("Computing temperature grid. It takes a while (one dot=one pixel)",
           end="", flush=True)
