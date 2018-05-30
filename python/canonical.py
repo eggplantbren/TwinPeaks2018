@@ -91,30 +91,30 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
     return result
 
 
-def create_canonical(particles_info,
-                     result, outfile="../output/canonical_particles.csv"):
-    """
-    Create and save samples from the canonical distribution.
-    Argument: a dictionary as output by get_canonical().
-    """
-    ln_W = result["ln_W"]
-    max_ln_W = np.max(ln_W)
+#def create_canonical(particles_info,
+#                     result, outfile="../output/canonical_particles.csv"):
+#    """
+#    Create and save samples from the canonical distribution.
+#    Argument: a dictionary as output by get_canonical().
+#    """
+#    ln_W = result["ln_W"]
+#    max_ln_W = np.max(ln_W)
 
-    # Indices of particles
-    indices = []
-    attempts = 0
-    while True:
-        attempts += 1
-        print(attempts)
+#    # Indices of particles
+#    indices = []
+#    attempts = 0
+#    while True:
+#        attempts += 1
+#        print(attempts)
 
-        k = rng.randint(len(ln_W))
-        p = np.exp(ln_W[k] - max_ln_W)
-        if rng.rand() <= p:
-            indices.append(k)
-        if len(indices) >= int(result["ESS"]):
-            break
+#        k = rng.randint(len(ln_W))
+#        p = np.exp(ln_W[k] - max_ln_W)
+#        if rng.rand() <= p:
+#            indices.append(k)
+#        if len(indices) >= int(result["ESS"]):
+#            break
 
-    indices = np.sort(np.array(indices))
+#    indices = np.sort(np.array(indices))
 
 
 def evaluate_temperature_grid(particles_info, limits):
@@ -126,9 +126,11 @@ def evaluate_temperature_grid(particles_info, limits):
     # Set up results grids
     ln_Z = np.empty((51, 51))
     H = np.empty((51, 51))
+    S0 = np.empty((51, 51))
+    S1 = np.empty((51, 51))
 
-    print("Computing temperature grid. It takes a long time", end="",
-          flush=True)
+    print("Computing temperature grid. It takes a while (one dot=one pixel)",
+          end="", flush=True)
 
     # Temperature grids
     T0 = 10.0**np.linspace(np.log10(T0_min),
@@ -142,22 +144,42 @@ def evaluate_temperature_grid(particles_info, limits):
         for j in range(ln_Z.shape[1]):
             results = get_canonical(particles_info,
                                     temperatures=[T0[i, j], T1[i, j]])
+
+            # Retrieve normalisation constant and KL divergence
             ln_Z[i, j] = results["ln_Z"]
             H[i, j] = results["H"]
+
+            # Compute expectations
+            ln_W = results["ln_W"]
+            S0[i, j] = logsumexp(ln_W + particles_info["scalars[0]"])
+            S1[i, j] = logsumexp(ln_W + particles_info["scalars[1]"])
+
             print(".", end="", flush=True)
+    print("")
 
     # Plot the results
-    plt.subplot(1, 2, 1)
+    plt.figure(figsize=(8, 8))
+    plt.subplot(2, 2, 1)
     plt.imshow(ln_Z, origin="lower", extent=np.log10(limits))
-    plt.xlabel("log10(T_0)")
-    plt.xlabel("log10(T_1)")
+    plt.ylabel("log10(T_1)")
     plt.title("ln_Z")
 
-    plt.subplot(1, 2, 2)
+    plt.subplot(2, 2, 2)
     plt.imshow(H, origin="lower", extent=np.log10(limits))
-    plt.xlabel("log10(T_0)")
-    plt.xlabel("log10(T_1)")
+    plt.ylabel("log10(T_1)")
     plt.title("H")
+
+    plt.subplot(2, 2, 3)
+    plt.imshow(S0, origin="lower", extent=np.log10(limits))
+    plt.xlabel("log10(T_0)")
+    plt.ylabel("log10(T_1)")
+    plt.title("<S_0>")
+
+    plt.subplot(2, 2, 4)
+    plt.imshow(S1, origin="lower", extent=np.log10(limits))
+    plt.xlabel("log10(T_0)")
+    plt.ylabel("log10(T_1)")
+    plt.title("<S_1>")
     plt.show()
 
 
@@ -179,5 +201,5 @@ if __name__ == "__main__":
     h = plot_particle_scalars(particles_info)
     plt.show()
 
-    evaluate_temperature_grid(particles_info, [0.01, 100.0, 0.01, 100.0])
+    evaluate_temperature_grid(particles_info, [0.1, 10.0, 0.1, 10.0])
 
