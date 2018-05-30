@@ -1,5 +1,6 @@
 doc/ms.aux
 doc/ms.log
+doc/ms.out
 doc/ms.pdf
 __pycache__
 main
