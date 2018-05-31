@@ -60,7 +60,7 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     plt.ylabel(names[1])
 
     plt.savefig("output/particle_scalars.png", dpi=600)
-    print("Saved particle_scalars.png")
+    print("Saved output/particle_scalars.png")
     plt.show()
 
     return h
@@ -191,7 +191,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51):
     plt.title("Residuals")
 
     plt.savefig("output/ln_Z_H.png", dpi=600)
-    print("ln_Z_h.png")
+    print("Saved output/ln_Z_h.png")
     plt.show()
 
     plt.figure(2)
@@ -207,7 +207,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51):
     plt.ylabel("log10(T_1)")
     plt.title("<S_1>")
     plt.savefig("output/expectations_of_scalars.png", dpi=600)
-    print("Saved expectations_of_scalars.png")
+    print("Saved output/expectations_of_scalars.png")
     plt.show()
 
 
