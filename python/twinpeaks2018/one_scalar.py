@@ -33,6 +33,8 @@ def postprocess_one_scalar(temperature=1.0):
     plt.figure(figsize=(9, 7))
     plt.subplot(2, 1, 1)
     plt.plot(ln_w, ln_l, ".", markersize=1, alpha=0.3)
+    ln_l_sorted = np.sort(ln_l)
+    plt.ylim([ln_l_sorted[int(0.05*len(ln_l_sorted))], ln_l_sorted[-1]])
     plt.ylabel("$\\ln(L)$")
 
     plt.subplot(2,1,2)
