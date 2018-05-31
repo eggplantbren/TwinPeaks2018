@@ -14,8 +14,8 @@ def compute_truth(limits, n=51, plot=False):
     # Temperature grids
     T0 = 10.0**np.linspace(np.log10(T0_min),
                                         np.log10(T0_max), ln_Z.shape[0])
-    T1 = 10.0**np.linspace(np.log10(T0_min),
-                                        np.log10(T0_max), ln_Z.shape[1])
+    T1 = 10.0**np.linspace(np.log10(T1_min),
+                                        np.log10(T1_max), ln_Z.shape[1])
     [T0, T1] = np.meshgrid(T0, T1)
 
     # Compute over the grid
