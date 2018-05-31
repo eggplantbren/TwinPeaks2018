@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from twinpeaks2018.canonical import *
 from twinpeaks2018.utils import *
 
 # Niceify plots
