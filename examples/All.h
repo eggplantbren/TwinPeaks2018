@@ -3,6 +3,7 @@
 
 #include "Atoms.h"
 #include "Potts.h"
+#include "Rosenbrock.h"
 #include "SpikeSlab.h"
 #include "TwoScalars.h"
 

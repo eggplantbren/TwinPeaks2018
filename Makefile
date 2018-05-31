@@ -18,6 +18,7 @@ default:
 	@echo "Compiling examples..."
 	$(CXX) $(CXXFLAGS) -c examples/Atoms.cpp
 	$(CXX) $(CXXFLAGS) -c examples/Potts.cpp
+	$(CXX) $(CXXFLAGS) -c examples/Rosenbrock.cpp
 	$(CXX) $(CXXFLAGS) -c examples/SpikeSlab.cpp
 	$(CXX) $(CXXFLAGS) -c examples/TwoScalars.cpp
 
