@@ -1,8 +1,7 @@
 * Implement more examples
-* Make it work elegantly on one-scalar examples (and possibly 3 or more too)
-* Finish canonical.create_canonical()
 * Auto-detect what temperature range is reliable (and even what specific
   temperatures are well-sampled!)
+* Verify that the algorithm is theoretically sound
 
 COMPLETED:
 
@@ -14,4 +13,6 @@ COMPLETED:
 * Implement thinning
 * Plot logZ/H/<f>/<g> maps
 * Make a Python package
-
+* Finish canonical.create_canonical() [deprecated]
+* Make it work elegantly on one-scalar examples (and possibly 3 or more too)
+  [one-scalar is good, 3 or more is hard to plot so I won't do it]
