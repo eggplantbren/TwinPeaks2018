@@ -313,7 +313,7 @@ void prepare_output_files()
     fout.open("output/particles_info.csv", std::ios::out);
 
     // Column names
-    std::vector<std::string> header = {"run_id", "iteration",
+    std::vector<std::string> header = {"rep_id", "iteration",
                                        "ln_prior_mass"};
     for(size_t i=0; i<T::num_scalars; ++i)
     {

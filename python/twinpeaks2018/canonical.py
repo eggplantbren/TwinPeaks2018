@@ -35,7 +35,7 @@ def load_particles_info():
     # Mark completed reps for keeping
     keep = np.zeros(particles_info.shape[0], dtype="bool")
     for r in completed_reps:
-        keep[particles_info["run_id"] == r] = True
+        keep[particles_info["rep_id"] == r] = True
     indices = np.nonzero(keep)[0]
     return particles_info.iloc[keep, :]
 
@@ -71,8 +71,8 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
     """
     Obtain the properties of a single canonical distribution.
     """
-    rep_ids = np.arange(min(particles_info["run_id"]),
-                        max(particles_info["run_id"] + 1))
+    rep_ids = np.arange(min(particles_info["rep_id"]),
+                        max(particles_info["rep_id"] + 1))
 
     ln_w = particles_info["ln_prior_mass"]\
                    - logsumexp(particles_info["ln_prior_mass"])
