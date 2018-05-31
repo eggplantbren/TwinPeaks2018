@@ -28,6 +28,7 @@ def postprocess_one_scalar(temperature=1.0):
 
     print("ln(Z) = {ln_Z}".format(ln_Z=ln_Z))
     print("H = {H}".format(H=H))
+    np.savetxt("output/posterior_weights.txt", W)
 
     plt.figure(figsize=(9, 7))
     plt.subplot(2, 1, 1)
