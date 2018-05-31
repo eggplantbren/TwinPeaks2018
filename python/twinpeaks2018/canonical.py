@@ -206,7 +206,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     plt.imshow(S0, origin="lower", extent=np.log10(limits))
     plt.xlabel("$\\log_{10}(T_0)$")
     plt.ylabel("$\\log_{10}(T_1)$")
-    plt.title("$<S_0>$")
+    plt.title("$\\left<S_0\\right>$")
 
     plt.subplot(1, 2, 2)
     plt.imshow(S1, origin="lower", extent=np.log10(limits))
