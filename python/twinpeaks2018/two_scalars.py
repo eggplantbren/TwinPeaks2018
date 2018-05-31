@@ -72,7 +72,7 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
 
     if plot_and_save:
         print("ln(Z) = {ln_Z}".format(ln_Z=ln_Z))
-        print("H = {H}".format(H=H))
+        print("H = {H} nats".format(H=H))
         np.savetxt("output/canonical_weights.txt", W)
 
         plt.figure(figsize=(9, 7))

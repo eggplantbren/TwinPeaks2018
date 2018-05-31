@@ -27,7 +27,7 @@ def postprocess_one_scalar(temperature=1.0):
     H = np.sum(W*(ln_W - ln_w))
 
     print("ln(Z) = {ln_Z}".format(ln_Z=ln_Z))
-    print("H = {H}".format(H=H))
+    print("H = {H} nats".format(H=H))
     np.savetxt("output/posterior_weights.txt", W)
 
     plt.figure(figsize=(9, 7))
