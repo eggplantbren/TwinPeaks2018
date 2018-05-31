@@ -24,7 +24,7 @@ def compute_truth(limits, n=51, plot=False):
 
             ln_y = -((x - 0.5)/0.1)**2 / T0[i, j] - \
                         (np.sin(10*np.pi*x))**2 / T1[i, j]
-            ln_Y = ln_y - logsumexp(ln_y)
+            ln_Y = ln_y - logsumexp(ln_y + np.log(dx))
             Y = np.exp(ln_Y)
 
             # Normalisation constant and KL divergence

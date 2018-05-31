@@ -18,8 +18,8 @@ def load_particles_info():
     returns whatever it's got).
     """
 
-    particles_info = pd.read_csv("particles_info.csv")
-    completed_reps = np.loadtxt("completed_reps.txt")
+    particles_info = pd.read_csv("output/particles_info.csv")
+    completed_reps = np.loadtxt("output/completed_reps.txt")
 
     if len(completed_reps) == 0:
         print("There are no completed reps.")
@@ -59,7 +59,7 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     plt.xlabel(names[0])
     plt.ylabel(names[1])
 
-    plt.savefig("particle_scalars.png", dpi=600)
+    plt.savefig("output/particle_scalars.png", dpi=600)
     print("Saved particle_scalars.png")
     plt.show()
 
@@ -190,7 +190,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51):
     plt.ylabel("log10(T_1)")
     plt.title("Residuals")
 
-    plt.savefig("ln_Z_H.png", dpi=600)
+    plt.savefig("output/ln_Z_H.png", dpi=600)
     print("ln_Z_h.png")
     plt.show()
 
@@ -206,7 +206,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51):
     plt.xlabel("log10(T_0)")
     plt.ylabel("log10(T_1)")
     plt.title("<S_1>")
-    plt.savefig("expectations_of_scalars.png", dpi=600)
+    plt.savefig("output/expectations_of_scalars.png", dpi=600)
     print("Saved expectations_of_scalars.png")
     plt.show()
 
