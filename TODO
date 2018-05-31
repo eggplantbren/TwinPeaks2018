@@ -1,5 +1,7 @@
 * Implement more examples
 * Finish canonical.create_canonical()
+* Auto-detect what temperature range is reliable (and even what specific
+  temperatures are well-sampled!)
 
 COMPLETED:
 
