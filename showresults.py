@@ -1,3 +1,3 @@
-import twinpeaks2018.canonical
+import twinpeaks2018
 
-twinpeaks2018.canonical.showresults()
+twinpeaks2018.postprocess_two_scalars()

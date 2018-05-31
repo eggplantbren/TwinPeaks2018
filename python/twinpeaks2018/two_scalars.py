@@ -7,38 +7,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.random as rng
 import pandas as pd
-from twinpeaks2018.two_scalars_truth import compute_truth
-from twinpeaks2018.utils import logsumexp
+from twinpeaks2018.example_truth import *
+from twinpeaks2018.utils import *
 
 
-# Niceify plots
-plt.rcParams["font.family"] = "serif"
-plt.rcParams["font.size"] = 16
-plt.rc("text", usetex=True)
-
-def load_particles_info():
-    """
-    Load all the particles_info file, and return a data frame containing
-    only complete runs (unless there aren't any, in which case it just
-    returns whatever it's got).
-    """
-
-    particles_info = pd.read_csv("output/particles_info.csv")
-    completed_reps = np.array([np.loadtxt("output/completed_reps.txt")])
-    completed_reps = completed_reps.flatten()
-
-    if len(completed_reps) == 0:
-        print("There are no completed reps.")
-        return particles_info
-
-    print("Found {n} completed reps.\n".format(n=len(completed_reps)))
-
-    # Mark completed reps for keeping
-    keep = np.zeros(particles_info.shape[0], dtype="bool")
-    for r in completed_reps:
-        keep[particles_info["rep_id"] == r] = True
-    indices = np.nonzero(keep)[0]
-    return particles_info.iloc[keep, :]
 
 
 def plot_particle_scalars(particles_info, scalars=[0, 1]):
@@ -224,7 +196,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
 
 
 
-def showresults(limits=[0.1, 100.0, 0.1, 100.0], residuals=True):
+def postprocess_two_scalars(limits=[0.1, 100.0, 0.1, 100.0], residuals=False):
     """
     This is what you'll usually want to call.
     """
