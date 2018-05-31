@@ -163,8 +163,6 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
             print(".", end="", flush=True)
     print("")
 
-    truth = compute_truth(limits, n)
-
     # Plot the results
     plt.figure(1, figsize=(9, 6))
     plt.subplot(1, 2, 1)
@@ -183,6 +181,8 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     plt.show()
 
     if residuals:
+        truth = compute_truth(limits, n)
+
         plt.figure(2, figsize=(9, 6))
         plt.subplot(1, 2, 1)
         plt.imshow(ln_Z - truth["ln_Z"],
@@ -211,14 +211,14 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     plt.subplot(1, 2, 2)
     plt.imshow(S1, origin="lower", extent=np.log10(limits))
     plt.xlabel("$\\log_{10}(T_0)$")
-    plt.title("$<S_1>$")
+    plt.title("$\\left<S_1\\right>$")
     plt.savefig("output/expectations_of_scalars.png", dpi=600)
     print("Saved output/expectations_of_scalars.png")
     plt.show()
 
 
 
-def showresults():
+def showresults(limits=[0.1, 100.0, 0.1, 100.0], residuals=True):
     """
     This is what you'll usually want to call.
     """
@@ -239,6 +239,6 @@ def showresults():
     plot_particle_scalars(particles_info)
     plt.show()
 
-    evaluate_temperature_grid(particles_info, [0.1, 100.0, 0.1, 100.0],
-                              residuals=True)
+    evaluate_temperature_grid(particles_info, limits=limits,
+                              residuals=residuals)
 
