@@ -10,16 +10,16 @@ import pandas as pd
 from .utils import logsumexp
 
 
-def load_particles_info(filename="../../output/particles_info.csv"):
+def load_particles_info():
     """
     Load all the particles_info file, and return a data frame containing
     only complete runs (unless there aren't any, in which case it just
     returns whatever it's got).
     """
 
-    particles_info = pd.read_csv(filename)
+    particles_info = pd.read_csv("particles_info.csv")
+    completed_reps = np.loadtxt("completed_reps.txt")
 
-    completed_reps = np.loadtxt("../../output/completed_reps.txt")
     if len(completed_reps) == 0:
         print("There are no completed reps.")
         return particles_info
@@ -182,7 +182,10 @@ def evaluate_temperature_grid(particles_info, limits, n=51):
     plt.show()
 
 
-if __name__ == "__main__":
+def showresults():
+    """
+    This is what you'll usually want to call.
+    """
 
     # Load the results
     particles_info = load_particles_info()
