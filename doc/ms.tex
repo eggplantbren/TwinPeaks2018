@@ -100,7 +100,7 @@
 %=================================================================
 
 % Full title of the paper (Capitalized)
-\Title{Nested sampling with two objective functions}
+\Title{Nested Sampling with Multiple Objective Functions}
 
 % Authors (Add full first names)
 \Author{Brendon J. Brewer$^{1,}$*,
@@ -130,17 +130,19 @@ occasionally in Bayesian inference.
 We demonstrate the algorithm on three example problems.
 The first is a toy problem whose structure allows us
 to accurately calculate $Z(\beta_1, \beta_2)$ numerically using non-Monte-Carlo
-methods.
-We show empirically how the accuracy of TwinPeaks
+methods. With this example, we empirically investigate the accuracy of TwinPeaks
 improves as a function of the number of particles used, $N$. We also
 calculate the partition function for a collection of atoms with a potential
-that is `intermediate' between a Lennard-Jones form and a polymer form.
+that is intermediate between a Lennard-Jones form and a `polymer' form.
 Finally, we present a Bayesian image reconstruction example,
 where we can infer the value of a hyperparameter even though its prior
-distribution contains an `intractable' normalizing constant.}
+distribution contains an `intractable' normalizing constant.
+An implementation in C++ is available at
+\url{https://github.com/eggplantbren/TwinPeaks2018}.}
 
 % Keywords: add 3 to 10 keywords
-\keyword{nested sampling; bayesian computation; statistical mechanics}
+\keyword{nested sampling; bayesian computation; statistical mechanics;
+         sequential monte carlo; multi-objective optimization}
 
 % The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
 %\PACS{}
@@ -161,6 +163,8 @@ distribution contains an `intractable' normalizing constant.}
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setlength{\parskip}{0.7em}
 
 \section{Introduction}
 
@@ -201,18 +205,20 @@ H &=& \int p(\xx | \data, \II) \ln
 \left[\frac{L(\xx)}{Z}\right] \, d\xx.
 \end{eqnarray}
 $H$ quantifies how compressed the posterior distribution is with
-respect to the prior. For example, $H = 10$ implies (loosely speaking)
+respect to the prior. For example, $H = 10$ implies, loosely speaking,
 that the posterior occupies a fraction $e^{-10}$ of the prior mass.
 $H$ can be interpreted quite literally as a measure of how much
-the data $\data$ told you about $\xx$.
+the specific data $\data$ resolved the question ``what is the value
+of $\xx$, precisely?''.
 
 NS works by drawing particles from the
 prior $\pi(\xx)$ and successively imposing constraints on the value of
 the likelihood $L(\xx)$ that compress the prior mass by a (roughly) known
 and constant factor. Like related algorithms such as those
 based on `annealing' or `tempering', NS
-moves through a sequence of probability distributions beginning from the
-prior. This sequence of distributions is defined by
+moves through a sequence of probability distributions, beginning with the
+prior. It is the specific sequence of distributions used that distinguishes
+NS from annealing. The sequence of distributions used in NS is defined by
 \begin{eqnarray}
 p(\xx; \ell) &=& \frac{1}{X(\ell)}\pi(\xx)\mathds{1}\left(L(\xx) > \ell\right).
 \label{eq:constrained_prior}
@@ -222,17 +228,20 @@ function $L(X)$:
 \begin{eqnarray}
 Z &=& \int_0^1 L(X)\, dX.
 \end{eqnarray}
+\citet{salamone} recently showed how NS can be viewed as an instance of
+Sequential Monte Carlo (SMC), with a particular choice of the sequence of
+distributions.
+
 Throughout this paper we use the popular `overloaded' notation for some
 functions and probability distributions.
 For example, $L(\xx)$ is the likelihood function, and $L(X)$ is the likelihood
-as a function of the enclosed prior mass $X$. These cannot literally be the
-same function as the inputs typically don't have the same dimensionality
-($\xx$ is usually a collection of quantities and $X$ is a single real number
-in $[0, 1]$).
+as a function of the enclosed prior mass $X$. The inverse, $X(L)$, takes a
+likelihood as input and computes the corresponding enclosed prior mass.
 Therefore the symbol $L$ implies the output of the function is a
 likelihood value; so $L(\xx)$ represents a likelihood value computed from
 the parameters $\xx$, and $L(X)$ represents a likelihood value that
-corresponds to an amount $X$ of prior mass.
+corresponds to an amount $X$ of prior mass. In more traditional notation,
+$X(L)$ would be written using function composition, $X(L(\xx))$.
 
 Naively, Equation~\ref{eqn:evidence} appears straightforward to compute because
 it is a simple expectation of $L$ with respect to the distribution $\pi$.
@@ -388,7 +397,19 @@ to accurately estimate $Z(\beta_1, \beta_2)$.
 %$\left(\ell_1, \ell_2\right)$. See Figure~\ref{fig:joint1} for an
 %example.
 
-\section{Properties of Nested sampling}
+\section{Properties of Nested Sampling}
+What is special about the NS sequence of distributions? 
+
+
+Consider the Nested Sampling measure, proportional to the amount of time
+NS spends in each region of the space. Since NS moves at a constant rate
+in terms of $\log(X)$, this measure is
+\begin{align}
+m_{\rm NS} &\propto \frac{\pi(\xx)}{X(\xx)}.
+\end{align}
+
+
+
 
 We seek an algorithm for computing the partition function
 $Z(\beta_1, \beta_2)$ for a range of values of the $\beta$s, from a single
