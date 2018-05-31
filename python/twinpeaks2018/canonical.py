@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.random as rng
 import pandas as pd
-from utils import logsumexp
+from .utils import logsumexp
 
 
 def load_particles_info(filename="../../output/particles_info.csv"):

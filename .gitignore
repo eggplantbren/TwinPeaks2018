@@ -8,3 +8,9 @@ output/*.csv
 output/*.txt
 logfile
 libtwinpeaks2018.a
+python/build/
+python/dist/
+python/twinpeaks2018.egg-info/
+python/twinpeaks2018/dist/
+python/twinpeaks2018/twinpeaks2018.egg-info/
+
