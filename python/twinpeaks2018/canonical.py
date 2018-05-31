@@ -57,15 +57,20 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     names = ["scalars[{i}]".format(i=scalars[0]),
              "scalars[{j}]".format(j=scalars[1])]
 
-    h = plt.figure()
+    plt.figure()
     plt.plot(particles_info[names[0]][indices],
              particles_info[names[1]][indices],
              ".", alpha=0.2, markersize=1)
     plt.xlabel("$S_{i}$".format(i=scalars[0]))
     plt.ylabel("$S_{j}$".format(j=scalars[1]))
+    x = np.sort(particles_info[names[0]][indices])
+    y = np.sort(particles_info[names[1]][indices])
+    plt.xlim([x[int(0.05*len(x))], x[-1]])
+    plt.ylim([y[int(0.05*len(y))], y[-1]])
 
     plt.savefig("output/particle_scalars.png", dpi=600)
     print("Saved output/particle_scalars.png")
+    plt.show()
 
 def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
     """
@@ -237,8 +242,6 @@ def showresults(limits=[0.1, 100.0, 0.1, 100.0], residuals=True):
           "-216.865, and H is 129.017 nats.\n")
 
     plot_particle_scalars(particles_info)
-    plt.show()
-
     evaluate_temperature_grid(particles_info, limits=limits,
                               residuals=residuals)
 
