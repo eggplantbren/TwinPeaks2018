@@ -53,7 +53,7 @@ double Rosenbrock::log_likelihood() const
 std::vector<double> Rosenbrock::scalars() const
 {
     double value = log_likelihood();
-    return {value/num_scalars, value/num_scalars};
+    return { value };
 }
 
 

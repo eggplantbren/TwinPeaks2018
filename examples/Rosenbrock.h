@@ -18,7 +18,7 @@ class Rosenbrock
 {
     // Number of scalars
     public:
-        static constexpr size_t num_scalars = 2;
+        static constexpr size_t num_scalars = 1;
 
     private:
 
