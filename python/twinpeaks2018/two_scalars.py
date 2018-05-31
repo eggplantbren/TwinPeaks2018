@@ -45,7 +45,7 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     print("Saved output/particle_scalars.png")
     plt.show()
 
-def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
+def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
     """
     Obtain the properties of a single canonical distribution.
     """
@@ -62,44 +62,33 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
     ln_Z = logsumexp(ln_prod)
     ln_W = ln_prod - ln_Z
     W = np.exp(ln_W)
+    H = np.sum(W*(ln_s - ln_Z))
 
     result = {}
     result["ln_Z"] = ln_Z
     result["ln_W"] = ln_W
-    result["H"] = np.sum(W*(ln_s - ln_Z))
+    result["H"] = H
     result["ESS"] = np.exp(-np.sum(W*ln_W))
 
-    if plot:
-        plt.plot(logW)
+    if plot_and_save:
+        print("ln(Z) = {ln_Z}".format(ln_Z=ln_Z))
+        print("H = {H}".format(H=H))
+        np.savetxt("output/canonical_weights.txt", W)
+
+        plt.figure(figsize=(9, 7))
+        plt.subplot(2, 1, 1)
+        plt.plot(ln_w, ln_s, ".", markersize=1, alpha=0.2)
+        plt.ylabel("$\\ln(L)$")
+
+        plt.subplot(2,1,2)
+        plt.plot(ln_w, W/W.max(), ".", markersize=1, alpha=0.2)
+        plt.xlabel("$\\ln(w)$")
+        plt.ylabel("$W/W_{\\rm max}$")
+        plt.savefig("output/likelihood_curve.png", dpi=600)
+        print("Saved output/likelihood_curve.png")
         plt.show()
 
     return result
-
-
-#def create_canonical(particles_info,
-#                     result, outfile="../../output/canonical_particles.csv"):
-#    """
-#    Create and save samples from the canonical distribution.
-#    Argument: a dictionary as output by get_canonical().
-#    """
-#    ln_W = result["ln_W"]
-#    max_ln_W = np.max(ln_W)
-
-#    # Indices of particles
-#    indices = []
-#    attempts = 0
-#    while True:
-#        attempts += 1
-#        print(attempts)
-
-#        k = rng.randint(len(ln_W))
-#        p = np.exp(ln_W[k] - max_ln_W)
-#        if rng.rand() <= p:
-#            indices.append(k)
-#        if len(indices) >= int(result["ESS"]):
-#            break
-
-#    indices = np.sort(np.array(indices))
 
 
 def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
@@ -196,25 +185,28 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
 
 
 
-def postprocess_two_scalars(limits=[0.1, 100.0, 0.1, 100.0], residuals=False):
+def postprocess_two_scalars(specific_temperatures=[1.0, 1.0],
+                            temperature_grid_limits=[0.1, 100.0, 0.1, 100.0],
+                            demo=False):
     """
-    This is what you'll usually want to call.
+    This is what you'll usually want to call. Use specific_temperatures
+    to select a canonical distribution of particular interest, and
+    use temperature_grid_limits to select a range of temperatures over
+    which the grids will be made.
     """
 
     # Load the results
     particles_info = load_particles_info()
 
-    # Compute the properties of a canonical distribution.
-    result = get_canonical(particles_info)
+    # Compute the properties of a canonical distribution and the requested
+    # temperatures.
+    result = get_canonical(particles_info, specific_temperatures, True)
 
-    print("ln(Z) = {ln_Z}.".format(ln_Z=result["ln_Z"]))
-    print("H = {H} nats.".format(H=result["H"]))
-    print("ESS = {ESS}.\n".format(ESS=result["ESS"]))
-
-    print("For the example, the true value of ln(Z) is " + \
-          "-216.865, and H is 129.017 nats.\n")
+    if demo:
+        print("For the demo example, the true value of ln(Z) is " + \
+              "-216.865, and H is 129.017 nats.\n")
 
     plot_particle_scalars(particles_info)
-    evaluate_temperature_grid(particles_info, limits=limits,
-                              residuals=residuals)
+    evaluate_temperature_grid(particles_info, limits=temperature_grid_limits,
+                              residuals=demo)
 

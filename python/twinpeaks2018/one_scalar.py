@@ -39,5 +39,7 @@ def postprocess_one_scalar(temperature=1.0):
     plt.plot(ln_w, W/W.max(), ".", markersize=1, alpha=0.3)
     plt.xlabel("$\\ln(w)$")
     plt.ylabel("$W/W_{\\rm max}$")
+    plt.savefig("output/likelihood_curve.png", dpi=600)
+    print("Saved output/likelihood_curve.png")
     plt.show()
 
