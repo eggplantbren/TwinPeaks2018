@@ -1,23 +1,23 @@
-#include "TwoScalars.h"
+#include "Demo.h"
 #include "Utils.h"
 #include <sstream>
 
 namespace TwinPeaks2018
 {
 
-TwoScalars::TwoScalars()
+Demo::Demo()
 :xs(N)
 {
 
 }
 
-void TwoScalars::from_prior(RNG& rng)
+void Demo::from_prior(RNG& rng)
 {
     for(size_t i=0; i<xs.size(); i++)
         xs[i] = rng.rand();
 }
 
-double TwoScalars::perturb(RNG& rng)
+double Demo::perturb(RNG& rng)
 {
     int which;
 
@@ -36,7 +36,7 @@ double TwoScalars::perturb(RNG& rng)
     return 0.0;
 }
 
-double TwoScalars::f() const
+double Demo::f() const
 {
     double result = 0.0;
     for(double x: xs)
@@ -44,7 +44,7 @@ double TwoScalars::f() const
     return result;
 }
 
-double TwoScalars::g() const
+double Demo::g() const
 {
     double result = 0.0;
     for(double x: xs)
@@ -52,19 +52,19 @@ double TwoScalars::g() const
     return result;
 }
 
-std::vector<double> TwoScalars::scalars() const
+std::vector<double> Demo::scalars() const
 {
     return {f(), g()};
 }
 
 
-std::ostream& operator << (std::ostream& out, const TwoScalars& s)
+std::ostream& operator << (std::ostream& out, const Demo& s)
 {
     out << render(s.xs, false);
     return out;
 }
 
-std::string TwoScalars::description()
+std::string Demo::description()
 {
     std::vector<std::string> colnames;
     for(size_t i=0; i<N; ++i)

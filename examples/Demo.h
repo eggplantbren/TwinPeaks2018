@@ -1,5 +1,5 @@
-#ifndef TwinPeaks2018_TwoScalars_h
-#define TwinPeaks2018_TwoScalars_h
+#ifndef TwinPeaks2018_Demo_h
+#define TwinPeaks2018_Demo_h
 
 #include "RNG.h"
 #include <ostream>
@@ -9,7 +9,7 @@
 namespace TwinPeaks2018
 {
 
-class TwoScalars
+class Demo
 {
     // Number of scalars
     public:
@@ -29,7 +29,7 @@ class TwoScalars
 
     public:
         // Constructor only gives size of params
-        TwoScalars();
+        Demo();
 
         // Generate the point from the prior
         void from_prior(TwinPeaks2018::RNG& rng);
@@ -44,11 +44,11 @@ class TwoScalars
         static std::string description();
 
         friend std::ostream& operator << (std::ostream& out,
-                                          const TwoScalars& s);
+                                          const Demo& s);
 };
 
 std::ostream& operator << (std::ostream& out,
-                           const TwoScalars& s);
+                           const Demo& s);
 
 } // namespace TwinPeaks2018
 
