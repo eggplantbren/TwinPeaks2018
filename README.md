@@ -48,6 +48,22 @@ cd python
 python setup.py install
 ```
 
+# Execution
+To run the demo example:
+
+```
+./main
+```
+
+Then wait a long time. At any time during the run (or after it's completed),
+you can execute
+
+```
+python showresults.py
+```
+
+to see the results.
+
 # Acknowledgements
 
 The authors of [this paper](https://arxiv.org/abs/1805.03924).
