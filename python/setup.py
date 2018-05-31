@@ -7,7 +7,6 @@ setuptools.setup(
     author_email="brendon.brewer@gmail.com",
     description="The Python package accompanying TwinPeaks2018",
     long_description="The Python package accompanying TwinPeaks2018",
-    long_description_content_type="text/markdown",
     url="https://github.com/eggplantbren/TwinPeaks2018",
     packages=setuptools.find_packages(),
     classifiers=(
