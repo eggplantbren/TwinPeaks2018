@@ -11,6 +11,11 @@ from twinpeaks2018.two_scalars_truth import compute_truth
 from twinpeaks2018.utils import logsumexp
 
 
+# Niceify plots
+plt.rcParams["font.family"] = "serif"
+plt.rcParams["font.size"] = 16
+plt.rc("text", usetex=True)
+
 def load_particles_info():
     """
     Load all the particles_info file, and return a data frame containing
@@ -164,14 +169,14 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     plt.figure(1, figsize=(9, 6))
     plt.subplot(1, 2, 1)
     plt.imshow(ln_Z, origin="lower", extent=np.log10(limits))
-    plt.xlabel(r"\log_{10}(T_0)")
-    plt.ylabel(r"\log_{10}(T_1)")
-    plt.title(r"$\ln_Z$")
+    plt.xlabel("$\\log_{10}(T_0)$")
+    plt.ylabel("$\\log_{10}(T_1)$")
+    plt.title("$\\ln(Z)$")
 
     plt.subplot(1, 2, 2)
     plt.imshow(H, origin="lower", extent=np.log10(limits))
-    plt.xlabel(r"\log_{10}(T_0)")
-    plt.title(r"$H$")
+    plt.xlabel("$\\log_{10}(T_0)$")
+    plt.title("$H$")
 
     plt.savefig("output/ln_Z_H.png", dpi=600)
     print("Saved output/ln_Z_h.png")
@@ -182,15 +187,15 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
         plt.subplot(1, 2, 1)
         plt.imshow(ln_Z - truth["ln_Z"],
                    origin="lower", extent=np.log10(limits), cmap="coolwarm")
-        plt.xlabel(r"\log_{10}(T_0)")
-        plt.ylabel(r"\log_{10}(T_1)")
-        plt.title("ln(Z) Residuals")
+        plt.xlabel("$\\log_{10}(T_0)$")
+        plt.ylabel("$\\log_{10}(T_1)$")
+        plt.title("$\\ln(Z)$ Residuals")
 
         plt.subplot(1, 2, 2)
         plt.imshow(H - truth["H"],
                    origin="lower", extent=np.log10(limits), cmap="coolwarm")
-        plt.xlabel(r"\log_{10}(T_0)")
-        plt.title("H Residuals")
+        plt.xlabel("$\\log_{10}(T_0)$")
+        plt.title("$H$ Residuals")
 
         plt.savefig("output/residuals.png", dpi=600)
         print("Saved output/residuals.png")
@@ -199,14 +204,14 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     plt.figure(3, figsize=(9, 6))
     plt.subplot(1, 2, 1)
     plt.imshow(S0, origin="lower", extent=np.log10(limits))
-    plt.xlabel(r"\log_{10}(T_0)")
-    plt.ylabel(r"\log_{10}(T_1)")
-    plt.title("<S_0>")
+    plt.xlabel("$\\log_{10}(T_0)$")
+    plt.ylabel("$\\log_{10}(T_1)$")
+    plt.title("$<S_0>$")
 
     plt.subplot(1, 2, 2)
     plt.imshow(S1, origin="lower", extent=np.log10(limits))
-    plt.xlabel(r"\log_{10}(T_0)")
-    plt.title("r$<S_1>$")
+    plt.xlabel("$\\log_{10}(T_0)$")
+    plt.title("$<S_1>$")
     plt.savefig("output/expectations_of_scalars.png", dpi=600)
     print("Saved output/expectations_of_scalars.png")
     plt.show()
