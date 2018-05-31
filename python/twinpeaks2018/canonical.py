@@ -24,7 +24,8 @@ def load_particles_info():
     """
 
     particles_info = pd.read_csv("output/particles_info.csv")
-    completed_reps = np.loadtxt("output/completed_reps.txt")
+    completed_reps = np.array([np.loadtxt("output/completed_reps.txt")])
+    completed_reps = completed_reps.flatten()
 
     if len(completed_reps) == 0:
         print("There are no completed reps.")
