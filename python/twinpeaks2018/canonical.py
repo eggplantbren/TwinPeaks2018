@@ -56,15 +56,11 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     plt.plot(particles_info[names[0]][indices],
              particles_info[names[1]][indices],
              ".", alpha=0.2, markersize=1)
-    plt.xlabel(names[0])
-    plt.ylabel(names[1])
+    plt.xlabel("$S_{i}$".format(i=scalars[0]))
+    plt.ylabel("$S_{j}$".format(j=scalars[1]))
 
     plt.savefig("output/particle_scalars.png", dpi=600)
     print("Saved output/particle_scalars.png")
-    plt.show()
-
-    return h
-
 
 def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
     """
@@ -123,7 +119,7 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
 #    indices = np.sort(np.array(indices))
 
 
-def evaluate_temperature_grid(particles_info, limits, n=51):
+def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     """
     Evaluate logZ and H on a temperature grid.
     """
@@ -165,47 +161,52 @@ def evaluate_temperature_grid(particles_info, limits, n=51):
     truth = compute_truth(limits, n)
 
     # Plot the results
-    plt.figure(1, figsize=(8, 8))
-    plt.subplot(2, 2, 1)
+    plt.figure(1, figsize=(9, 6))
+    plt.subplot(1, 2, 1)
     plt.imshow(ln_Z, origin="lower", extent=np.log10(limits))
-    plt.ylabel("log10(T_1)")
-    plt.title("ln_Z")
+    plt.xlabel(r"\log_{10}(T_0)")
+    plt.ylabel(r"\log_{10}(T_1)")
+    plt.title(r"$\ln_Z$")
 
-    plt.subplot(2, 2, 2)
+    plt.subplot(1, 2, 2)
     plt.imshow(H, origin="lower", extent=np.log10(limits))
-    plt.ylabel("log10(T_1)")
-    plt.title("H")
-
-    plt.subplot(2, 2, 3)
-    plt.imshow(ln_Z - truth["ln_Z"],
-               origin="lower", extent=np.log10(limits), cmap="coolwarm")
-    plt.xlabel("log10(T_0)")
-    plt.ylabel("log10(T_1)")
-    plt.title("Residuals")
-
-    plt.subplot(2, 2, 4)
-    plt.imshow(H - truth["H"],
-               origin="lower", extent=np.log10(limits), cmap="coolwarm")
-    plt.xlabel("log10(T_0)")
-    plt.ylabel("log10(T_1)")
-    plt.title("Residuals")
+    plt.xlabel(r"\log_{10}(T_0)")
+    plt.title(r"$H$")
 
     plt.savefig("output/ln_Z_H.png", dpi=600)
     print("Saved output/ln_Z_h.png")
     plt.show()
 
-    plt.figure(2)
+    if residuals:
+        plt.figure(2, figsize=(9, 6))
+        plt.subplot(1, 2, 1)
+        plt.imshow(ln_Z - truth["ln_Z"],
+                   origin="lower", extent=np.log10(limits), cmap="coolwarm")
+        plt.xlabel(r"\log_{10}(T_0)")
+        plt.ylabel(r"\log_{10}(T_1)")
+        plt.title("ln(Z) Residuals")
+
+        plt.subplot(1, 2, 2)
+        plt.imshow(H - truth["H"],
+                   origin="lower", extent=np.log10(limits), cmap="coolwarm")
+        plt.xlabel(r"\log_{10}(T_0)")
+        plt.title("H Residuals")
+
+        plt.savefig("output/residuals.png", dpi=600)
+        print("Saved output/residuals.png")
+        plt.show()
+
+    plt.figure(3, figsize=(9, 6))
     plt.subplot(1, 2, 1)
     plt.imshow(S0, origin="lower", extent=np.log10(limits))
-    plt.xlabel("log10(T_0)")
-    plt.ylabel("log10(T_1)")
+    plt.xlabel(r"\log_{10}(T_0)")
+    plt.ylabel(r"\log_{10}(T_1)")
     plt.title("<S_0>")
 
     plt.subplot(1, 2, 2)
     plt.imshow(S1, origin="lower", extent=np.log10(limits))
-    plt.xlabel("log10(T_0)")
-    plt.ylabel("log10(T_1)")
-    plt.title("<S_1>")
+    plt.xlabel(r"\log_{10}(T_0)")
+    plt.title("r$<S_1>$")
     plt.savefig("output/expectations_of_scalars.png", dpi=600)
     print("Saved output/expectations_of_scalars.png")
     plt.show()
@@ -231,5 +232,8 @@ def showresults():
           "-216.865, and H is 129.017 nats.\n")
 
     plot_particle_scalars(particles_info)
-    evaluate_temperature_grid(particles_info, [0.1, 100.0, 0.1, 100.0])
+    plt.show()
+
+    evaluate_temperature_grid(particles_info, [0.1, 100.0, 0.1, 100.0],
+                              residuals=True)
 
