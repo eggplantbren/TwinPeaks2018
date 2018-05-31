@@ -1,6 +1,5 @@
 * Implement more examples
 * Finish canonical.create_canonical()
-* Make a Python package
 
 COMPLETED:
 
@@ -11,3 +10,5 @@ COMPLETED:
 * Make sense of stdout messages when running in parallel
 * Implement thinning
 * Plot logZ/H/<f>/<g> maps
+* Make a Python package
+

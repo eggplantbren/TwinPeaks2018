@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.random as rng
 import pandas as pd
-from .utils import logsumexp
+from twinpeaks2018.two_scalars_truth import compute_truth
+from twinpeaks2018.utils import logsumexp
 
 
 def load_particles_info():
@@ -57,6 +58,11 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
              ".", alpha=0.2, markersize=1)
     plt.xlabel(names[0])
     plt.ylabel(names[1])
+
+    plt.savefig("particle_scalars.png", dpi=600)
+    print("Saved particle_scalars.png")
+    plt.show()
+
     return h
 
 
@@ -156,8 +162,10 @@ def evaluate_temperature_grid(particles_info, limits, n=51):
             print(".", end="", flush=True)
     print("")
 
+    truth = compute_truth(limits, n)
+
     # Plot the results
-    plt.figure(figsize=(8, 8))
+    plt.figure(1, figsize=(8, 8))
     plt.subplot(2, 2, 1)
     plt.imshow(ln_Z, origin="lower", extent=np.log10(limits))
     plt.ylabel("log10(T_1)")
@@ -169,17 +177,39 @@ def evaluate_temperature_grid(particles_info, limits, n=51):
     plt.title("H")
 
     plt.subplot(2, 2, 3)
+    plt.imshow(ln_Z - truth["ln_Z"],
+               origin="lower", extent=np.log10(limits), cmap="coolwarm")
+    plt.xlabel("log10(T_0)")
+    plt.ylabel("log10(T_1)")
+    plt.title("Residuals")
+
+    plt.subplot(2, 2, 4)
+    plt.imshow(H - truth["H"],
+               origin="lower", extent=np.log10(limits), cmap="coolwarm")
+    plt.xlabel("log10(T_0)")
+    plt.ylabel("log10(T_1)")
+    plt.title("Residuals")
+
+    plt.savefig("ln_Z_H.png", dpi=600)
+    print("ln_Z_h.png")
+    plt.show()
+
+    plt.figure(2)
+    plt.subplot(1, 2, 1)
     plt.imshow(S0, origin="lower", extent=np.log10(limits))
     plt.xlabel("log10(T_0)")
     plt.ylabel("log10(T_1)")
     plt.title("<S_0>")
 
-    plt.subplot(2, 2, 4)
+    plt.subplot(1, 2, 2)
     plt.imshow(S1, origin="lower", extent=np.log10(limits))
     plt.xlabel("log10(T_0)")
     plt.ylabel("log10(T_1)")
     plt.title("<S_1>")
+    plt.savefig("expectations_of_scalars.png", dpi=600)
+    print("Saved expectations_of_scalars.png")
     plt.show()
+
 
 
 def showresults():
@@ -200,8 +230,6 @@ def showresults():
     print("For the example, the true value of ln(Z) is " + \
           "-216.865, and H is 129.017 nats.\n")
 
-    h = plot_particle_scalars(particles_info)
-    plt.show()
-
+    plot_particle_scalars(particles_info)
     evaluate_temperature_grid(particles_info, [0.1, 100.0, 0.1, 100.0])
 
