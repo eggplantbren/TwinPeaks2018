@@ -10,7 +10,7 @@ import pandas as pd
 from utils import logsumexp
 
 
-def load_particles_info(filename="../output/particles_info.csv"):
+def load_particles_info(filename="../../output/particles_info.csv"):
     """
     Load all the particles_info file, and return a data frame containing
     only complete runs (unless there aren't any, in which case it just
@@ -19,7 +19,7 @@ def load_particles_info(filename="../output/particles_info.csv"):
 
     particles_info = pd.read_csv(filename)
 
-    completed_reps = np.loadtxt("../output/completed_reps.txt")
+    completed_reps = np.loadtxt("../../output/completed_reps.txt")
     if len(completed_reps) == 0:
         print("There are no completed reps.")
         return particles_info
@@ -92,7 +92,7 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot=False):
 
 
 #def create_canonical(particles_info,
-#                     result, outfile="../output/canonical_particles.csv"):
+#                     result, outfile="../../output/canonical_particles.csv"):
 #    """
 #    Create and save samples from the canonical distribution.
 #    Argument: a dictionary as output by get_canonical().
