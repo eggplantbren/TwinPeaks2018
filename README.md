@@ -33,8 +33,7 @@ On the Python side, you'll need:
   [Anaconda](https://www.anaconda.com)
   is a good Python distribution that includes these. Otherwise they might come
   with (or be installable through) Python 3 as provided by your OS.
-* LaTeX and [dvipng](https://sourceforge.net/projects/dvipng/) so that LaTeX
-  can be used with matplotlib.
+* [LaTeX](https://tug.org/texlive) and [dvipng](https://sourceforge.net/projects/dvipng/) so that LaTeX can be used with matplotlib.
 
 # Compilation
 
