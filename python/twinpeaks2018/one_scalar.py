@@ -3,10 +3,7 @@ import numpy as np
 import pandas as pd
 from twinpeaks2018.utils import *
 
-# Niceify plots
-plt.rcParams["font.family"] = "serif"
-plt.rcParams["font.size"] = 16
-plt.rc("text", usetex=True)
+plot_settings()
 
 def postprocess_one_scalar(temperature=1.0):
     """

@@ -10,6 +10,7 @@ import pandas as pd
 from twinpeaks2018.example_truth import *
 from twinpeaks2018.utils import *
 
+plot_settings()
 
 def plot_particle_scalars(particles_info, scalars=[0, 1]):
     """
@@ -42,6 +43,9 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     plt.savefig("output/particle_scalars.png", dpi=600)
     print("Saved output/particle_scalars.png")
     plt.show()
+
+
+
 
 def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
     """
