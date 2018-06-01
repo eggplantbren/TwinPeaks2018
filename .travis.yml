@@ -5,7 +5,8 @@ os:
   - linux
 script: 
     - make
-    - python setup.py install
+    - cd python
+    - python3 setup.py install
 addons:
   apt_packages:
     - libboost-all-dev
