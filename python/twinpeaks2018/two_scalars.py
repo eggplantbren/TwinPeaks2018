@@ -157,15 +157,21 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
 
         plt.figure(2, figsize=(9, 6))
         plt.subplot(1, 2, 1)
-        plt.imshow(ln_Z - truth["ln_Z"],
-                   origin="lower", extent=np.log10(limits), cmap="coolwarm")
+        resid = ln_Z - truth["ln_Z"]
+        biggest = np.max(np.abs(resid))
+        plt.imshow(resid,
+                   origin="lower", extent=np.log10(limits),
+                   vmin=-biggest, vmax=biggest, cmap="coolwarm")
         plt.xlabel("$\\log_{10}(T_0)$")
         plt.ylabel("$\\log_{10}(T_1)$")
         plt.title("$\\ln(Z)$ Residuals")
 
         plt.subplot(1, 2, 2)
-        plt.imshow(H - truth["H"],
-                   origin="lower", extent=np.log10(limits), cmap="coolwarm")
+        resid = H - truth["H"]
+        biggest = np.max(np.abs(resid))
+        plt.imshow(resid,
+                   origin="lower", extent=np.log10(limits),
+                   vmin=-biggest, vmax=biggest, cmap="coolwarm")
         plt.xlabel("$\\log_{10}(T_0)$")
         plt.title("$H$ Residuals")
 
