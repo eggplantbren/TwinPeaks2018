@@ -24,9 +24,11 @@ def postprocess_one_scalar(temperature=1.0):
     ln_W = ln_w + ln_l - ln_Z
     W = np.exp(ln_W)
     H = np.sum(W*(ln_W - ln_w))
+    ESS = np.exp(-np.sum(W*ln_W))
 
     print("ln(Z) = {ln_Z}".format(ln_Z=ln_Z))
     print("H = {H} nats".format(H=H))
+    print("Effective sample size = {ESS}".format(ESS=ESS))
     np.savetxt("output/posterior_weights.txt", W)
 
     plt.figure(figsize=(9, 7))

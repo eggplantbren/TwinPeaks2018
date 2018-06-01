@@ -11,8 +11,6 @@ from twinpeaks2018.example_truth import *
 from twinpeaks2018.utils import *
 
 
-
-
 def plot_particle_scalars(particles_info, scalars=[0, 1]):
     """
     Plot particle scalars
@@ -73,6 +71,7 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
     if plot_and_save:
         print("ln(Z) = {ln_Z}".format(ln_Z=ln_Z))
         print("H = {H} nats".format(H=H))
+        print("Effective sample size = {ESS}".format(ESS=result["ESS"]))
         np.savetxt("output/canonical_weights.txt", W)
 
         plt.figure(figsize=(9, 7))
