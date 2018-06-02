@@ -58,8 +58,8 @@
 \DeclareUnicodeCharacter{00A0}{ }
 \newcommand{\xx}{\boldsymbol{\theta}}
 \newcommand{\dx}{d\boldsymbol{\theta}}
-\newcommand{\data}{\boldsymbol{D}}
-\newcommand{\II}{\boldsymbol{I}}
+\newcommand{\data}{D}
+\newcommand{\II}{I}
 
 %------------------------------------------------------------------
 % The following line should be uncommented if the LaTeX file is uploaded to arXiv.org
@@ -121,23 +121,26 @@ of Zoology, University of Oxford, South Parks Road, Oxford, UK\\}
 \corres{{\tt bj.brewer@auckland.ac.nz}}
 
 % Abstract (Do not use inserted blank lines, i.e. \\)
-\abstract{We present a generalization of the Nested Sampling algorithm
+\abstract{We present a generalization of Skilling's Nested Sampling algorithm
 that estimates
 the partition function $Z(\beta_1, \beta_2)$ for a family of
 probability distributions indexed by two hyperparameters, $\beta_1$ and
 $\beta_2$. Problems like this arise frequently in statistical mechanics and
 occasionally in Bayesian inference.
-We demonstrate the algorithm on three example problems.
-The first is a toy problem whose structure allows us
+The algorithm is based on an interpretation of Nested Sampling in terms of
+Sequential Monte Carlo, which produces unbiased estimates of $Z$ and therefore
+allows parallel runs to be trivially combined.
+We demonstrate the algorithm on three example problems:
+(i)
+a toy problem whose structure allows us
 to accurately calculate $Z(\beta_1, \beta_2)$ numerically using non-Monte-Carlo
-methods. With this example, we empirically investigate the accuracy of TwinPeaks
-improves as a function of the number of particles used, $N$. We also
-calculate the partition function for a collection of atoms with a potential
-that is intermediate between a Lennard-Jones form and a `polymer' form.
-Finally, we present a Bayesian image reconstruction example,
-where we can infer the value of a hyperparameter even though its prior
-distribution contains an `intractable' normalizing constant.
-An implementation in C++ is available at
+methods, so we can compute the actual error in the reconstructed function
+$Z(\beta_1, \beta_2)$; (ii) a collection of atoms with a potential
+that is intermediate between a Lennard-Jones form and a `polymer' form; and
+(iii) A Bayesian image reconstruction example where the prior for the image
+is defined conditionally on a hyperparameter, but where this prior contains
+an intractable normalizing constant.
+A free software implementation in C++ and Python is available at
 \url{https://github.com/eggplantbren/TwinPeaks2018}.}
 
 % Keywords: add 3 to 10 keywords
@@ -177,7 +180,8 @@ Its key strength its ability to cope with phase transitions which cause
 problems for many other methods \citep{skilling}.
 In a Bayesian inference problem with unknown parameters denoted collectively
 by a vector $\xx$, the
-posterior distribution for the parameters given data $\data$ (and prior
+posterior distribution for the parameters given a data proposition $\data$ and
+a `prior information' proposition $\II$ is
 information $\II$) is:
 \begin{eqnarray}
 p(\xx | \data, \II) &=&
