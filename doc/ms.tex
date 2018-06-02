@@ -397,16 +397,22 @@ to accurately estimate $Z(\beta_1, \beta_2)$.
 %$\left(\ell_1, \ell_2\right)$. See Figure~\ref{fig:joint1} for an
 %example.
 
-\section{Properties of Nested Sampling}
+\section{Unique Properties of Nested Sampling}
 What is special about the NS sequence of distributions? 
-
 
 Consider the Nested Sampling measure, proportional to the amount of time
 NS spends in each region of the space. Since NS moves at a constant rate
-in terms of $\log(X)$, this measure is
+in terms of $\log(X)$, this measure is proportional to
 \begin{align}
-m_{\rm NS} &\propto \frac{\pi(\xx)}{X(\xx)}.
+m_{\rm NS} &\propto \frac{\pi(\xx)}{X(\xx)}.\label{eqn:measure}
 \end{align}
+The sequence of dead particles emitted by NS is then used to compute properties
+of the posterior distribution, or other canonical distributions for temperatures
+other than 1. Why does this work? Why does the NS measure of
+Equation~\ref{eqn:ns_measure} allow the user to get a reasonable number of
+samples for {\em any} canonical distribution?
+
+
 
 
 
