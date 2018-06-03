@@ -73,6 +73,7 @@
 \newcommand{\dx}{d\boldsymbol{\theta}}
 \newcommand{\data}{D}
 \newcommand{\II}{I}
+\newcommand{\mnras}{Monthly Notices of the Royal Astronomical Society}
 
 %\newcommand{\orcidauthorA}{0000-0000-000-000X} % Add \orcidA{} behind the author's name
 %\newcommand{\orcidauthorB}{0000-0000-000-000X} % Add \orcidB{} behind the author's name
@@ -165,10 +166,10 @@ A free software implementation in C++ and Python is available at
 
 \section{Introduction}
 
-Nested Sampling \citep[NS][]{skilling} is general
+Nested Sampling \citep[NS][]{skilling2006nested} is general
 Monte Carlo algorithm that can solve a wide range of problems in Bayesian
 computation and statistical mechanics
-\citep{2009arXiv0906.3544P, 2014PhRvE..89b2302P, 2015arXiv150303404B}.
+\citep[e.g.][]{2009arXiv0906.3544P, 2014PhRvE..89b2302P, 2015arXiv150303404B}.
 Its key strength its ability to cope with phase transitions and other
 features which cause
 problems for many other methods.
@@ -212,7 +213,7 @@ the logarithm is the natural logarithm) implies, loosely speaking,
 that the posterior occupies a fraction $e^{-100}$ of the prior mass.
 $H$ can be interpreted quite literally as a measure of how much
 the specific data $\data$ resolved the question ``what is the value
-of $\xx$, precisely?'' \citep{knuth, van_erp}.
+of $\xx$, precisely?'' \citep{knuth_questions, van_erp}.
 
 NS works by drawing particles from the
 prior $\pi(\xx)$ and successively imposing constraints on the value of
@@ -439,7 +440,7 @@ values and not the values themselves.
 \end{enumerate}
 The standard Nested Sampling algorithm has these properties but for a
 single objective function. The same is true of variants such as
-Diffusive Nested Sampling \citep{dnest}.
+Diffusive Nested Sampling \citep{dns, dnest4}.
 
 
 %The introduction should briefly place the study in a broad context and highlight why it is important. It should define the purpose of the work and its significance. The current state of the research field should be reviewed carefully and key publications cited. Please highlight controversial and diverging hypotheses when necessary. Finally, briefly mention the main aim of the work and highlight the principal conclusions. As far as possible, please keep the introduction comprehensible to scientists outside your particular field of research. Citing a journal paper \cite{ref-journal}. And now citing a book reference \cite{ref-book}. Please use the command \citep{ref-journal} for the following MDPI journals, which use author-date citation: Administrative Sciences, Arts, Econometrics, Economies, Genealogy, Humanities, IJFS, JRFM, Languages, Laws, Religions, Risks, Social Sciences.
@@ -598,8 +599,8 @@ All appendix sections must be cited in the main text. In the appendixes, Figures
 %=====================================
 \reftitle{References}
 
-\bibliographystyle{mdpi}
-\bibliography{references/references}
+%\bibliographystyle{mdpi}
+\bibliography{references.bib/references}
 
 % The following MDPI journals use author-date citation: Arts, Econometrics, Economies, Genealogy, Humanities, IJFS, JRFM, Laws, Religions, Risks, Social Sciences. For those journals, please follow the formatting guidelines on http://www.mdpi.com/authors/references
 % To cite two works by the same author: \citeauthor{ref-journal-1a} (\citeyear{ref-journal-1a}, \citeyear{ref-journal-1b}). This produces: Whittaker (1967, 1975)
