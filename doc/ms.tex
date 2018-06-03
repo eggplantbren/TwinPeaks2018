@@ -166,7 +166,7 @@ A free software implementation in C++ and Python is available at
 
 \setlength{\parskip}{0.6em}
 
-\section{Introduction}
+\section{Nested Sampling}
 
 Nested Sampling (NS) \citep{skilling2006nested} is general
 Monte Carlo algorithm that can solve a wide range of problems in Bayesian
@@ -235,7 +235,8 @@ $H$ can be interpreted quite literally as a measure of how much
 the specific data $\data$ resolved the question ``what is the value
 of $\xx$, precisely?'' \citep{knuth_questions, van2017inquiry}.
 \citet{brewer2017computing} introduced a variant of NS that computes
-Shannon entropies.
+Shannon entropies, including entropies of marginal distributions (whereas
+standard NS can only compute divergences for full joint distributions).
 
 NS works by drawing particles from the
 prior $\pi(\xx)$ and successively imposing constraints on the value of
@@ -249,7 +250,11 @@ NS from annealing. The sequence of distributions used in NS is defined by
 p(\xx; \ell) &=& \frac{1}{X(\ell)}\pi(\xx)\mathds{1}\left(L(\xx) > \ell\right).
 \label{eq:constrained_prior}
 \end{eqnarray}
-and the marginal likelihood can be computed by numerically integrating the
+where $X(\ell) = \int \pi(\xx)\mathds{1}\left(L(\xx) > \ell\right)$ is the
+normalising constant of the distribution constrained by the condition
+$L(\xx) > \ell)$. $X$ is also the quantile function of the likelihoods.
+
+The marginal likelihood can be computed by numerically integrating the
 function $L(X)$:
 \begin{eqnarray}
 Z &=& \int_0^1 L(X)\, dX.
@@ -257,27 +262,31 @@ Z &=& \int_0^1 L(X)\, dX.
 \citet{salomone2018unbiased}
 recently showed how NS can be viewed as an instance of
 Sequential Monte Carlo (SMC), with a particular choice of the sequence of
-distributions.
+distributions. By weighting the sequence of discarded points differently from
+Skilling, the estimates of $Z$ are unbiased.
 
-Throughout this paper we use the popular `overloaded' notation for some
-functions and probability distributions.
-For example, $L(\xx)$ is the likelihood function, and $L(X)$ is the likelihood
-as a function of the enclosed prior mass $X$. The inverse, $X(L)$, takes a
-likelihood as input and computes the corresponding enclosed prior mass.
-Therefore the symbol $L$ implies the output of the function is a
-likelihood value; so $L(\xx)$ represents a likelihood value computed from
-the parameters $\xx$, and $L(X)$ represents a likelihood value that
-corresponds to an amount $X$ of prior mass. In more traditional notation,
-$X(L)$ would be written using function composition, $X(L(\xx))$.
+%Throughout this paper we use the popular `overloaded' notation for some
+%functions and probability distributions.
+%For example, $L(\xx)$ is the likelihood function, and $L(X)$ is the likelihood
+%as a function of the enclosed prior mass $X$. The inverse, $X(L)$, takes a
+%likelihood as input and computes the corresponding enclosed prior mass.
+%Therefore the symbol $L$ implies the output of the function is a
+%likelihood value; so $L(\xx)$ represents a likelihood value computed from
+%the parameters $\xx$, and $L(X)$ represents a likelihood value that
+%corresponds to an amount $X$ of prior mass. In more traditional notation,
+%$X(L)$ would be written using function composition, $X(L(\xx))$.
 
-Using a single NS run, we can also calculate the properties of any other distribution that
+\section{Accessing distributions other than the posterior}
+Using a single NS run, we can also calculate the properties of any
+distribution that
 is (in some sense which we do not make precise) {\em intermediate}
 between the prior and the posterior. For example, we might be interested in
 a `power posterior' where the likelihood is raised to a power $\beta$
 (this is also the family of distributions used in `annealing' or `tempering'
 methods):
 \begin{eqnarray}
-p(\xx; \beta) &=& \frac{\pi(\xx)L(\xx)^\beta}{Z(\beta)}\label{eqn:power_posterior}
+p(\xx; \beta) &=& \frac{\pi(\xx)L(\xx)^\beta}
+                       {Z(\beta)}\label{eqn:power_posterior}
 \end{eqnarray}
 The normalisation and posterior samples from this distribution can be obtained
 from the original NS run by re-weighting the output according to $L(\xx)^\beta$
@@ -315,12 +324,15 @@ phase space (the set of possible positions and momenta of a collection of
 particles) or configuration space (the set of possible positions of a collection
 of particles). In this context we usually want to
 compute $Z(\beta)$ as a function of $\beta$, which is called the
-{\it partition function}. The quantity $\mathcal{I}(\beta)$ is, up to a sign
-change and an additive constant, the Gibbs entropy.
-NS can achieve this, allowing the study of
+{\it partition function}. When the full phase space of positions and momenta
+is included, the KL-divergence as a function of temperature,
+$H(\beta)$, is the Gibbs entropy (up to a sign change and a constant factor).
+A single run of NS can be used to reconstruct $Z(\beta)$ and $H(\beta)$,
+allowing the study of
 the properties of materials from first principles, based on hypotheses about
-the atoms or molecules that make them up \citep[e.g.][]{2009arXiv0906.3544P,
-2014PhRvE..89b2302P, 2015arXiv150303404B}. The NS algorithm is invariant under
+the atoms or molecules that make them up
+\citep[e.g.][]{partay2010efficient, baldock2016determining}.
+The NS exploration algorithm is invariant under
 monotonic transformations of $L$ or $E$ and therefore there we can discuss the
 algorithm in Bayesian or statistical mechanical terms without loss of
 generality.
@@ -332,6 +344,7 @@ discussing optimization methods. Although we are interested in sampling rather
 than optimization, we still want to increase the values of $L$ or decrease
 the values of $E$ relative to what is typical of the prior.
 
+\section{Multiple objective functions}
 In some inference and
 statistical mechanics problems, there are two or more scalar functions of
 $\xx$ that are relevant. Suppose our prior is $\pi(\xx)$ as before, and
