@@ -164,15 +164,21 @@ A free software implementation in C++ and Python is available at
 %The template details the sections that can be used in a manuscript. Note that the order and names of article sections may differ from the requirements of the journal (e.g. the positioning of the Materials and Methods section). Please check the instructions for authors page of the journal to verify the correct order and names. For any questions, please contact the editorial office of the journal or support@mdpi.com. For LaTeX related questions please contact Janine Daum at latex-support@mdpi.com.
 %The order of the section titles is: Introduction, Materials and Methods, Results, Discussion, Conclusions for these journals: aerospace,algorithms,antibodies,antioxidants,atmosphere,axioms,biomedicines,carbon,crystals,designs,diagnostics,environments,fermentation,fluids,forests,fractalfract,informatics,information,inventions,jfmk,jrfm,lubricants,neonatalscreening,neuroglia,particles,pharmaceutics,polymers,processes,technologies,viruses,vision
 
+\setlength{\parskip}{0.6em}
+
 \section{Introduction}
 
 Nested Sampling (NS) \citep{skilling2006nested} is general
 Monte Carlo algorithm that can solve a wide range of problems in Bayesian
-computation and statistical mechanics
-\citep[e.g.][]{2009arXiv0906.3544P, exoplanet, baldock2016determining}.
+computation, statistical mechanics, and information theory
+\citep[e.g.][]{partay2010efficient, exoplanet, baldock2016determining,
+brewer2017computing}.
 Its key strength its ability to cope with phase transitions and other
-features which cause
-problems for many other methods.
+features which cause problems for many other methods such as those based
+on `annealing' \citep{neal2001annealed}. These methods all fall into that half
+of the Monte Carlo landscape that addresses {\em what distribution to sample}
+rather than how to sample it.
+
 In a Bayesian inference problem with unknown parameters denoted collectively
 by a vector $\xx$, the
 posterior distribution for the parameters given a data proposition $\data$ and
@@ -196,6 +202,20 @@ whatever additional assumptions were made. $Z$ thus plays the role
 of a likelihood for the parameter space as a whole, and is a key input in
 calculating the posterior probabilities of competing `models' (mutually
 exclusive choices of $\II$).
+Naively, Equation~\ref{eqn:evidence} appears straightforward to compute because
+it is a simple expectation of $L$ with respect to the distribution $\pi$.
+However,
+NS is required because Equation~\ref{eqn:evidence}
+is the expected value of $L$ with respect to a very heavy-tailed distribution
+(the distribution of $L$-values implied by $\pi(\xx)$). This means a very
+large number of samples would be required.
+Hence, there is a strong
+connection between NS and ideas from rare event simulation.
+\citet{walter2017point} has explicitly explored this connection.
+Another way of thinking about this
+challenge is that the $Z$ integral is dominated by a region with very
+high values of $L$ but very low probability according to $\pi$ (and usually
+very low volume according to $d\xx$, as well).
 
 The main goal of NS is to compute $Z$, but it can also be used to make
 Monte Carlo approximations of the posterior distribution, and to
@@ -214,6 +234,8 @@ that the posterior occupies a fraction $e^{-100}$ of the prior mass.
 $H$ can be interpreted quite literally as a measure of how much
 the specific data $\data$ resolved the question ``what is the value
 of $\xx$, precisely?'' \citep{knuth_questions, van2017inquiry}.
+\citet{brewer2017computing} introduced a variant of NS that computes
+Shannon entropies.
 
 NS works by drawing particles from the
 prior $\pi(\xx)$ and successively imposing constraints on the value of
@@ -247,15 +269,6 @@ likelihood value; so $L(\xx)$ represents a likelihood value computed from
 the parameters $\xx$, and $L(X)$ represents a likelihood value that
 corresponds to an amount $X$ of prior mass. In more traditional notation,
 $X(L)$ would be written using function composition, $X(L(\xx))$.
-
-Naively, Equation~\ref{eqn:evidence} appears straightforward to compute because
-it is a simple expectation of $L$ with respect to the distribution $\pi$.
-However,
-NS is required because Equation~\ref{eqn:evidence}
-is the expected value of $L$ with respect to a very heavy-tailed distribution
-(the prior for the $L$ value implied by $\pi(\xx)$). Hence, there is a strong
-connection between NS and ideas from rare event simulation.
-\citet{walter2017point} has explicitly explored this connection.
 
 Using a single NS run, we can also calculate the properties of any other distribution that
 is (in some sense which we do not make precise) {\em intermediate}
