@@ -349,37 +349,45 @@ In some inference and
 statistical mechanics problems, there are two or more scalar functions of
 $\xx$ that are relevant. Suppose our prior is $\pi(\xx)$ as before, and
 we obtain information that fixes the expected values of two scalar
-functions of $\xx$, $L_1(\xx)$ and $L_2(\xx)$.
-It is well known that the
+``likelihood'' functions of $\xx$, $L_1(\xx)$ and $L_2(\xx)$
+(or equivalently, ``energy'' functions $E_1(\xx) = -\ln L_1(\xx)$ and
+$E_2 = -\ln L_2(\xx)$). The
 updated probability distribution that takes into account the constraints is
-of the canonical form:
-\begin{eqnarray}
-p(\xx; \beta_1, \beta_2) &=& \frac{\pi(\xx)\exp\left[\beta_1L_1(\xx)+\beta_2L_2(\xx)\right]}
-{Z(\beta_1, \beta_2)}
-\end{eqnarray}
+of the canonical form \citep{jaynes1957information}:
+\begin{align}
+p(\xx; \beta_1, \beta_2) &=
+    \frac{\pi(\xx)L_1(\xx)^{\beta_1}L_2(\xx)^{\beta_2}}
+         {Z(\beta_1, \beta_2)} \\
+    &=
+    \frac{\pi(\xx)\exp\left[-\beta_1E_1(\xx) - \beta_2E_2(\xx)\right]}
+         {Z(\beta_1, \beta_2)}
+\end{align}
 where $\beta_1$ and $\beta_2$ are two `inverse temperatures' (the temperatures
 themselves are $T_1 = \beta_1^{-1}$ and $T_2 = \beta_2^{-1}$).
 In a Bayesian
 context, this distribution (when $\beta_1 = \beta_2 = 1$) could be the
 posterior distribution for parameters $\xx$
 given two datasets, where $L_1$ and $L_2$ are the
-likelihood functions for each dataset. In statistical mechanics, $L_1$ might
-be $\exp\left(-\textnormal{energy}\right)$ and $L_2$ might be the total
-angular momentum, or be a term depending on an external field (so $\beta_2$
+likelihood functions for each dataset. In statistical mechanics, $E_1$ might
+be the total energy and $E_2$ might be the total
+angular momentum, or perhaps a term depending on an external field (so $\beta_2$
 would then describe the strength of the external field).
 
 If we are only interested in a single canonical distribution, for example
 with $\beta_1 = 0.3$ and $\beta_2 = 0.7$, we can estimate its normalising
 constant and by running standard Nested Sampling with objective function
-$L(\xx) = \exp\left[0.3L_1(\xx) + 0.7L_2(\xx)\right]$. However, usually we
+$L(\xx) = L_1(\xx)^{\beta_1}L_2(\xx)^{\beta_2}$. However, usually we
 are interested in a range of values for $\beta_1$ and $\beta_2$, and we
 want to know the entire partition function $Z(\beta_1, \beta_2)$.
 This work describes
 progress towards solving this class of problems while maintaining the benefits
 of Nested Sampling, such as the ability to cope with first-order phase
-transitions. The algorithm is designed for problems with two objective
-functions, but may generalize to problems with more than two (though perhaps
-not more than a few).
+transitions. The algorithm is presented here for problems with two objective
+functions, but the implementation allows for more than two (though the
+performance is those cases is likely to be poor).
+
+
+\
 
 The prior $\pi(\xx)$ implies a certain prior for $L_1$ and $L_2$, which we
 denote $\pi(L_1, L_2)$. An example of a prior is shown as the
