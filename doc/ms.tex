@@ -1,31 +1,34 @@
-%  LaTeX support: latex@mdpi.com
-%  In case you need support, please attach any log files that you could have, and specify the details of your LaTeX setup (which operating system and LaTeX version / tools you are using).
+%  LaTeX support: latex@mdpi.com 
+%  In case you need support, please attach all files that are necessary for compiling as well as the log file, and specify the details of your LaTeX setup (which operating system and LaTeX version / tools you are using).
+
+% You need to save the "mdpi.cls" and "mdpi.bst" files into the same folder as this template file.
 
 %=================================================================
+\documentclass[entropy,article,submit,moreauthors,pdftex,10pt,a4paper]{Definitions/mdpi} 
 
-% LaTeX Class File and Rendering Mode (choose one)
-% You will need to save the "mdpi.cls" and "mdpi.bst" files into the same folder as this template file.
+\usepackage{dsfont}
 
-%=================================================================
+% If you would like to post an early version of this manuscript as a preprint, you may use preprint as the journal and change 'submit' to 'accept'. The document class line would be, e.g. \documentclass[preprints,article,accept,moreauthors,pdftex,10pt,a4paper]{mdpi}. This is especially recommended for submission to arXiv, where line numbers should be removed before posting. For preprints.org, the editorial staff will make this change immediately prior to posting.
 
-\documentclass[journal,article,accept,moreauthors,pdftex,12pt,a4paper]{mdpi}
+%
 %--------------------
 % Class Options:
 %--------------------
 % journal
 %----------
 % Choose between the following MDPI journals:
-% actuators, administrativesciences, aerospace, agriculture, agronomy, algorithms, animals, antibiotics, antibodies, antioxidants, appliedsciences, arts, atmosphere, atoms, axioms, batteries, behavioralsciences, beverages, bioengineering, biology, biomedicines, biomimetics, biomolecules, biosensors, brainsciences, buildings, cancers, catalysts, cells, challenges, chemosensors, children, chromatography, climate, coatings, computation, computers, cosmetics, crystals, data, dentistryjournal, diagnostics, diseases, diversity, econometrics, economies, education, electronics, energies, entropy, environments, epigenomes, fermentation, fibers, foods, forests, futureinternet, galaxies, games, gels, genealogy, genes, geosciences, geriatrics, healthcare, horticulturae, humanities, hydrology, informatics, information, inorganics, insects, ijerph, ijfs, ijms, ijns, ijgi, jcdd, jcm, jdb, jfb, jfmk, jimaging, jof, joi, jlpea, jmse, jpm, jrfm, jsan, land, languages, laws, life, lubricants, machines, marinedrugs, materials, mathematics, medicalsciences, membranes, metabolites, metals, microarrays, micromachines, microorganisms, minerals, molbank, molecules, nanomaterials, ncrna, nutrients, pathogens, pharmaceuticals, pharmaceutics, pharmacy, philosophies, photonics, plants, polymers, processes, proteomes, publications, recycling, religions, remotesensing, resources, risks, robotics, safety, sensors, sinusitis, socialsciences, societies, sports, standards, sustainability, symmetry, systems, technologies, toxics, toxins, universe, vaccines, veterinarysciences, viruses, water
+% acoustics, actuators, addictions, admsci, aerospace, agriculture, agronomy, algorithms, animals, antibiotics, antibodies, antioxidants, applsci, arts, asi, atmosphere, atoms, axioms, batteries, bdcc, behavsci, beverages, bioengineering, biology, biomedicines, biomimetics, biomolecules, biosensors, brainsci, buildings, carbon, cancers, catalysts, cells, ceramics, challenges, chemengineering, chemosensors, children, cleantechnol, climate, clockssleep, cmd, coatings, colloids, computation, computers, condensedmatter, cosmetics, cryptography, crystals, cybersecurity, data, dentistry, designs, diagnostics, dairy, diseases, diversity, drones, econometrics, economies, education, electrochem, electrochemistry, electronics, energies, entropy, environments, epigenomes, est, fermentation, fibers, fire, fishes, fluids, foods, forecasting, forests, fractalfract, futureinternet, galaxies, games, gastrointestdisord, gels, genealogy, genes, geohazards, geosciences, geriatrics, hazardousmatters, healthcare, heritage, highthroughput, horticulturae, humanities, hydrology, informatics, information, infrastructures, inorganics, insects, instruments, ijerph, ijfs, ijms, ijgi, ijtpp, inventions, j, jcdd, jcm, jcs, jdb, jfb, jfmk, jimaging, jof, jintelligence, jlpea, jmmp, jmse, jpm, jrfm, jsan, land, languages, laws, life, literature, logistics, lubricants, machines, magnetochemistry, make, marinedrugs, materials, mathematics, mca, medsci, medicina, medicines, membranes, metabolites, metals, microarrays, micromachines, microorganisms, minerals, modelling, molbank, molecules, mps, mti, nanomaterials, ncrna, neonatalscreening, neuroglia, nitrogen, nutrients, ohbm, particles, pathogens, pharmaceuticals, pharmaceutics, pharmacy, philosophies, photonics, plants, plasma, polymers, polysaccharides, proceedings, processes, proteomes, publications, quaternary, qubs, reactions, recycling, religions, remotesensing, reports, resources, risks, robotics, safety, sci, scipharm, sensors, separations, sexes, sinusitis, smartcities, socsci, societies, soilsystems, sports, standards, stats, surfaces, surgeries, sustainability, symmetry, systems, technologies, toxics, toxins, tropicalmed, universe, urbansci, vaccines, vehicles, vetsci, vibration, viruses, vision, water, wem, wevj
 %---------
 % article
 %---------
-% The default type of manuscript is article, but could be replaced by using one of the class options:
-% article, review, communication, commentary, bookreview, correction, addendum, editorial, changes, supfile, casereport, comment, conceptpaper, conferencereport, meetingreport, discussion, essay, letter, newbookreceived, opinion, projectreport, reply, retraction, shortnote, technicalnote, creative, datadescriptor (for journal Data), briefreport, hypothesis, interestingimage
+% The default type of manuscript is article, but can be replaced by: 
+% abstract, addendum, article, benchmark, book, bookreview, briefreport, casereport, changes, comment, commentary, communication, conceptpaper, correction, conferenceproceedings, conferencereport, expressionofconcern, meetingreport, creative, datadescriptor, discussion, editorial, essay, erratum, hypothesis, interestingimages, letter, meetingreport, newbookreceived, opinion, obituary, projectreport, reply, reprint, retraction, review, perspective, protocol, shortnote, supfile, technicalnote, viewpoint
+% supfile = supplementary materials
+% protocol: If you are preparing a "Protocol" paper, please refer to http://www.mdpi.com/journal/mps/instructions for details on its expected structure and content.
 %----------
 % submit
 %----------
-% The class option "submit" will be changed to "accept" by the Editorial Office when the paper is accepted. This will only make changes to the frontpage (e.g. the logo of the journal will get visible), the headings, and the copyright information. Journal info and pagination for accepted papers will also be assigned by the Editorial Office.
-% Please insert a blank line is before and after all equation and eqnarray environments to ensure proper line numbering when option submit is chosen
+% The class option "submit" will be changed to "accept" by the Editorial Office when the paper is accepted. This will only make changes to the frontpage (e.g. the logo of the journal will get visible), the headings, and the copyright information. Also, line numbering will be removed. Journal info and pagination for accepted papers will also be assigned by the Editorial Office.
 %------------------
 % moreauthors
 %------------------
@@ -33,94 +36,74 @@
 %---------
 % pdftex
 %---------
-% The option "pdftex" is for use with pdfLaTeX only. If eps figure are used, use the optioin "dvipdfm", with LaTeX and dvi2pdf only.
+% The option pdftex is for use with pdfLaTeX. If eps figures are used, remove the option pdftex and use LaTeX and dvi2pdf.
 
 %=================================================================
-\setcounter{page}{1}
-\lastpage{x}
-\doinum{10.3390/------}
+\firstpage{1} 
+\makeatletter 
+\setcounter{page}{\@firstpage} 
+\makeatother
 \pubvolume{xx}
-\pubyear{2016}
-%\externaleditor{Academic Editor: xx}
-\history{Received: xx / Accepted: xx / Published: xx}
+\issuenum{1}
+\articlenumber{1}
+\pubyear{2018}
+\copyrightyear{2018}
+\externaleditor{Academic Editor: name}
+\history{Received: date; Accepted: date; Published: date}
 
-\usepackage[utf8]{inputenc}
-\usepackage{algorithm}
-\usepackage{algorithmicx}
-\usepackage{algpseudocode}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{dsfont}
-\usepackage{graphicx}
-\usepackage{microtype}
-\usepackage{natbib}
-
-\DeclareUnicodeCharacter{00A0}{ }
-\newcommand{\xx}{\boldsymbol{\theta}}
-\newcommand{\dx}{d\boldsymbol{\theta}}
-\newcommand{\data}{D}
-\newcommand{\II}{I}
-
+%\updates{yes} % If there is an update available, un-comment this line
+ 
 %------------------------------------------------------------------
 % The following line should be uncommented if the LaTeX file is uploaded to arXiv.org
 %\pdfoutput=1
 
 %=================================================================
-
-% Add packages and commands to include here
-% The amsmath, amsthm, amssymb, hyperref, caption, float and color packages are loaded by the MDPI class.
-%\usepackage{graphicx}
-%\usepackage{subfigure,psfig}
+% Add packages and commands here. The following packages are loaded in our class file: fontenc, calc, indentfirst, fancyhdr, graphicx, lastpage, ifthen, lineno, float, amsmath, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, amsthm, hyphenat, natbib, hyperref, footmisc, geometry, caption, url, mdframed, tabto, soul, multirow, microtype, tikz
 
 %=================================================================
-%% Please use the following mathematics environments:
-% \theoremstyle{mdpi}
-% \newcounter{thm}
-% \setcounter{thm}{0}
-% \newcounter{ex}
-% \setcounter{ex}{0}
-% \newcounter{re}
-% \setcounter{re}{0}
-%
-% \newtheorem{Theorem}[thm]{Theorem}
-% \newtheorem{Lemma}[thm]{Lemma}
-% \newtheorem{Corollary}[thm]{Corollary}
-% \newtheorem{Proposition}[thm]{Proposition}
-%
-% \theoremstyle{mdpidefinition}
-% \newtheorem{Characterization}[thm]{Characterization}
-% \newtheorem{Property}[thm]{Property}
-% \newtheorem{Problem}[thm]{Problem}
-% \newtheorem{Example}[ex]{Example}
-% \newtheorem{ExamplesandDefinitions}[ex]{Examples and Definitions}
-% \newtheorem{Remark}[re]{Remark}
-% \newtheorem{Definition}[thm]{Definition}
+%% Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition
 %% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
 
 %=================================================================
-
 % Full title of the paper (Capitalized)
 \Title{Nested Sampling with Multiple Objective Functions}
 
-% Authors (Add full first names)
+% Author Orchid ID: enter ID or remove command
+\newcommand{\xx}{\boldsymbol{\theta}}
+\newcommand{\dx}{d\boldsymbol{\theta}}
+\newcommand{\data}{D}
+\newcommand{\II}{I}
+
+%\newcommand{\orcidauthorA}{0000-0000-000-000X} % Add \orcidA{} behind the author's name
+%\newcommand{\orcidauthorB}{0000-0000-000-000X} % Add \orcidB{} behind the author's name
+
+% Authors, for the paper (add full first names)
 \Author{Brendon J. Brewer$^{1,}$*,
-        Robert J. N. Baldock$^{2}$,
-        Ewan Cameron$^{3}$}
+        Robert J. N. Baldock$^2$ and
+        Ewan Cameron$^3$}
+
+% Authors, for metadata in PDF
+\AuthorNames{Brendon J. Brewer, Robert J. N. Baldock and Ewan Cameron}
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
 \address{%
-$^{1}$ Department of Statistics, The University of Auckland, Private Bag 92019,
+$^{1}$ \quad Department of Statistics, The University of Auckland, Private Bag 92019,
 Auckland 1142, New Zealand \\
-$^{2}$ Cavendish, University of Cambridge, Cambridge, UK \\
-$^{3}$ Spatial Ecology and Epidemiology Group, Tinbergen Building, Department
-of Zoology, University of Oxford, South Parks Road, Oxford, UK\\}
+$^{2}$ \quad TBD \\
+$^{3}$ \quad TBD }
 
-%\contributed{$^\dagger$ These authors contributed equally to this work.}
+% Contact information of the corresponding author
+\corres{Correspondence: bj.brewer@auckland.ac.nz}
 
-% Contact information of the corresponding author (Add [2] after \corres if there are more than one corresponding author.)
-\corres{{\tt bj.brewer@auckland.ac.nz}}
+% Current address and/or shared authorship
+%\firstnote{Current address: Affiliation 3} 
+%\secondnote{These authors contributed equally to this work.}
+% The commands \thirdnote{} till \eighthnote{} are available for further notes
 
-% Abstract (Do not use inserted blank lines, i.e. \\)
+% Simple summary
+%\simplesumm{}
+
+% Abstract (Do not insert blank lines, i.e. \\) 
 \abstract{We present a generalization of Skilling's Nested Sampling algorithm
 that estimates
 the partition function $Z(\beta_1, \beta_2)$ for a family of
@@ -143,29 +126,42 @@ an intractable normalizing constant.
 A free software implementation in C++ and Python is available at
 \url{https://github.com/eggplantbren/TwinPeaks2018}.}
 
-% Keywords: add 3 to 10 keywords
-\keyword{
+% Keywords
+\keyword{nested sampling; bayesian computation; statistical mechanics;
+         partition functions;
+         sequential monte carlo; multi-objective optimization}
+
 % The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
-%\PACS{}
+%\PACS{J0101}
 %\MSC{}
 %\JEL{}
 
-% If this is an expanded version of a conference paper, please cite it here: enter the full citation of your conference paper, and add $^\dagger$ in the end of the title of this article.
-%\conference{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Applied Sciences:
+%\featuredapplication{Authors are encouraged to provide a concise description of the specific application or a potential application of the work. This section is not mandatory.}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% For journal Data:
-
+% Only for the journal Data:
 %\dataset{DOI number or link to the deposited data set in cases where the data set is published or set to be published separately. If the data set is submitted and will be published as a supplement to this paper in the journal Data, this field will be filled by the editors of the journal. In this case, please make sure to submit the data set as a supplement when entering your manuscript into our manuscript editorial system.}
+
 %\datasetlicense{license under which the data set is made available (CC0, CC-BY, CC-BY-SA, CC-BY-NC, etc.)}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Only for the journal Toxins
+%\keycontribution{The breakthroughs or highlights of the manuscript. Authors can write one or two sentences to describe the most important part of the paper.}
 
+%\setcounter{secnumdepth}{4}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Only for the journal Gels: Please place the Experimental Section after the Conclusions
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\setlength{\parskip}{0.7em}
+%\setcounter{section}{-1} %% Remove this when starting to work on the template.
+%\section{How to Use this Template}
+%The template details the sections that can be used in a manuscript. Note that the order and names of article sections may differ from the requirements of the journal (e.g. the positioning of the Materials and Methods section). Please check the instructions for authors page of the journal to verify the correct order and names. For any questions, please contact the editorial office of the journal or support@mdpi.com. For LaTeX related questions please contact Janine Daum at latex-support@mdpi.com.
+%The order of the section titles is: Introduction, Materials and Methods, Results, Discussion, Conclusions for these journals: aerospace,algorithms,antibodies,antioxidants,atmosphere,axioms,biomedicines,carbon,crystals,designs,diagnostics,environments,fermentation,fluids,forests,fractalfract,informatics,information,inventions,jfmk,jrfm,lubricants,neonatalscreening,neuroglia,particles,pharmaceutics,polymers,processes,technologies,viruses,vision
 
 \section{Introduction}
 
@@ -440,370 +436,162 @@ The standard Nested Sampling algorithm has these properties but for a
 single objective function. The same is true of variants such as
 Diffusive Nested Sampling \citep{dnest}.
 
-%\section{Rationale}\label{sec:rationale}
 
-%Consider the following proposal, which we label the `turn-the-corner idea'.
-%Imagine running standard NS with $N$ particles
-%using the objective function $L_1(\xx)$.
-%After $M_1$ iterations, we'd be able to approximate
-%the function $X(\ell_1) = \int \pi(\xx) \, d\xx$
-%from $X\approx e^{-M_1/N}$ to $X=1$. Defining $Y=-\ln(X)$, we could also
-%construct an approximation to the function
-%$L_1(Y)$, a non-decreasing function of $Y$, from $Y=0$ to $Y\approx M_1/N$.
-%After $M$ iterations, we keep the last value of $L_1(\xx)$ obtained
-%(call it $L_1^*$), and continue to impose the constraint $L_1(\xx) > L_1^*$.
+%The introduction should briefly place the study in a broad context and highlight why it is important. It should define the purpose of the work and its significance. The current state of the research field should be reviewed carefully and key publications cited. Please highlight controversial and diverging hypotheses when necessary. Finally, briefly mention the main aim of the work and highlight the principal conclusions. As far as possible, please keep the introduction comprehensible to scientists outside your particular field of research. Citing a journal paper \cite{ref-journal}. And now citing a book reference \cite{ref-book}. Please use the command \citep{ref-journal} for the following MDPI journals, which use author-date citation: Administrative Sciences, Arts, Econometrics, Economies, Genealogy, Humanities, IJFS, JRFM, Languages, Laws, Religions, Risks, Social Sciences.
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results}
 
-%Subject to the constraint $L_1(\xx) > L_1^*$, standard NS can continue but
-%attempting to increase $L_2$ instead of $L_1$. This is what we mean by
-%`turning the corner'. After $M_2$ such iterations,
-%the algorithm would have compressed the prior by a factor
-%$e^{(M_1 + M_2)/N}$ and therefore ended at a point in the $(L_1, L_2)$ plane
-%where $X(L_1, L_2) \approx e^{-(M_1 + M_2)/N}$. Any such run consisting of
-%$M_1 + M_2$ iterations will therefore appoximately finish on a contour line
-%of the function $X(L_1, L_2)$.
-%We have explored the idea of using multiple turn-the-corner runs, with
-%the corner being turned at different times (i.e. using different values of
-%$M_1$), and combining the results using biased sampling
-%\citep{vardi, cameron} in order to estimate $Z(\beta_1, \beta_2)$. However,
-%this was very computationally intensive. We presented the turn-the-corner idea
-%here in order to provide an intuitive rationale for our actual algorithm given in
-%Section~\ref{sec:algorithm}.
-
-%Figure~\ref{fig:contours} shows the contour lines of $X(L_1, L_2)$ for the
-%prior in Figure~\ref{fig:joint1}. Each contour line encloses half of the
-%prior mass of the previous one. The fact that contours of $X(L_1, L_2)$ are
-%relevant suggests that a standard NS run with objective function
-%$X(L_1(\xx), L_2(\xx))$ would achieve a similar effect to the turn-the-corner
-%idea.
-
-%%\begin{figure}[ht!]
-%%\centering
-%%\includegraphics[scale=0.5]{figures/contours.pdf}
-%%\caption{\it The joint prior for the objective functions, and fifteen
-%%contours of the cumulative distribution $X(L_1, L_2)$, each enclosing half
-%%the prior mass of the previous one. \label{fig:contours}}
-%%\end{figure}
-
-%{\bf Try to relate this to \citet{vertical}}.
-
-%\section{Proposed algorithm}\label{sec:algorithm}
-
-%The basic idea of our algorithm is to try to mimic a standard NS run, where the
-%objective function being increased is
-%\begin{eqnarray}
-%Y(\xx) &=& 1/X\left(L_1(\xx), L_2(\xx)\right).
-%\end{eqnarray}
-%Standard NS cannot be applied simply because we cannot evaluate $X(L_1, L_2)$ and
-%therefore cannot restrict the parameter space based on the value of $X$ (or
-%equivalently, $Y$). However, given a number of Monte Carlo samples, we
-%can {\em approximate} $X$ by $\hat{X}(L_1, L_2)$, and restrict the parameter
-%space based on a contour of that approximation.
-%The algorithm is presented in detail below.
-
-%\begin{algorithm}[ht!]
-%\begin{algorithmic}
-%\State 1) Generate $N$ particles $\{\xx_1, ..., \xx_N\}$ from $\pi(\xx)$.
-%$N$ should quite large (typically 1000 or greater), and the algorithm is
-%slightly more elegant if $N$ is odd.
-%\State 2) Initialise the {\em remaining prior mass} to be $M=1$.
-%\State 3) Initialise the {\em excluded region} $\mathcal{R}$ to be the empty set
-%$\emptyset$.
-%\While{more iterations desired}
-%	\State i) Calculate $\hat{X}(\ell_1, \ell_2)$ at the position of each particle
-%			and sort the $\hat{X}$ values observed.
-%	\State ii) Find the median $\hat{X}$ value, $\hat{X}_{(k)}$.
-%	\State iii) Classify all particles as either ``interior'', ``boundary'', or
-%			``exterior'', based on whether their $\hat{X}$ values are
-%			greater than, equal to, or less than $\hat{X}_{(k)}$ respectively.
-%	\State iv) If the number of interior particles $n_{\rm interior}$ or the number
-%			of exterior particles $n_{\rm exterior}$ is zero, replace $k$ by
-%			$(k-1)$ (to try a percentile other than the median)
-%			and go to step iii) (if $k=1$ then set $k=N$ instead of zero).
-%	\State v) Save all ``interior'' particles to disk, assigning each a prior weight of $n_{\rm interior}/(n_{\rm interior} + n_{\rm exterior})$.
-%	\State vi) Exclude the region in the $L_1$-$L_2$ plane where
-%$\hat{X} \geq \hat{X}_{(k)}$. That is, set
-%	\State \hspace{20pt} $\mathcal{R} \leftarrow \mathcal{R} \cup \{(\ell_1, \ell_2) \in \mathbb{R}^2: \hat{X}(\ell_1, \ell_2) \geq \hat{X}_{(k)}\}$.
-%	\State vii) Update the remaining prior mass to $M \leftarrow M n_{\rm exterior}/N$.
-%	\State viii) Replace all interior and boundary particles by new
-%			particles generated from $\pi(\xx)$, subject to the constraint
-%			of not being in the excluded region.
-%\EndWhile
-%\end{algorithmic}
-%\caption{\label{alg:algorithm}}
-%\end{algorithm}
-
-%Step 1 of the algorithm ensures that NS property 1 is trivially satisfied.
-
-%\begin{figure}[ht!]
-%\centering
-%\includegraphics[scale=0.5]{figures/joint2.pdf}
-%\caption{\it The joint prior for the objective functions, and Monte Carlo
-%samples, as in Figure~\ref{fig:joint1}. The shaded region imposes a
-%constraint on the value of $\hat{X}$. Its boundary approximates a contour
-%of $X(L_1, L_2)$.
-%\label{fig:joint2}}
-%\end{figure}
-
-\section{Example 1: Known solution}
-We tested the algorithm on a simple 20-dimensional example, where the
-prior is a uniform distribution between 0 and 1 for each coordinate:
-\begin{eqnarray}
-\pi(\xx) &=& \prod_{i=1}^{20}
-\left\{
-\begin{array}{lr}
-1, & x_i \in [0, 1]\\
-0, & \textnormal{otherwise.}
-\end{array}
-\right.
-\end{eqnarray}
-The first objective function is quadratic in form, such that the canonical
-distribution is an iid gaussian centered at $(0.5, 0.5, ..., 0.5)$:
-\begin{eqnarray}
-L_1(\xx) &=& -\frac{1}{2} \sum_{i=1}^{20} \left(\frac{x_i - 0.5}{0.01}\right)^2.
-\end{eqnarray}
-
-The second objective function upweights states where coordinates $\{x_i\}$
-are close to 0, 0.25, 0.5, 0.75, or 1:
-\begin{eqnarray} 
-L_2(\xx) &=& -\sum_{i=1}^{100} \sin^2(4\pi x_i)
-\end{eqnarray}
-
-The true partition function (computed numerically) and the Kullback-Leibler
-divergence from the prior to the canonical distribution are shown in
-Figure~\ref{fig:truth} as a function of two temperatures.
-
-%\begin{figure}[ht!]
-%\centering
-%\includegraphics[scale=0.75]{figures/truth.pdf}
-%\caption{The true partition function and KL divergence (from the prior to
-%the canonical distribution) as a function of two temperatures for the
-%test problem.\label{fig:truth}}
-%\end{figure}
-
-
-%\begin{figure}[ht!]
-%\centering
-%\includegraphics[scale=1]{figures/output.png}
-%\caption{The sequence of discarded particles (yellow) and
-%points representing the canonical distribution at temperatures
-%$(T_1, T_2) = (0.1, 1)$ (black).\label{fig:output}}
-%\end{figure}
-
-
-
-%\begin{figure}[ht!]
-%\centering
-%\includegraphics[scale=0.5]{figures/results.pdf}
-%\caption{Numerical results for the test problem. These compare well with the
-%true partition function and KL divergence given in Figure~\ref{fig:truth}.
-%\label{fig:results}}
-%\end{figure}
-
-\section{Example 2: Lennard-Jones/Polymer Example}
-
-Consider $n$ Lennard-Jones atoms confined to the unit cube $[0, 1]^3$.
-The position of each atom is given by a vector
-$\boldsymbol{r}_i = (x_i, y_i, z_i)$.
-The potential energy of any configuration of the atoms is given by
-a sum over all pairs of atoms:
-\begin{eqnarray}
-U_{\rm LJ} &=& \sum_{i=1}^n\sum_{j=(i+1)}^n U_{\rm LJ}
-(\boldsymbol{r}_i, \boldsymbol{r}_j)
-\end{eqnarray}
-where the inter-atomic potential energy is given by:
-
-\begin{eqnarray}
-U_{\rm LJ}(\boldsymbol{r}_i, \boldsymbol{r}_j)
-&=& 4\epsilon
-\left[
-\left(\frac{\sigma}{|\boldsymbol{r}_i - \boldsymbol{r}_j|}\right)^12 -
-\left(\frac{\sigma}{|\boldsymbol{r}_i - \boldsymbol{r}_j|}\right)^6
-\right].
-\end{eqnarray}
-We adopted the Lennard Jones units by setting $\epsilon=1$ and $\sigma=1$.
-
-In terms of the Lennard Jones parameters $\epsilon$ and $\sigma$, the
-``polymer'' potential is
-\begin{eqnarray}
-U_{\rm polymer} &=&
-\sum_{i=1}^{n-1} \phi^{(1)}_{i,i+1} + \sum_{i=2}^{n-1} \phi^{(2)}_{i-1, i, i+1}
-\end{eqnarray}
-where
-
-\begin{eqnarray}
-\phi^{(1)}_{i,i+1} &=& \frac{k}{2}\left(|\boldsymbol{r}_i - \boldsymbol{r}_{i+1}|- 2^{1/6}\sigma\right)^2,\\
-\phi^{(2)}_{i-1, i, i+1} &=& \frac{k}{2}
-\left((\boldsymbol{r}_i - \boldsymbol{r}_{i-1})\cdot(\boldsymbol{r}_{i-1} - \boldsymbol{r}_{i}) - 1\right)^2,
-\end{eqnarray}
-and $k=\frac{36 \times 2^{2/3}\epsilon}{\sigma^2}$ has been chosen to match
-the curvature of $U_{\rm LJ}(\boldsymbol{r}_i, \boldsymbol{r}_j)$.
-
-
-\section{Example 3: ``MaxEnt'' image deconvolution example}
-
-Problems with more than one objective function can also arise in data
-analysis. Consider, for example, the problem of deblurring a noisy
-image. A common approach to these problems is regularized inversion,
-such as the ``maximum entropy'' technique of \citet{gull}. It is important
-to distinguish between this method and the maximum entropy principle used
-to update or assign probabilities \citep{caticha}.
-
-The unknown parameters are a set of pixel intensities
-$\{x_i\}_{i=1}^n$ where $n$ is the number of pixels and $x_i \geq 0$.
-The dataset is also a collection of pixel intensities $\{D_i\}_{i=1}^n$.
-The prior for the dataset given the parameters is a normal distribution
-with mean given by the underlying image $\{xi\}$ convolved by
-a point spread function. The standard deviation of each pixel is
-$\sigma$, assumed known. This is usually written as
-
-\begin{eqnarray}
-\boldsymbol{D} = \boldsymbol{M}\boldsymbol{x} + \boldsymbol{n}
-\end{eqnarray}
-where $\boldsymbol{n}$ is the noise in each pixel and $\boldsymbol{M}$ is
-the blurring operator written in matrix form.
-
-The prior for the pixel intensities $\{x_i\}$ has an ``entropic'' form,
-where images are upweighted (relative to a uniform prior) if the pixel
-intensities have a low dynamic range. The prior density is defined conditional
-on a hyperparameter $\lambda$:
-\begin{eqnarray}
-p(\boldsymbol{x} | \lambda) &=&
-\frac{\exp\left[\lambda S(\xx)\right]}{\int \exp\left[\lambda S(\xx)\right] \, d\xx}
-\label{eq:entropy_prior}
-\end{eqnarray}
-where
-\begin{eqnarray}
-S(\xx) &=& -\sum_{i=1}^n x_i \ln x_i
-\end{eqnarray}
-is the ``configurational entropy'' of the image (crucially, this is a function of
-an image, and not a function of a probability distribution).
-The denominator in Equation~\ref{eq:entropy_prior} ensures the conditional prior
-is normalized.
-
-In the 1980s, this prior was thought to have a fundamental status, but this
-is no longer the case \citep{massinf}, although the function $S(\xx)$ does
-have special properties when its argument is a measure \citep{knuth_skilling}.
-However, it is still a prior whose
-consequences we might be interested in.
-
-Instead, we can consider the configurational
-entropy $S(\xx)$ as simply a function of an image that may
-be relevant somehow, and that we are uncertain about. The joint posterior
-for $\xx$ and $\lambda$ is:
-\begin{eqnarray}
-p(\lambda, \xx | \data) &=&
-\frac{p(\lambda)p(\xx | \lambda)p(\data | \xx)}
-{p(\data)}\\
-&=&
-\frac{p(\lambda)p(\xx | \lambda)p(\data | \xx)}
-{p(\data)}
-\end{eqnarray}
-
-
-The posterior for the underlying image given the data is
-\begin{eqnarray}
-p(\boldsymbol{x} | \boldsymbol{D}, \lambda)
-&=& \frac{p(\boldsymbol{x} | \lambda)p(\boldsymbol{D}|\boldsymbol{x}, \lambda)}
-{\int p(\boldsymbol{x}|\lambda)p(\boldsymbol{D}|\boldsymbol{x}, \lambda) \,d^n\boldsymbol{m}}\\
-&=& \frac{\exp\left[-\lambda \sum_i x_i\ln x_i
--\frac{1}{2\sigma^2}\left(D_i - \sum_{j} P_{ij}x_{j}\right)^2\right]}
-{\int \exp\left[-\lambda \sum_i x_i\ln x_i
--\frac{1}{2\sigma^2}\left(D_i - \sum_{j} P_{ij}x_{j}\right)^2\right]\, d^n\boldsymbol{m}}
-\end{eqnarray}
-
-This is a `doubly intractable' problem \citep{murray}, since an integral, whose
-result is a function of the parameters, appears in the {\em denominator} of the
-target density. However, in our case the integral in the
-denominator arises from the prior for the parameters, rather than from the
-likelihood function.
-
-\section{What kind of accuracy can we expect?}
-
-Imagine computing $Z(\beta_1, \beta_2)$ by looping over a grid of $\beta_2$
-values and doing an NS run with respect to $L_1$ for each. For each
-value of $\beta_1$ and $\beta_2$ that we're interested in, we can expect
-a (marginal) `one-sigma' accuracy in
-$\ln\left[Z(\beta_1, \beta_2)\right]$ of $\pm \sqrt{H(\beta_1, \beta_2)/N}$,
-for a computational cost proportional to...
-
-\section{What kind of accuracy do we need?}
-
-The following argument is due to John Skilling. Consider Bayesian model selection
-between two models $M_1$ and $M_2$. The Bayes Factor is the ratio of the
-two marginal likelihoods:
-\begin{eqnarray}
-B = \frac{P(D | M_1)}{P(D | M_2)} = \frac{Z_1}{Z_2}
-\end{eqnarray}
-where $Z_1 = \int \pi(\xx_1)L(\xx_1) \, d\xx_1$ and
-$Z_2 = \int \pi(\xx_2)L(\xx_2) \, d\xx_2$.
-In large problems, the log of the Bayes Factor is usually more convenient:
-\begin{eqnarray}
-\Delta := \ln B = \ln Z_1 - \ln Z_2.
-\end{eqnarray}
-Naively, we want $\Delta$ to an accuracy of about 0.1, so that we can reliably
-quantify the strength of the evidence when the two models are similarly
-supported by the data. But is this a realistic situation?
-
-Prior to knowing the data $D$, we don't know how much information we will get
-about the question of $M_1$ vs. $M_2$, quantified by the KL divergence:
-\begin{eqnarray}
-H &=& \sum_{i=1}^2 P(M_i | D)
-\ln\left[
-\frac{P(M_i | D)}{P(M_i)}
-\right].
-\end{eqnarray}
-
-The expected value of $H$ (with respect to the prior over datasets)
-is the mutual information:
-\begin{eqnarray}
-\mathcal{I} &=& \mathds{E}\left[H\right]\\
-&=&
-\sum_{i=1}^2 \int P(M_i, D)
-\ln\left[
-\frac{P(M_i, D)}{P(M_i)P(D)}
-\right] \, dD.
-\end{eqnarray}
-
-\section{Failure modes}\label{sec:failure_modes}
-
-If $L_1(\xx)$ and $L_2(\xx)$ are inversely and strongly dependent...
-
-
-%Use Skilling's argument about the prior distribution of a log Bayes factor.
-%Even though the performance of this algorithm won't be great for high $H$, it
-%will be good enough. I think the probability it won't give enough accuracy will
-%be ``exponentially small''.
-
-\acknowledgments{Acknowledgements}
-
-It is a pleasure to thank Rob Salamone (QUT),
-Gábor Csányi (Cambridge), Livia B. Pártay (Cambridge),
-and Will Handley (Cambridge) for valuable conversations.
+This section may be divided by subheadings. It should provide a concise and precise description of the experimental results, their interpretation as well as the experimental conclusions that can be drawn.
+\begin{quote}
+This section may be divided by subheadings. It should provide a concise and precise description of the experimental results, their interpretation as well as the experimental conclusions that can be drawn.
+\end{quote}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Subsection}
 
-\authorcontributions{Author Contributions}
+\subsubsection{Subsubsection}
 
-BJB initiated the project and explored various ideas which did not work.
-EC worked on the biased sampling suggestion in Section~\ref{sec:rationale},
-discovered the failure mode in Section~\ref{sec:failure_modes}, and was involved
-in many other discussions about the project. RB suggested the statistical
-mechanics example and helped BJB to get it working and to interpret the results.
+Bulleted lists look like this:
+\begin{itemize}[leftmargin=*,labelsep=5.8mm]
+\item	First bullet
+\item	Second bullet
+\item	Third bullet
+\end{itemize}
+
+Numbered lists can be added as follows:
+\begin{enumerate}[leftmargin=*,labelsep=4.9mm]
+\item	First item 
+\item	Second item
+\item	Third item
+\end{enumerate}
+
+The text continues here.
+
+\subsection{Figures, Tables and Schemes}
+
+All figures and tables should be cited in the main text as Figure 1, Table 1, etc.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=2 cm]{Definitions/logo-mdpi}
+\caption{This is a figure, Schemes follow the same formatting. If there are multiple panels, they should be listed as: (\textbf{a}) Description of what is contained in the first panel. (\textbf{b}) Description of what is contained in the second panel. Figures should be placed in the main text near to the first time they are cited. A caption on a single line should be centered.}
+\end{figure}   
+
+\begin{table}[H]
+\caption{This is a table caption. Tables should be placed in the main text near to the first time they are cited.}
+\centering
+%% \tablesize{} %% You can specify the fontsize here, e.g.  \tablesize{\footnotesize}. If commented out \small will be used.
+\begin{tabular}{ccc}
+\toprule
+\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
+\midrule
+entry 1		& data			& data\\
+entry 2		& data			& data\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Formatting of Mathematical Components}
+
+This is an example of an equation:
+
+\begin{equation}
+a + b = c
+\end{equation}
+%% If the documentclass option "submit" is chosen, please insert a blank line before and after any math environment (equation and eqnarray environments). This ensures correct linenumbering. The blank line should be removed when the documentclass option is changed to "accept" because the text following an equation should not be a new paragraph. 
+
+Please punctuate equations as regular text. Theorem-type environments (including propositions, lemmas, corollaries etc.) can be formatted as follows:
+%% Example of a theorem:
+\begin{Theorem}
+Example text of a theorem.
+\end{Theorem}
+
+The text continues here. Proofs must be formatted as follows:
+
+%% Example of a proof:
+\begin{proof}[Proof of Theorem 1]
+Text of the proof. Note that the phrase `of Theorem 1' is optional if it is clear which theorem is being referred to.
+\end{proof}
+The text continues here.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion}
 
-\conflictofinterests{Conflicts of Interest}
-The authors declare no conflict of interest.
+Authors should discuss the results and how they can be interpreted in perspective of previous studies and of the working hypotheses. The findings and their implications should be discussed in the broadest context possible. Future research directions may also be highlighted.
 
-%=================================================================
-% References: Variant A
-%=================================================================
-% Back Matter (References and Notes)
-%----------------------------------------------------------
-% Style and layout of the references
-\bibliographystyle{mdpi}
-\makeatletter
-\renewcommand\@biblabel[1]{#1. }
-\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Materials and Methods}
+
+Materials and Methods should be described with sufficient details to allow others to replicate and build on published results. Please note that publication of your manuscript implicates that you must make all materials, data, computer code, and protocols associated with the publication available to readers. Please disclose at the submission stage any restrictions on the availability of materials or information. New methods and protocols should be described in detail while well-established methods can be briefly described and appropriately cited.
+
+Research manuscripts reporting large datasets that are deposited in a publicly available database should specify where the data have been deposited and provide the relevant accession numbers. If the accession numbers have not yet been obtained at the time of submission, please state that they will be provided during review. They must be provided prior to publication.
+
+Interventionary studies involving animals or humans, and other studies require ethical approval must list the authority that provided approval and the corresponding ethical approval code. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions}
+
+This section is not mandatory, but can be added to the manuscript if the discussion is unusually long or complex.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Patents}
+This section is not mandatory, but may be added if there are patents resulting from the work reported in this manuscript.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{6pt} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% optional
+%\supplementary{The following are available online at \linksupplementary{s1}, Figure S1: title, Table S1: title, Video S1: title.}
+
+% Only for the journal Methods and Protocols:
+% If you wish to submit a video article, please do so with any other supplementary material.
+% \supplementary{The following are available at \linksupplementary, Figure S1: title, Table S1: title, Video S1: title. A supporting video article is available at doi: link.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; Methodology, X.X.; Software, X.X.; Validation, X.X., Y.Y. and Z.Z.; Formal Analysis, X.X.; Investigation, X.X.; Resources, X.X.; Data Curation, X.X.; Writing—Original Draft Preparation, X.X.; Writing—Review \& Editing, X.X.; Visualization, X.X.; Supervision, X.X.; Project Administration, X.X.; Funding Acquisition, Y.Y.'', please turn to the \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work reported. }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\funding{Please add: ``This research received no external funding'' or ``This research was funded by [name of funder] grant number [xxx].'' Check carefully that the details given are accurate and use the standard spelling of funding agency names at \url{https://search.crossref.org/funding}, any errors may affect your future funding.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\acknowledgments{In this section you can acknowledge any support given which is not covered by the author contribution or funding sections. This may include administrative and technical support, or donations in kind (e.g. materials used for experiments).}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\conflictsofinterest{Declare conflicts of interest or state ``The authors declare no conflict of interest.'' Authors must identify and declare any personal circumstances or interest that may be perceived as inappropriately influencing the representation or interpretation of reported research results. Any role of the funding sponsors in the design of the study; in the collection, analyses or interpretation of data; in the writing of the manuscript, or in the decision to publish the results must be declared in this section. If there is no role, please state ``The founding sponsors had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript, and in the decision to publish the results''.} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% optional
+\abbreviations{The following abbreviations are used in this manuscript:\\
+
+\noindent 
+\begin{tabular}{@{}ll}
+MDPI & Multidisciplinary Digital Publishing Institute\\
+DOAJ & Directory of open access journals\\
+TLA & Three letter acronym\\
+LD & linear dichroism
+\end{tabular}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% optional
+\appendixtitles{no} %Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
+\appendixsections{multiple} %Leave argument "multiple" if there are multiple sections. Then a counter is printed ("Appendix A"). If there is only one appendix section then change the argument to "one" and no counter is printed ("Appendix").
+\appendix
+\section{}
+\subsection{}
+The appendix is an optional section that can contain details and data supplemental to the main text. For example, explanations of experimental details that would disrupt the flow of the main text, but nonetheless remain crucial to understanding and reproducing the research shown; figures of replicates for experiments of which representative data is shown in the main text can be added here if brief, or as Supplementary data. Mathematical proofs of results not central to the paper can be added as an appendix.
+
+\section{}
+All appendix sections must be cited in the main text. In the appendixes, Figures, Tables, etc. should be labeled starting with `A', e.g., Figure A1, Figure A2, etc. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Citations and References in Supplementary files are permitted provided that they also appear in the reference list here. 
+
+%=====================================
+% References, variant A: internal bibliography
+%=====================================
+\reftitle{References}
 
 \begin{thebibliography}{999} % if there are less than 10 entries, enter a one digit number
 
@@ -882,36 +670,28 @@ Walter, C.\ Point Process-based Monte Carlo estimation.\ arXiv: 1412.6368.
 
 \end{thebibliography}
 
-%=================================================================
-% References:  Variant B
-%=================================================================
-% Use the following option to include external BibTeX files:
-%\bibliography{lite}
-%\bibliographystyle{mdpi}
+
+% The following MDPI journals use author-date citation: Arts, Econometrics, Economies, Genealogy, Humanities, IJFS, JRFM, Laws, Religions, Risks, Social Sciences. For those journals, please follow the formatting guidelines on http://www.mdpi.com/authors/references
+% To cite two works by the same author: \citeauthor{ref-journal-1a} (\citeyear{ref-journal-1a}, \citeyear{ref-journal-1b}). This produces: Whittaker (1967, 1975)
+% To cite two works by the same author with specific pages: \citeauthor{ref-journal-3a} (\citeyear{ref-journal-3a}, p. 328; \citeyear{ref-journal-3b}, p.475). This produces: Wong (1999, p. 328; 2000, p. 475)
+
+%=====================================
+% References, variant B: external bibliography
+%=====================================
+%\externalbibliography{yes}
+%\bibliography{your_external_BibTeX_file}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% optional
+\sampleavailability{Samples of the compounds ...... are available from the authors.}
 
-%\abbreviations{Abbreviations/Nomenclature}
-%
-%Main text.
+%% for journal Sci
+%\reviewreports{\\
+%Reviewer 1 comments and authors’ response\\
+%Reviewer 2 comments and authors’ response\\
+%Reviewer 3 comments and authors’ response
+%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\appendix
-%\section{Appendix 1: Fast computation of upper corner counts}
-%The upper corner count of particle $i$ is defined as the value of
-%$\hat{X}$ at the position of particle $i$. Less formally, it is the number
-%of other particles that are `up and to the right' of particle $i$ in
-%a plot like Figure~\ref{fig:joint1}, plus one.
-
-%\begin{eqnarray}
-%C_i &=& \sum_{j=1}^N
-%\mathds{1}\left[L_1(\xx_j) \geq L_1(\xx_i), L_2(\xx_j) \geq L_2(\xx_i)\right]\\
-%&=& \sum_{j=1}^N
-%\mathds{1}\left[L_1(\xx_j) \geq L_1(\xx_i)\right]
-%\mathds{1}\left[L_2(\xx_j) \geq L_2(\xx_i)\right]
-%\end{eqnarray}
-
-
 \end{document}
 
