@@ -165,49 +165,54 @@ A free software implementation in C++ and Python is available at
 
 \section{Introduction}
 
-Nested Sampling \citep[NS][]{skilling} is popular general
+Nested Sampling \citep[NS][]{skilling} is general
 Monte Carlo algorithm that can solve a wide range of problems in Bayesian
 computation and statistical mechanics
 \citep{2009arXiv0906.3544P, 2014PhRvE..89b2302P, 2015arXiv150303404B}.
-Its key strength its ability to cope with phase transitions which cause
-problems for many other methods \citep{skilling}.
+Its key strength its ability to cope with phase transitions and other
+features which cause
+problems for many other methods.
 In a Bayesian inference problem with unknown parameters denoted collectively
 by a vector $\xx$, the
 posterior distribution for the parameters given a data proposition $\data$ and
-a `prior information' proposition $\II$ is
-information $\II$) is:
+a `prior information' proposition $\II$ is:
 \begin{eqnarray}
 p(\xx | \data, \II) &=&
 \frac{p(\xx | \II)p(\data | \xx, \II)}{p(\data | \II)}\\
 &=& \frac{\pi(\xx)L(\xx)}{Z}
 \end{eqnarray}
 where $\pi(\xx)$ is the prior distribution, $L(\xx)$ is the likelihood
-function, and $Z$ is the normalising constant, usually known as the
-`marginal likelihood' or the `evidence':
+function, and $Z$ is the normalising constant, known as the
+`marginal likelihood' or `evidence':
 \begin{eqnarray}
 Z &=& \int \pi(\xx) L(\xx) \, \dx.\label{eqn:evidence}
 \end{eqnarray}
 
-$Z$ is useful because it is the (prior) probability of the data given that
-$\xx$ is {\em one of}
-the possibilities in the space being integrated over, and thus plays the role
-of a likelihood for the parameter space as a whole.
-The main goal of NS is to approximate $Z$, but it can also be used to make
+$Z$ is useful because it is the prior probability of the data conditional on
+the hypothesis that $\xx$ is {\em one of}
+the possibilities in the space being integrated over, along with
+whatever additional assumptions were made. $Z$ thus plays the role
+of a likelihood for the parameter space as a whole, and is a key input in
+calculating the posterior probabilities of competing `models' (mutually
+exclusive choices of $\II$).
+
+The main goal of NS is to compute $Z$, but it can also be used to make
 Monte Carlo approximations of the posterior distribution, and to
 calculate the `information',
 or Kullback-Leibler divergence from the prior to the posterior:
 \begin{eqnarray}
-H &=& \int p(\xx | \data, \II) \ln
-\left[\frac{p(\xx | \data, \II)}{p(\xx | \II)}\right] \, d\xx \\
-&=& \int \frac{\pi(\xx) L(\xx)}{Z} \ln
-\left[\frac{L(\xx)}{Z}\right] \, d\xx.
+H &=& \int p(\xx | \data, \II) \log
+\left(\frac{p(\xx | \data, \II)}{p(\xx | \II)}\right) \, d\xx \\
+&=& \int \frac{\pi(\xx) L(\xx)}{Z} \log
+\left(\frac{L(\xx)}{Z}\right) \, d\xx.
 \end{eqnarray}
 $H$ quantifies how compressed the posterior distribution is with
-respect to the prior. For example, $H = 10$ implies, loosely speaking,
-that the posterior occupies a fraction $e^{-10}$ of the prior mass.
+respect to the prior. For example, $H = 100$ nats (the units obtained when
+the logarithm is the natural logarithm) implies, loosely speaking,
+that the posterior occupies a fraction $e^{-100}$ of the prior mass.
 $H$ can be interpreted quite literally as a measure of how much
 the specific data $\data$ resolved the question ``what is the value
-of $\xx$, precisely?''.
+of $\xx$, precisely?'' \citep{knuth, van_erp}.
 
 NS works by drawing particles from the
 prior $\pi(\xx)$ and successively imposing constraints on the value of
@@ -593,83 +598,8 @@ All appendix sections must be cited in the main text. In the appendixes, Figures
 %=====================================
 \reftitle{References}
 
-\begin{thebibliography}{999} % if there are less than 10 entries, enter a one digit number
-
-\bibitem[Baldock et al.(2015)]{2015arXiv150303404B} Baldock, R.~J.~N., 
-P{\'a}rtay, L.~v.~B., Bart{\'o}k, A.~P., Payne, M.~C., Cs{\'a}nyi, G.\ 
-2015.\ Determining pressure-temperature phase diagrams of materials.\ ArXiv 
-e-prints arXiv: 1503.03404. 
-
-\bibitem[Brewer and Donovan(2015)]{exoplanet} Brewer, B.~J., 
-Donovan, C.~P.\ 2015.\ Fast Bayesian inference for exoplanet discovery in 
-radial velocity data.\ Monthly Notices of the Royal Astronomical Society 
-448, 3206-3214. 
-
-\bibitem[Brewer(2014)]{rjobject} Brewer, B.~J.\ 2014.\ Inference 
-for Trans-dimensional Bayesian Models with Diffusive Nested Sampling.\ 
-ArXiv e-prints arXiv:1411.3921.
-
-\bibitem[\protect\citeauthoryear{Brewer, P{\'a}rtay,
-\& Cs{\'a}nyi}{2011}]{dnest} Brewer B.~J., P{\'a}rtay L.~B., Cs{\'a}nyi G., 2011,
-Statistics and Computing, 21, 4, 649-656. arXiv:0912.2380
-
-\bibitem[Cameron and Pettitt(2014)]{cameron} Cameron, E., and Pettitt, A., 2014,
-``Recursive pathways to marginal likelihood estimation with
-prior-sensitivity analysis.'' Statistical Science 29.3 (2014): 397-419.
-
-\bibitem[Caticha(2008)]{caticha} Caticha, A.\ 2008.\ Lectures 
-on Probability, Entropy, and Statistical Physics.\ ArXiv e-prints 
-arXiv:0808.0012. 
-
-\bibitem[\protect\citeauthoryear{Gregory}{2005}]{gregory}
-Gregory, Phil. Bayesian Logical Data Analysis for the Physical Sciences: A Comparative Approach with Mathematica® Support. Cambridge University Press, 2005.
-
-\bibitem[Gull and Daniell(1978)]{gull} Gull, Stephen F., and Daniell, G., 1978
-Image reconstruction from incomplete and noisy data. Nature (1978): 686-690.
-
-\bibitem[Hansmann(1997)]{pt} Hansmann, Ulrich HE., 1997, ``Parallel tempering algorithm for conformational studies of biological molecules.'', Chemical Physics Letters 281, no. 1 (1997): 140-150.
-
-\bibitem[Knuth and Skilling(2010)]{knuth_skilling} Knuth, K.~H., 
-Skilling, J.\ 2010.\ Foundations of Inference.\
-Axioms 1.1 (2012): 38-73.\
-ArXiv e-prints arXiv:1008.4831. 
-
-\bibitem[Murray(2012)]{murray} Murray, Iain, Ghahramani, Zoubin, and MacKay, David.
-``MCMC for doubly-intractable distributions.'' arXiv preprint arXiv:1206.6848 (2012).
-
-\bibitem[P{\'a}rtay et al.(2014)]{2014PhRvE..89b2302P} P{\'a}rtay, L.~B., 
-Bart{\'o}k, A.~P., Cs{\'a}nyi, G.\ 2014.\ Nested sampling for materials: 
-The case of hard spheres.\ Physical Review E 89, 022302. 
-
-\bibitem[P{\'a}rtay et al.(2009)]{2009arXiv0906.3544P} P{\'a}rtay, L.~B., 
-Bart{\'o}k, A.~P., Cs{\'a}nyi, G.\ 2009.\ Efficient sampling of atomic 
-configurational spaces.\ ArXiv e-prints arXiv: 0906.3544. 
-
-\bibitem[Polson and Scott(2014)]{vertical}
-Polson, Nicholas G., and James G. Scott. ``Vertical-likelihood Monte Carlo
-Integration.'' arXiv preprint arXiv:1409.3601 (2014).
-
-\bibitem[\protect\citeauthoryear{Skilling}{1998}]{massinf}
-Skilling J., 1998, Massive Inference and Maximum Entropy, in Maximum Entropy
-and Bayesian Methods, Kluwer Academic Publishers, Dordrecht/Boston/London p.14
-
-\bibitem[\protect\citeauthoryear{Skilling}{2006}]{skilling} Skilling, J., 2006, Nested Sampling for General Bayesian Computation, Bayesian Analysis 4, pp. 833-860.
-
-\bibitem[Vardi (1985)]{vardi}
-Vardi, Yehuda. ``Empirical distributions in selection bias models.'', The Annals of Statistics (1985): 178-203.
-
-\bibitem[Walter(2015)]{walter}
-Walter, C.\ Point Process-based Monte Carlo estimation.\ arXiv: 1412.6368.
-%% Reference 1
-%\bibitem{ref-journal}
-%Lastname, F.; Author, T. The title of the cited article. {\em Journal Abbreviation} {\bf 2008}, {\em 10}, 142-149.
-
-%% Reference 2
-%\bibitem{ref-book}
-%Lastname, F.F.; Author, T. The title of the cited contribution. In {\em The Book Title}; Editor, F., Meditor, A., Eds.; Publishing House: City, Country, 2007; pp. 32-58.
-
-\end{thebibliography}
-
+\bibliographystyle{mdpi}
+\bibliography{references/references}
 
 % The following MDPI journals use author-date citation: Arts, Econometrics, Economies, Genealogy, Humanities, IJFS, JRFM, Laws, Religions, Risks, Social Sciences. For those journals, please follow the formatting guidelines on http://www.mdpi.com/authors/references
 % To cite two works by the same author: \citeauthor{ref-journal-1a} (\citeyear{ref-journal-1a}, \citeyear{ref-journal-1b}). This produces: Whittaker (1967, 1975)
