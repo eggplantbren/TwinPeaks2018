@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.random as rng
 import pandas as pd
-from twinpeaks2018.example_truth import *
+from twinpeaks2018.demo_truth import *
 from twinpeaks2018.utils import *
 
 plot_settings()

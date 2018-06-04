@@ -4,7 +4,7 @@ import twinpeaks2018 as tp
 
 # Compute the true partition function
 limits = [1E-3, 1E3, 1E-3, 1E3]
-truth = tp.example_truth.compute_truth(limits=limits, n=101)
+truth = tp.demo_truth.compute_truth(limits=limits, n=101)
 
 # Plot the results
 plt.figure(1, figsize=(9, 6))
