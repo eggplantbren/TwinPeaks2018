@@ -113,19 +113,19 @@ std::string Atoms::description()
     for(size_t i=0; i<num_atoms; ++i)
     {
         s.str("");
-        s << "x[" << i << "],";
+        s << "x[" << i << "]";
         parts.emplace_back(s.str());
     }
     for(size_t i=0; i<num_atoms; ++i)
     {
         s.str("");
-        s << "y[" << i << "],";
+        s << "y[" << i << "]";
         parts.emplace_back(s.str());
     }
     for(size_t i=0; i<num_atoms; ++i)
     {
         s.str("");
-        s << "z[" << i << "],";
+        s << "z[" << i << "]";
         parts.emplace_back(s.str());
     }
 
