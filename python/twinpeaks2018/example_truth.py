@@ -4,7 +4,7 @@ from twinpeaks2018.utils import *
 
 plot_settings()
 
-def compute_truth(limits, n=51, plot=False):
+def compute_truth(limits, n=51):
     T0_min, T0_max, T1_min, T1_max = limits
 
     # Set up grids
@@ -35,25 +35,6 @@ def compute_truth(limits, n=51, plot=False):
 
             print(".", end="", flush=True)
     print("")
-
-    if plot:
-        # Plot the results
-        limits = [0.1, 100.0, 0.1, 100.0]
-        result = compute_truth(limits)
-
-        plt.figure(figsize=(8, 6))
-        plt.subplot(1, 2, 1)
-        plt.imshow(result["ln_Z"], origin="lower", extent=np.log10(limits))
-        plt.xlabel("log10(T_0)")
-        plt.ylabel("log10(T_1)")
-        plt.title("ln_Z")
-
-        plt.subplot(1, 2, 2)
-        plt.imshow(result["H"], origin="lower", extent=np.log10(limits))
-        plt.xlabel("log10(T_0)")
-        plt.ylabel("log10(T_1)")
-        plt.title("H")
-        plt.show()
 
     return {"ln_Z": ln_Z, "H": H}
 
