@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from twinpeaks2018.utils import logsumexp
+from twinpeaks2018.utils import *
+
+plot_settings()
 
 def compute_truth(limits, n=51, plot=False):
     T0_min, T0_max, T1_min, T1_max = limits
