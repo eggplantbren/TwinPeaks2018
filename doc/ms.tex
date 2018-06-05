@@ -469,7 +469,7 @@ desiderata).
 Since NS moves at a constant rate
 in terms of $\log(X)$, this measure is proportional to
 \begin{align}
-m_{\rm NS} &\propto \frac{\pi(\xx)}{X(\xx)}.\label{eqn:measure}
+m_{\rm NS} &\propto \frac{\pi(\xx)}{X(L(\xx))}.\label{eqn:measure}
 \end{align}
 and is improper if we imagine an NS run that does not terminate.
 Consider using $m_{NS}$ as an importance sampling-type distribution to
@@ -485,13 +485,17 @@ D_{\rm KL}\left(p(\xx ; \ell) || m_{\rm NS}(\xx)\right)
     &= \textnormal{const} + \int_{L(\xx) > \ell} \frac{\pi(\xx)}{X(\ell)}
                 \log \left(\frac{X(L(\xx))}{X(\ell)}\right) \, d\xx
 \end{align}
-Rewriting the integral to be with respect to $X$, and taking advantage of the
-fact that the implied prior for $X$ is uniform (since $X$ is the complementary
-CDF of the likelihood values under $\pi$) gives:
+Rewriting the integral to be with respect to $X$,
+and taking advantage of the
+fact the implied prior for $X$ is uniform (since $X$ is the complementary
+CDF of the likelihood values under $\pi$), gives:
 \begin{align}
 D_{\rm KL}\left(p(\xx ; \ell) || m_{\rm NS}(\xx)\right)
-    &= \textnormal{const} + \int_0^{X(\ell)} \frac{1}{X(\ell)}
-                \log \left(\frac{1}{X(\ell)}\right) \, dX
+    &= \textnormal{const} + \frac{1}{X(\ell)}\int_0^{X(\ell)} 
+                \log \left(\frac{X}{X(\ell)}\right) \, dX\\
+    &= \textnormal{const} + \frac{1}{X(\ell)}\left(
+                    X(\ell)\log \left(\frac{X(\ell)}{X(\ell)}\right) - X(\ell)\right)\\
+    &= \textnormal{const} -1 = \textnormal{const}'.
 \end{align}
 
 Remarkably, this does not depend on $\ell$. This means that every constrained
