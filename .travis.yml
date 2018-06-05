@@ -5,13 +5,7 @@ os:
   - linux
 script: 
     - make
-    - cd python
-    - sudo python3 setup.py install
 addons:
   apt_packages:
     - libboost-all-dev
     - libyaml-cpp-dev
-    - python3-distutils
-    - python3-matplotlib
-    - python3-numpy
-    - python3-pandas
