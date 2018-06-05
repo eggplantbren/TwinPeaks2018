@@ -210,8 +210,8 @@ is the expected value of $L$ with respect to a very heavy-tailed distribution
 (the distribution of $L$-values implied by $\pi(\xx)$). This means a very
 large number of samples would be required.
 Hence, there is a strong
-connection between NS and ideas from rare event simulation.
-\citet{walter2017point} has explicitly explored this connection.
+connection between NS and ideas from rare event simulation
+(\citet{walter2017point} has explicitly explored this connection).
 Another way of thinking about this
 challenge is that the $Z$ integral is dominated by a region with very
 high values of $L$ but very low probability according to $\pi$ (and usually
@@ -230,11 +230,12 @@ H &=& \int p(\xx | \data, \II) \log
 $H$ quantifies how compressed the posterior distribution is with
 respect to the prior. For example, $H = 100$ nats (the units obtained when
 the logarithm is the natural logarithm) implies, loosely speaking,
-that the posterior occupies a fraction $e^{-100}$ of the prior mass.
+that the posterior is to be found in a tiny region of the space that
+has a prior probability of only $e^{-100}$.
 $H$ can be interpreted quite literally as a measure of how much
 the specific data $\data$ resolved the question ``what is the value
 of $\xx$, precisely?'' \citep{knuth_questions, van2017inquiry}.
-\citet{brewer2017computing} introduced a variant of NS that computes
+\citet{brewer2017computing} introduced a version of NS that computes
 Shannon entropies, including entropies of marginal distributions (whereas
 standard NS can only compute divergences for full joint distributions).
 
@@ -304,7 +305,10 @@ a high posterior probability.
 Alternatives to NS include methods based on `annealing', where a sequence of
 distributions of the form of Equation~\ref{eqn:power_posterior} is used.
 There are many different methods based on this idea, such as the popular
-parallel tempering method \citep{pt, gregory}.
+parallel tempering \citep{hansmann1997parallel, gregory2005bayesian},
+simulated tempering \citep{marinari1992simulated},
+annealed importance sampling \citep{neal2001annealed}, and
+steppingstone sampling \citep{xie2010improving}.
 However, unlike annealing methods, NS requires only a small number of
 tuning parameters (just the number of particles $N$ is inherent to NS, although
 most NS implementations have additional tuning parameters related to their
@@ -339,10 +343,11 @@ generality.
 
 Throughout this paper we will refer to $L(\xx)$ or
 $-E(\xx)$ as `objective functions',
-by analogy with the terminology used when
-discussing optimization methods. Although we are interested in sampling rather
+by analogy with the terminology used in optimization.
+Although we are interested in sampling rather
 than optimization, we still want to increase the values of $L$ or decrease
-the values of $E$ relative to what is typical of the prior.
+the values of $E$ relative to what is typical of the prior --- just in
+a controlled manner, so we can quantify prior mass as we ascend.
 
 \section{Multiple objective functions}
 In some inference and
@@ -376,27 +381,33 @@ would then describe the strength of the external field).
 If we are only interested in a single canonical distribution, for example
 with $\beta_1 = 0.3$ and $\beta_2 = 0.7$, we can estimate its normalising
 constant and by running standard Nested Sampling with objective function
-$L(\xx) = L_1(\xx)^{\beta_1}L_2(\xx)^{\beta_2}$. However, usually we
+$L(\xx) = L_1(\xx)^{\beta_1}L_2(\xx)^{\beta_2}$. However, what if we
 are interested in a range of values for $\beta_1$ and $\beta_2$, and we
-want to know the entire partition function $Z(\beta_1, \beta_2)$.
+want to know the entire partition function $Z(\beta_1, \beta_2)$?
 This work describes
 progress towards solving this class of problems while maintaining the benefits
-of Nested Sampling, such as the ability to cope with first-order phase
+of Nested Sampling, such as the ability to cope with phase
 transitions. The algorithm is presented here for problems with two objective
 functions, but the implementation allows for more than two (though the
 performance is those cases is likely to be poor).
 
 
-\
-
+\section{Algorithm requirements}
 The prior $\pi(\xx)$ implies a certain prior for $L_1$ and $L_2$, which we
-denote $\pi(L_1, L_2)$. An example of a prior is shown as the
+denote $\pi(L_1, L_2)$, overloading the $\pi$ symbol.
+An example of a prior is shown as the
 probability density in Figure~\ref{fig:joint1}. The partition function
 $Z(\beta_1, \beta_2)$ is a set of expected values with respect to this density.
-Simple Monte Carlo sampling from $\pi$ will not work except for values of
-$(\beta_1, \beta_2)$ where the canonical distribution remains similar to $\pi$.
-We need a sampler that explores regions where $L_1$ and $L_2$ are high in order
-to accurately estimate $Z(\beta_1, \beta_2)$.
+By analogy with the standard case of one objective function,
+simple Monte Carlo sampling from $\pi$ will not work except for values of
+$(\beta_1, \beta_2)$ where the canonical distributions of interest are
+not too different from $\pi$.
+We need a sampler that explores regions where $L_1$ and $L_2$ are increased
+(relative to what's typical of $\pi$) in order
+to accurately estimate $Z(\beta_1, \beta_2)$. The specific way of increasing
+$L_1$ and $L_2$ should follow the requirements listed in the following
+subsection, which are unique to NS.
+
 %\begin{figure}[ht!]
 %\centering
 %\includegraphics[scale=0.5]{figures/joint1.pdf}
@@ -436,11 +447,20 @@ to accurately estimate $Z(\beta_1, \beta_2)$.
 %$\left(\ell_1, \ell_2\right)$. See Figure~\ref{fig:joint1} for an
 %example.
 
-\section{Unique Properties of Nested Sampling}
-What is special about the NS sequence of distributions? 
+\subsection{Unique Properties of Nested Sampling}
+What is special about the NS sequence of distributions?
+Intuitively, the fact they are chosen adaptively provides a practical advantage
+over annealing-based methods (and reduces the number of tuning parameters
+substantially --- no `annealing schedule' is needed). While adaptive methods
+for generating annealing schedules exist \citep{salomone2018unbiased}, these
+are of no use in some phase change problems where a single temperature implies
+a mixture of two or more phases.
 
 Consider the Nested Sampling measure, proportional to the amount of time
-NS spends in each region of the space. Since NS moves at a constant rate
+NS spends in each region of the space (see \citet{polson2014vertical}
+for further discussion of this concept, and a derivation of it from some
+desiderata).
+Since NS moves at a constant rate
 in terms of $\log(X)$, this measure is proportional to
 \begin{align}
 m_{\rm NS} &\propto \frac{\pi(\xx)}{X(\xx)}.\label{eqn:measure}
@@ -475,8 +495,8 @@ values and not the values themselves.
 \end{enumerate}
 The standard Nested Sampling algorithm has these properties but for a
 single objective function. The same is true of variants such as
-Diffusive Nested Sampling \citep{dns, dnest4}.
-
+Diffusive Nested Sampling \citep{dns, dnest4} and PolyChord
+\citep{handley2015polychord}.
 
 Sequential Monte Carlo \citep{doucet2001introduction, salomone2018unbiased}
 
@@ -665,103 +685,103 @@ likelihood function.
 %The introduction should briefly place the study in a broad context and highlight why it is important. It should define the purpose of the work and its significance. The current state of the research field should be reviewed carefully and key publications cited. Please highlight controversial and diverging hypotheses when necessary. Finally, briefly mention the main aim of the work and highlight the principal conclusions. As far as possible, please keep the introduction comprehensible to scientists outside your particular field of research. Citing a journal paper \cite{ref-journal}. And now citing a book reference \cite{ref-book}. Please use the command \citep{ref-journal} for the following MDPI journals, which use author-date citation: Administrative Sciences, Arts, Econometrics, Economies, Genealogy, Humanities, IJFS, JRFM, Languages, Laws, Religions, Risks, Social Sciences.
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results}
+%\section{Results}
 
-This section may be divided by subheadings. It should provide a concise and precise description of the experimental results, their interpretation as well as the experimental conclusions that can be drawn.
-\begin{quote}
-This section may be divided by subheadings. It should provide a concise and precise description of the experimental results, their interpretation as well as the experimental conclusions that can be drawn.
-\end{quote}
+%This section may be divided by subheadings. It should provide a concise and precise description of the experimental results, their interpretation as well as the experimental conclusions that can be drawn.
+%\begin{quote}
+%This section may be divided by subheadings. It should provide a concise and precise description of the experimental results, their interpretation as well as the experimental conclusions that can be drawn.
+%\end{quote}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Subsection}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{Subsection}
 
-\subsubsection{Subsubsection}
+%\subsubsection{Subsubsection}
 
-Bulleted lists look like this:
-\begin{itemize}[leftmargin=*,labelsep=5.8mm]
-\item	First bullet
-\item	Second bullet
-\item	Third bullet
-\end{itemize}
+%Bulleted lists look like this:
+%\begin{itemize}[leftmargin=*,labelsep=5.8mm]
+%\item	First bullet
+%\item	Second bullet
+%\item	Third bullet
+%\end{itemize}
 
-Numbered lists can be added as follows:
-\begin{enumerate}[leftmargin=*,labelsep=4.9mm]
-\item	First item 
-\item	Second item
-\item	Third item
-\end{enumerate}
+%Numbered lists can be added as follows:
+%\begin{enumerate}[leftmargin=*,labelsep=4.9mm]
+%\item	First item 
+%\item	Second item
+%\item	Third item
+%\end{enumerate}
 
-The text continues here.
+%The text continues here.
 
-\subsection{Figures, Tables and Schemes}
+%\subsection{Figures, Tables and Schemes}
 
-All figures and tables should be cited in the main text as Figure 1, Table 1, etc.
+%All figures and tables should be cited in the main text as Figure 1, Table 1, etc.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=2 cm]{Definitions/logo-mdpi}
-\caption{This is a figure, Schemes follow the same formatting. If there are multiple panels, they should be listed as: (\textbf{a}) Description of what is contained in the first panel. (\textbf{b}) Description of what is contained in the second panel. Figures should be placed in the main text near to the first time they are cited. A caption on a single line should be centered.}
-\end{figure}   
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=2 cm]{Definitions/logo-mdpi}
+%\caption{This is a figure, Schemes follow the same formatting. If there are multiple panels, they should be listed as: (\textbf{a}) Description of what is contained in the first panel. (\textbf{b}) Description of what is contained in the second panel. Figures should be placed in the main text near to the first time they are cited. A caption on a single line should be centered.}
+%\end{figure}   
 
-\begin{table}[H]
-\caption{This is a table caption. Tables should be placed in the main text near to the first time they are cited.}
-\centering
-%% \tablesize{} %% You can specify the fontsize here, e.g.  \tablesize{\footnotesize}. If commented out \small will be used.
-\begin{tabular}{ccc}
-\toprule
-\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
-\midrule
-entry 1		& data			& data\\
-entry 2		& data			& data\\
-\bottomrule
-\end{tabular}
-\end{table}
+%\begin{table}[H]
+%\caption{This is a table caption. Tables should be placed in the main text near to the first time they are cited.}
+%\centering
+%%% \tablesize{} %% You can specify the fontsize here, e.g.  \tablesize{\footnotesize}. If commented out \small will be used.
+%\begin{tabular}{ccc}
+%\toprule
+%\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
+%\midrule
+%entry 1		& data			& data\\
+%entry 2		& data			& data\\
+%\bottomrule
+%\end{tabular}
+%\end{table}
 
-\subsection{Formatting of Mathematical Components}
+%\subsection{Formatting of Mathematical Components}
 
-This is an example of an equation:
+%This is an example of an equation:
 
-\begin{equation}
-a + b = c
-\end{equation}
-%% If the documentclass option "submit" is chosen, please insert a blank line before and after any math environment (equation and eqnarray environments). This ensures correct linenumbering. The blank line should be removed when the documentclass option is changed to "accept" because the text following an equation should not be a new paragraph. 
+%\begin{equation}
+%a + b = c
+%\end{equation}
+%%% If the documentclass option "submit" is chosen, please insert a blank line before and after any math environment (equation and eqnarray environments). This ensures correct linenumbering. The blank line should be removed when the documentclass option is changed to "accept" because the text following an equation should not be a new paragraph. 
 
-Please punctuate equations as regular text. Theorem-type environments (including propositions, lemmas, corollaries etc.) can be formatted as follows:
-%% Example of a theorem:
-\begin{Theorem}
-Example text of a theorem.
-\end{Theorem}
+%Please punctuate equations as regular text. Theorem-type environments (including propositions, lemmas, corollaries etc.) can be formatted as follows:
+%%% Example of a theorem:
+%\begin{Theorem}
+%Example text of a theorem.
+%\end{Theorem}
 
-The text continues here. Proofs must be formatted as follows:
+%The text continues here. Proofs must be formatted as follows:
 
-%% Example of a proof:
-\begin{proof}[Proof of Theorem 1]
-Text of the proof. Note that the phrase `of Theorem 1' is optional if it is clear which theorem is being referred to.
-\end{proof}
-The text continues here.
+%%% Example of a proof:
+%\begin{proof}[Proof of Theorem 1]
+%Text of the proof. Note that the phrase `of Theorem 1' is optional if it is clear which theorem is being referred to.
+%\end{proof}
+%The text continues here.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Discussion}
 
-Authors should discuss the results and how they can be interpreted in perspective of previous studies and of the working hypotheses. The findings and their implications should be discussed in the broadest context possible. Future research directions may also be highlighted.
+%Authors should discuss the results and how they can be interpreted in perspective of previous studies and of the working hypotheses. The findings and their implications should be discussed in the broadest context possible. Future research directions may also be highlighted.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Materials and Methods}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Materials and Methods}
 
-Materials and Methods should be described with sufficient details to allow others to replicate and build on published results. Please note that publication of your manuscript implicates that you must make all materials, data, computer code, and protocols associated with the publication available to readers. Please disclose at the submission stage any restrictions on the availability of materials or information. New methods and protocols should be described in detail while well-established methods can be briefly described and appropriately cited.
+%Materials and Methods should be described with sufficient details to allow others to replicate and build on published results. Please note that publication of your manuscript implicates that you must make all materials, data, computer code, and protocols associated with the publication available to readers. Please disclose at the submission stage any restrictions on the availability of materials or information. New methods and protocols should be described in detail while well-established methods can be briefly described and appropriately cited.
 
-Research manuscripts reporting large datasets that are deposited in a publicly available database should specify where the data have been deposited and provide the relevant accession numbers. If the accession numbers have not yet been obtained at the time of submission, please state that they will be provided during review. They must be provided prior to publication.
+%Research manuscripts reporting large datasets that are deposited in a publicly available database should specify where the data have been deposited and provide the relevant accession numbers. If the accession numbers have not yet been obtained at the time of submission, please state that they will be provided during review. They must be provided prior to publication.
 
-Interventionary studies involving animals or humans, and other studies require ethical approval must list the authority that provided approval and the corresponding ethical approval code. 
+%Interventionary studies involving animals or humans, and other studies require ethical approval must list the authority that provided approval and the corresponding ethical approval code. 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Conclusions}
 
-This section is not mandatory, but can be added to the manuscript if the discussion is unusually long or complex.
+%This section is not mandatory, but can be added to the manuscript if the discussion is unusually long or complex.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Patents}
-This section is not mandatory, but may be added if there are patents resulting from the work reported in this manuscript.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Patents}
+%This section is not mandatory, but may be added if there are patents resulting from the work reported in this manuscript.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \vspace{6pt} 
