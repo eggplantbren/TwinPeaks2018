@@ -448,15 +448,21 @@ subsection, which are unique to NS.
 %example.
 
 \subsection{Unique Properties of Nested Sampling}
-What is special about the NS sequence of distributions?
-Intuitively, the fact they are chosen adaptively provides a practical advantage
+What is special about the NS sequence of distributions (the constrained priors)?
+Intuitively, the fact they are chosen adaptively (i.e., the likelihood values
+observed
+at one iteration determine the likelihood threshold for the next constrained
+distribution)
+provides a practical advantage
 over annealing-based methods (and reduces the number of tuning parameters
 substantially --- no `annealing schedule' is needed). While adaptive methods
 for generating annealing schedules exist \citep{salomone2018unbiased}, these
 are of no use in some phase change problems where a single temperature implies
 a mixture of two or more phases.
 
-Consider the Nested Sampling measure, proportional to the amount of time
+Another feature of NS is that its output can be used to reconstruct
+any constrained prior. Consider the Nested Sampling measure, proportional
+to the amount of time
 NS spends in each region of the space (see \citet{polson2014vertical}
 for further discussion of this concept, and a derivation of it from some
 desiderata).
@@ -465,31 +471,58 @@ in terms of $\log(X)$, this measure is proportional to
 \begin{align}
 m_{\rm NS} &\propto \frac{\pi(\xx)}{X(\xx)}.\label{eqn:measure}
 \end{align}
-The sequence of dead particles emitted by NS is then used to compute properties
-of the posterior distribution, or other canonical distributions for temperatures
-other than 1. Why does this work? Why does the NS measure of
-Equation~\ref{eqn:ns_measure} allow the user to get a reasonable number of
-samples for {\em any} canonical distribution?
+and is improper if we imagine an NS run that does not terminate.
+Consider using $m_{NS}$ as an importance sampling-type distribution to
+estimate properties of a constrained prior
+$p(\xx ; \ell) = \pi(\xx)\mathds{1}(L(\xx) > \ell)/X(\ell)$.
+How useful $m_{\rm NS}$ is for determining properties of $p(\xx ; \ell)$
+may be indicated by the KL-divergence from the former to the latter:
+\begin{align}
+D_{\rm KL}\left(p(\xx ; \ell) || m_{\rm NS}(\xx)\right)
+    &= \int p(\xx ; \ell)
+                \log \left(\frac{p(\xx ; \ell)}{m_{\rm NS}(\xx)}\right)
+                \, d\xx \\
+    &= \textnormal{const} + \int_{L(\xx) > \ell} \frac{\pi(\xx)}{X(\ell)}
+                \log \left(\frac{X(L(\xx))}{X(\ell)}\right) \, d\xx
+\end{align}
+Rewriting the integral to be with respect to $X$, and taking advantage of the
+fact that the implied prior for $X$ is uniform (since $X$ is the complementary
+CDF of the likelihood values under $\pi$) gives:
+\begin{align}
+D_{\rm KL}\left(p(\xx ; \ell) || m_{\rm NS}(\xx)\right)
+    &= \textnormal{const} + \int_0^{X(\ell)} \frac{1}{X(\ell)}
+                \log \left(\frac{1}{X(\ell)}\right) \, dX
+\end{align}
 
+Remarkably, this does not depend on $\ell$. This means that every constrained
+prior, no matter the value of its threshold $\ell$, is equally `distant'
+from $m_{\rm NS}$. This can be seen intuitively using a standard
+$\log L$-$\log X$ plot from NS. On these plots, the prior is a reflected
+exponential distribution with scale 1, and the likelihood constraints
+merely truncate the exponential distribution (by the memorylessness property
+of the exponential, truncation is equivalent to shifting). The NS measure
+is uniform in terms of $\log(X)$, so we have essentially shown that the KL
+divergence from a wide uniform measure to a narrow shifted
+exponential (of unit width) contained within it does not depend on the
+position of the exponential.
 
+Unfortunately, this property breaks down with more than
+one objective function, and (as far as we know) the algorithm given in this
+paper does not satisfy an analogous property.
 
-
-
-
-We seek an algorithm for computing the partition function
-$Z(\beta_1, \beta_2)$ for a range of values of the $\beta$s, from a single
-run. To be a variant of Nested Sampling, the algorithm should satisfy
-the following properties:
+\subsection{Desiderata}
+While we could not see how to satisfy the property in the above subsection,
+the algorithm of this paper does satisfy the following other NS properties:
 \begin{enumerate}
-\item It should begin with $N$ points drawn from the prior $\pi(\xx)$.
-\item It should seek to explore regions where the values of
+\item It begins with $N$ points drawn from the prior $\pi(\xx)$.
+\item It seeks to explore regions where the values of
 $L_1(\xx)$ and $L_2(\xx)$ are higher than the prior $\pi(L_1, L_2)$
 would typically imply.
-\item The algorithm should consider a sequence of probability
+\item It considers a sequence of probability
 distributions proportional to $\pi$, but restricted to smaller and smaller
 domains for which the enclosed prior mass shrinks by a (roughly) constant and
 known factor at each iteration.
-\item The algorithm should be invariant to monotonic transformations of
+\item It is invariant to monotonic transformations of
 $L_1$ and $L_2$, i.e. it should only depend on rankings of $L_1$ and $L_2$
 values and not the values themselves.
 \end{enumerate}
