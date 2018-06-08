@@ -182,22 +182,20 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
         plt.figure(3, figsize=(9, 6))
         plt.subplot(1, 2, 1)
         resid = ln_Z - truth["ln_Z"]
-        biggest = np.max(np.abs(resid))
-        plt.imshow(truth["H"]/resid**2,
-                   origin="lower", extent=np.log10(limits),
-                   vmin=-biggest, vmax=biggest)
+        Neff = truth["H"]/resid**2
+        Neff[Neff < 1.0] = np.nan
+        plt.imshow(np.log10(Neff), origin="lower", extent=np.log10(limits))
         plt.xlabel("$\\log_{10}(T_0)$")
         plt.ylabel("$\\log_{10}(T_1)$")
-        plt.title("$N_{\\rm eff}$ based on $\\ln(Z)$ Residuals")
+        plt.title("$\\log_{10} N_{\\rm eff}$ based on $\\ln(Z)$ Residuals")
 
         plt.subplot(1, 2, 2)
         resid = H - truth["H"]
-        biggest = np.max(np.abs(resid))
-        plt.imshow(truth["H"]/resid**2,
-                   origin="lower", extent=np.log10(limits),
-                   vmin=-biggest, vmax=biggest)
+        Neff = truth["H"]/resid**2
+        Neff[Neff < 1.0] = np.nan
+        plt.imshow(np.log10(Neff), origin="lower", extent=np.log10(limits))
         plt.xlabel("$\\log_{10}(T_0)$")
-        plt.title("$N_{\\rm eff}$ based on $H$ Residuals")
+        plt.title("$\\log_{10} N_{\\rm eff}$ based on $H$ Residuals")
 
         plt.savefig("output/residuals2.png", dpi=600)
         print("Saved output/residuals2.png")
