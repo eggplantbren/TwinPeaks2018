@@ -1,5 +1,6 @@
 #include "SpikeSlab.h"
 #include "Utils.h"
+#include <mutex>
 #include <sstream>
 
 namespace TwinPeaks2018
@@ -31,13 +32,17 @@ double SpikeSlab::log_likelihood() const
     static constexpr double shift = 0.031;
     static constexpr double center = 0.5;
     static constexpr double u = 0.01;
-    static constexpr double inv_u = 1.0/u;
     static constexpr double v = 0.1;
-    static constexpr double inv_v = 1.0/v;
-    static constexpr double log_u = log(u);
-    static constexpr double log_v = log(v);
-    static constexpr double C = log(1.0/sqrt(2.0*M_PI));
-    static constexpr double log_half = log(0.5);
+
+    static std::mutex m;
+    m.lock();
+    static const double inv_u = 1.0/u;
+    static const double inv_v = 1.0/v;
+    static const double log_u = log(u);
+    static const double log_v = log(v);
+    static const double C = log(1.0/sqrt(2.0*M_PI));
+    static const double log_half = log(0.5);
+    m.unlock();
 
     double logl1 = 0.0;
     double logl2 = 0.0;
