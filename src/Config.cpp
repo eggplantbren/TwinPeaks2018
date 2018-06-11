@@ -1,4 +1,5 @@
 #include "Config.h"
+#include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <yaml-cpp/yaml.h>
@@ -30,6 +31,12 @@ void Config::load(const char* filename)
         rng_seed = time(0);
     else
         rng_seed = file["rng_seed"].as<unsigned int>();
+
+    // Save the rng seed to a file
+    std::fstream fout("rng_seed.out", std::ios::out);
+    fout << rng_seed;
+    fout.close();
+
 
     num_particles = file["num_particles"].as<size_t>();
     mcmc_steps = file["mcmc_steps"].as<unsigned int>();

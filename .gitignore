@@ -5,6 +5,7 @@ doc/ms.pdf
 doc/Definitions/*.pdf
 __pycache__
 main
+rng_seed.out
 output/*.csv
 output/*.png
 output/*.txt
