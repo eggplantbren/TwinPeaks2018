@@ -11,7 +11,7 @@ using namespace TwinPeaks2018;
 int main()
 {
     // Which example?
-    using Example = Potts;
+    using Example = Demo;
 
     // Load the configuration
     Config::global_config.load("config.yaml");
