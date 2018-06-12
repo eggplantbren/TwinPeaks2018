@@ -10,7 +10,7 @@ def compute_truth(limits, n=51):
     # Set up grids
     ln_Z = np.empty((n, n))
     H = np.empty((n, n))
-    x = np.linspace(0.0, 1.0, 100001)
+    x = np.linspace(0.0, 1.0, 10001)
     dx = x[1] - x[0]
 
     # Temperature grids
