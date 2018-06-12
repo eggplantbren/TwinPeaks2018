@@ -33,7 +33,7 @@ void Config::load(const char* filename)
         rng_seed = file["rng_seed"].as<unsigned int>();
 
     // Save the rng seed to a file
-    std::fstream fout("rng_seed.out", std::ios::out);
+    std::fstream fout("output/rng_seed.out", std::ios::out);
     fout << rng_seed;
     fout.close();
 
