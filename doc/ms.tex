@@ -568,18 +568,28 @@ are close to 0, 0.1, 0.2, ..., 0.9 and 1.
 The canonical distributions for this system should draw the coordinates
 towards 0.5 (due to $E_1$) and towards the troughs of $E_2$, with the
 relative importance of these effects determined by the values of the
-inverse temperatures $\beta_1$ and $\beta_2$.
+inverse temperatures $\beta_1$ and $\beta_2$. Three example canonical
+distributions are shown in Figure~\ref{fig:demo_canonical}.
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.75]{figures/demo_canonical.pdf}
+\caption{Three canonical distributions for different values of the two
+temperatures $T_1$ and $T_2$. These are for the one-dimensional case, but
+in this example, the 100 dimensional canonical distributions are independent
+and have these distributions as their marginals.\label{fig:demo_canonical}}
+\end{figure}
 
 The true partition function (computed numerically) and the Kullback-Leibler
 divergence from the prior to the canonical distribution are shown in
-Figure~\ref{fig:truth} as a function of two temperatures.
+Figure~\ref{fig:demo_truth} as a function of two temperatures.
 
-\begin{figure}[ht!]
+\begin{figure}[!ht]
 \centering
 \includegraphics[scale=0.75]{figures/demo_truth.pdf}
 \caption{The true partition function and KL divergence (from the prior to
 the canonical distribution) as a function of two temperatures for the
-test problem.\label{fig:truth}}
+test problem.\label{fig:demo_truth}}
 \end{figure}
 
 
