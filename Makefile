@@ -24,7 +24,7 @@ default:
 
 	@echo "Building binaries..."
 	$(CXX) $(CXXFLAGS) -c src/main.cpp
-	$(CXX) -pthread -L . -o main *.o $(LINK)
+	$(CXX) -pthread -L . -o TwinPeaks2018 *.o $(LINK)
 
 	@echo "Tidying up..."
 	rm -f *.o

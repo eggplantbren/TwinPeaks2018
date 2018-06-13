@@ -4,8 +4,8 @@ doc/ms.out
 doc/ms.pdf
 doc/Definitions/*.pdf
 __pycache__
-main
-rng_seed.out
+TwinPeaks2018
+output/rng_seed.out
 output/*.csv
 output/*.png
 output/*.txt
