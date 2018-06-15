@@ -74,6 +74,7 @@
 \newcommand{\data}{D}
 \newcommand{\II}{I}
 \newcommand{\mnras}{Monthly Notices of the Royal Astronomical Society}
+\newcommand{\todo}{\color{blue}{\bf TODO}:~}
 
 %\newcommand{\orcidauthorA}{0000-0000-000-000X} % Add \orcidA{} behind the author's name
 %\newcommand{\orcidauthorB}{0000-0000-000-000X} % Add \orcidB{} behind the author's name
@@ -406,7 +407,8 @@ We need a sampler that explores regions where $L_1$ and $L_2$ are increased
 (relative to what's typical of $\pi$) in order
 to accurately estimate $Z(\beta_1, \beta_2)$. The specific way of increasing
 $L_1$ and $L_2$ should follow the requirements listed in the following
-subsection, which are unique to NS.
+subsection, which are unique to NS. Another unique property of NS which our
+algorithm {\em does not} satisfy is discussed in Appendix~\ref{sec:property}.
 
 %\begin{figure}[ht!]
 %\centering
@@ -447,75 +449,9 @@ subsection, which are unique to NS.
 %$\left(\ell_1, \ell_2\right)$. See Figure~\ref{fig:joint1} for an
 %example.
 
-\subsection{Unique Properties of Nested Sampling}
-What is special about the NS sequence of distributions (the constrained priors)?
-Intuitively, the fact they are chosen adaptively (i.e., the likelihood values
-observed
-at one iteration determine the likelihood threshold for the next constrained
-distribution)
-provides a practical advantage
-over annealing-based methods (and reduces the number of tuning parameters
-substantially --- no `annealing schedule' is needed). While adaptive methods
-for generating annealing schedules exist \citep{salomone2018unbiased}, these
-are of no use in some phase change problems where a single temperature implies
-a mixture of two or more phases.
-
-Another feature of NS is that its output can be used to reconstruct
-any constrained prior. Consider the Nested Sampling measure, proportional
-to the amount of time
-NS spends in each region of the space (see \citet{polson2014vertical}
-for further discussion of this concept, and a derivation of it from some
-desiderata).
-Since NS moves at a constant rate
-in terms of $\log(X)$, this measure is proportional to
-\begin{align}
-m_{\rm NS} &\propto \frac{\pi(\xx)}{X(L(\xx))}.\label{eqn:measure}
-\end{align}
-and is improper if we imagine an NS run that does not terminate.
-Consider using $m_{NS}$ as an importance sampling-type distribution to
-estimate properties of a constrained prior
-$p(\xx ; \ell) = \pi(\xx)\mathds{1}(L(\xx) > \ell)/X(\ell)$.
-How useful $m_{\rm NS}$ is for determining properties of $p(\xx ; \ell)$
-may be indicated by the KL-divergence from the former to the latter:
-\begin{align}
-D_{\rm KL}\left(p(\xx ; \ell) || m_{\rm NS}(\xx)\right)
-    &= \int p(\xx ; \ell)
-                \log \left(\frac{p(\xx ; \ell)}{m_{\rm NS}(\xx)}\right)
-                \, d\xx \\
-    &= \textnormal{const} + \int_{L(\xx) > \ell} \frac{\pi(\xx)}{X(\ell)}
-                \log \left(\frac{X(L(\xx))}{X(\ell)}\right) \, d\xx
-\end{align}
-Rewriting the integral to be with respect to $X$,
-and taking advantage of the
-fact the implied prior for $X$ is uniform (since $X$ is the complementary
-CDF of the likelihood values under $\pi$), gives:
-\begin{align}
-D_{\rm KL}\left(p(\xx ; \ell) || m_{\rm NS}(\xx)\right)
-    &= \textnormal{const} + \frac{1}{X(\ell)}\int_0^{X(\ell)} 
-                \log \left(\frac{X}{X(\ell)}\right) \, dX\\
-    &= \textnormal{const} + \frac{1}{X(\ell)}\left(
-                    X(\ell)\log \left(\frac{X(\ell)}{X(\ell)}\right) - X(\ell)\right)\\
-    &= \textnormal{const} -1 = \textnormal{const}'.
-\end{align}
-
-Remarkably, this does not depend on $\ell$. This means that every constrained
-prior, no matter the value of its threshold $\ell$, is equally `distant'
-from $m_{\rm NS}$. This can be seen intuitively using a standard
-$\log L$-$\log X$ plot from NS. On these plots, the prior is a reflected
-exponential distribution with scale 1, and the likelihood constraints
-merely truncate the exponential distribution (by the memorylessness property
-of the exponential, truncation is equivalent to shifting). The NS measure
-is uniform in terms of $\log(X)$, so we have essentially shown that the KL
-divergence from a wide uniform measure to a narrow shifted
-exponential (of unit width) contained within it does not depend on the
-position of the exponential.
-
-Unfortunately, this property breaks down with more than
-one objective function, and (as far as we know) the algorithm given in this
-paper does not satisfy an analogous property.
-
 \subsection{Desiderata}
-While we could not see how to satisfy the property in the above subsection,
+While we could not see how to satisfy the property in
+Appendix~\ref{sec:property},
 the algorithm of this paper does satisfy the following other NS properties:
 \begin{enumerate}
 \item It begins with $N$ points drawn from the prior $\pi(\xx)$.
@@ -526,19 +462,69 @@ would typically imply.
 distributions proportional to $\pi$, but restricted to smaller and smaller
 domains for which the enclosed prior mass shrinks by a (roughly) constant and
 known factor at each iteration.
-\item It is invariant to monotonic transformations of
+\item The exploration procedure is invariant under monotonic transformations of
 $L_1$ and $L_2$, i.e. it should only depend on rankings of $L_1$ and $L_2$
-values and not the values themselves.
+values and not on the numeric values themselves.
 \end{enumerate}
 The standard Nested Sampling algorithm has these properties but for a
 single objective function. The same is true of variants such as
 Diffusive Nested Sampling \citep{dns, dnest4} and PolyChord
 \citep{handley2015polychord}.
 
-Sequential Monte Carlo \citep{doucet2001introduction, salomone2018unbiased}
+\subsection{The algorithm}
+The algorithm itself is rather simple. It consists of a collection of
+{\em reps} (short for repetitions) of Nested Sampling, each of which ascends
+a different compromise between $L_1$ and $L_2$. The output of the reps can then
+be used, with appropriate weights, to represent canonical distributions at
+any temperature.
 
+The combination of the reps makes use of the (approximate?) unbiasedness
+property of Nested Sampling when the prior weights of the dead particles are
+assigned proportional to
+$[(N-1)/N]^i$ at iteration $i$, instead of being based on
+Skilling's geometric sequence of $X$-values given by $\exp(-i/N)$.
+\citet{walter} demonstrated that the Nested Sampling estimator of $Z$
+is unbiased with these weights, but assuming perfect sampling of the replacement
+particles at each iteration. Additionally, using the framework of
+Sequential Monte Carlo \citep{doucet2001introduction},
+\citet{salomone2018unbiased} showed that this remains true even if imperfect
+MCMC is used to generate new particles. Technically, this property is
+lost if the sequence of distributions is chosen adaptively (a key feature of NS)
+rather than being fixed in advanced. However, this paper demonstrates that the
+algorithm works well in practice despite this limitation.
 
+The fact that $Z$ estimates can be made unbiased means that separate $Z$
+estimates can be averaged together and the properties of the averaged estimator
+will be easily understood and satisfactory ({\todo probably need to be more
+technical here.}). {\todo The following statement is based on intuition}
+Runs that ascend the `wrong' objective function are still unbiased
+estimates of $Z$ for the `right' objective function. Some of the reps will
+be well-positioned to represent some canonical distributions but inappropriate
+for others. When this happens, the particles from the rep will just have very
+low weights with respect to some canonical distributions.
 
+{\todo A description of the algorithm for a single rep follows}.
+A probability distribution over the objective functions is set up. If there
+are only two objective functions, there is just a probability $p_1$ for
+objective function 1, and $1-p_1$ for objective function 2.
+
+The first distribution is the prior $\pi(\xx)$. Objective function thresholds
+$(\ell_1, \ell_2)_0 = (-\inf, -\inf)$ are assigned.
+$N$ particles are generated
+from the prior. Then, an objective function is selected according to the
+probabilities $\{p_k\}$. Suppose the objective function chosen is number $k$.
+Then the worst particle wrt that criteron is written to disk and replaced,
+and the threshold is updated in the $k$th position only.
+
+Essentially, a `rep' is just Nested Sampling, but where a threshold is
+maintained for all objective functions. At each iteration, the space is
+restricted by only one of the objective functions.
+
+The probability distribution over the objective functions influences the
+proportion of the compressions that are done using each objective function.
+Different reps ought to have different values for the probability distribution.
+Some reps will mostly increase $L_1$, some will mostly increase $L_2$, and
+some will be in between.
 
 \section{Example 1: Known solution}
 In the software repository, this example is implemented in
@@ -880,8 +866,75 @@ SMC & Sequential Monte Carlo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% optional
 \appendixtitles{yes} %Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
-\appendixsections{one} %Leave argument "multiple" if there are multiple sections. Then a counter is printed ("Appendix A"). If there is only one appendix section then change the argument to "one" and no counter is printed ("Appendix").
+\appendixsections{multiple} %Leave argument "multiple" if there are multiple sections. Then a counter is printed ("Appendix A"). If there is only one appendix section then change the argument to "one" and no counter is printed ("Appendix").
 \appendix
+\section{A Unique Property of Nested Sampling}\label{sec:property}
+What is special about the NS sequence of distributions (the constrained priors)?
+Intuitively, the fact they are chosen adaptively (i.e., the likelihood values
+observed
+at one iteration determine the likelihood threshold for the next constrained
+distribution)
+provides a practical advantage
+over annealing-based methods (and reduces the number of tuning parameters
+substantially --- no `annealing schedule' is needed). While adaptive methods
+for generating annealing schedules exist \citep{salomone2018unbiased}, these
+are of no use in some phase change problems where a single temperature implies
+a mixture of two or more phases.
+
+Another feature of NS is that its output can be used to reconstruct
+any constrained prior. Consider the Nested Sampling measure, proportional
+to the amount of time
+NS spends in each region of the space (see \citet{polson2014vertical}
+for further discussion of this concept, and a derivation of it from some
+desiderata).
+Since NS moves at a constant rate
+in terms of $\log(X)$, this measure is proportional to
+\begin{align}
+m_{\rm NS} &\propto \frac{\pi(\xx)}{X(L(\xx))}.\label{eqn:measure}
+\end{align}
+and is improper if we imagine an NS run that does not terminate.
+Consider using $m_{NS}$ as an importance sampling-type distribution to
+estimate properties of a constrained prior
+$p(\xx ; \ell) = \pi(\xx)\mathds{1}(L(\xx) > \ell)/X(\ell)$.
+How useful $m_{\rm NS}$ is for determining properties of $p(\xx ; \ell)$
+may be indicated by the KL-divergence from the former to the latter:
+\begin{align}
+D_{\rm KL}\left(p(\xx ; \ell) || m_{\rm NS}(\xx)\right)
+    &= \int p(\xx ; \ell)
+                \log \left(\frac{p(\xx ; \ell)}{m_{\rm NS}(\xx)}\right)
+                \, d\xx \\
+    &= \textnormal{const} + \int_{L(\xx) > \ell} \frac{\pi(\xx)}{X(\ell)}
+                \log \left(\frac{X(L(\xx))}{X(\ell)}\right) \, d\xx
+\end{align}
+Rewriting the integral to be with respect to $X$,
+and taking advantage of the
+fact the implied prior for $X$ is uniform (since $X$ is the complementary
+CDF of the likelihood values under $\pi$), gives:
+\begin{align}
+D_{\rm KL}\left(p(\xx ; \ell) || m_{\rm NS}(\xx)\right)
+    &= \textnormal{const} + \frac{1}{X(\ell)}\int_0^{X(\ell)} 
+                \log \left(\frac{X}{X(\ell)}\right) \, dX\\
+    &= \textnormal{const} + \frac{1}{X(\ell)}\left(
+                    X(\ell)\log \left(\frac{X(\ell)}{X(\ell)}\right) - X(\ell)\right)\\
+    &= \textnormal{const} -1 = \textnormal{const}'.
+\end{align}
+
+Remarkably, this does not depend on $\ell$. This means that every constrained
+prior, no matter the value of its threshold $\ell$, is equally `distant'
+from $m_{\rm NS}$. This can be seen intuitively using a standard
+$\log L$-$\log X$ plot from NS. On these plots, the prior is a reflected
+exponential distribution with scale 1, and the likelihood constraints
+merely truncate the exponential distribution (by the memorylessness property
+of the exponential, truncation is equivalent to shifting). The NS measure
+is uniform in terms of $\log(X)$, so we have essentially shown that the KL
+divergence from a wide uniform measure to a narrow shifted
+exponential (of unit width) contained within it does not depend on the
+position of the exponential.
+
+Unfortunately, this property breaks down with more than
+one objective function, and (as far as we know) the algorithm given in this
+paper does not satisfy an analogous property.
+
 \section{Using the TwinPeaks2018 software}
 
 
