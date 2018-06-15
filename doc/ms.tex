@@ -570,23 +570,30 @@ towards 0.5 (due to $E_1$) and towards the troughs of $E_2$, with the
 relative importance of these effects determined by the values of the
 inverse temperatures $\beta_1$ and $\beta_2$. Three example canonical
 distributions are shown in Figure~\ref{fig:demo_canonical}.
-
-\begin{figure}[!ht]
-\centering
-\includegraphics[scale=0.75]{figures/demo_canonical.pdf}
-\caption{Three canonical distributions for different values of the two
-temperatures $T_1$ and $T_2$. These are for the one-dimensional case, but
-in this example, the 100 dimensional canonical distributions are independent
-and have these distributions as their marginals.\label{fig:demo_canonical}}
-\end{figure}
-
 The true partition function (computed numerically) and the Kullback-Leibler
 divergence from the prior to the canonical distribution are shown in
-Figure~\ref{fig:demo_truth} as a function of two temperatures.
+Figure~\ref{fig:demo_truth} as a function of two temperatures. These show the
+common behaviour where lower temperatures correspond to lower values
+of the normalising constant $\log Z$ and higher values of the KL divergence
+$H$. There are no phase changes, which would result in discontinuities.
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[scale=0.75]{figures/demo_truth.pdf}
+\includegraphics[scale=0.6]{figures/demo_canonical.pdf}
+\caption{Three canonical distributions for different values of the two
+temperatures $T_1$ and $T_2$, in the simple demo problem.
+These are for the one-dimensional case, but
+in this example, the 100 dimensional canonical distributions are `independent
+and identically distributed' version of this distribution.
+Low values of $T_1$ bring
+more probability towards the centre of the domain, and low values of $T_2$
+bring out the oscillatory structure in the probability density function.
+\label{fig:demo_canonical}}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.6]{figures/demo_truth.pdf}
 \caption{The true partition function and KL divergence (from the prior to
 the canonical distribution) as a function of two temperatures for the
 test problem.\label{fig:demo_truth}}
@@ -842,16 +849,22 @@ likelihood function.
 % \supplementary{The following are available at \linksupplementary, Figure S1: title, Table S1: title, Video S1: title. A supporting video article is available at doi: link.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``Conceptualization, X.X. and Y.Y.; Methodology, X.X.; Software, X.X.; Validation, X.X., Y.Y. and Z.Z.; Formal Analysis, X.X.; Investigation, X.X.; Resources, X.X.; Data Curation, X.X.; Writing—Original Draft Preparation, X.X.; Writing—Review \& Editing, X.X.; Visualization, X.X.; Supervision, X.X.; Project Administration, X.X.; Funding Acquisition, Y.Y.'', please turn to the \href{http://img.mdpi.org/data/contributor-role-instruction.pdf}{CRediT taxonomy} for the term explanation. Authorship must be limited to those who have contributed substantially to the work reported. }
+\authorcontributions{BJB conceived the problem and worked on various ideas
+over the years that nearly worked. RJNB suggested and worked on the polymer
+example.
+EC discussed the problem and worked on
+several attempts at solutions with BJB over the years.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\funding{Please add: ``This research received no external funding'' or ``This research was funded by [name of funder] grant number [xxx].'' Check carefully that the details given are accurate and use the standard spelling of funding agency names at \url{https://search.crossref.org/funding}, any errors may affect your future funding.}
+\funding{This research received no external funding.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\acknowledgments{In this section you can acknowledge any support given which is not covered by the author contribution or funding sections. This may include administrative and technical support, or donations in kind (e.g. materials used for experiments).}
+\acknowledgments{BJB acknowledges research and study leave funding from the
+University of Auckland. We would like to thank Gabor Csanyi, Livia B. Partay,
+Rob Salomone, John Skilling, etc etc.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\conflictsofinterest{Declare conflicts of interest or state ``The authors declare no conflict of interest.'' Authors must identify and declare any personal circumstances or interest that may be perceived as inappropriately influencing the representation or interpretation of reported research results. Any role of the funding sponsors in the design of the study; in the collection, analyses or interpretation of data; in the writing of the manuscript, or in the decision to publish the results must be declared in this section. If there is no role, please state ``The founding sponsors had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript, and in the decision to publish the results''.} 
+\conflictsofinterest{The authors declare no conflict of interest.} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% optional
@@ -859,23 +872,22 @@ likelihood function.
 
 \noindent 
 \begin{tabular}{@{}ll}
-MDPI & Multidisciplinary Digital Publishing Institute\\
-DOAJ & Directory of open access journals\\
-TLA & Three letter acronym\\
-LD & linear dichroism
+MCMC & Markov Chain Monte Carlo \\
+NS & Nested Sampling \\
+SMC & Sequential Monte Carlo
 \end{tabular}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% optional
-\appendixtitles{no} %Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
-\appendixsections{multiple} %Leave argument "multiple" if there are multiple sections. Then a counter is printed ("Appendix A"). If there is only one appendix section then change the argument to "one" and no counter is printed ("Appendix").
+\appendixtitles{yes} %Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
+\appendixsections{one} %Leave argument "multiple" if there are multiple sections. Then a counter is printed ("Appendix A"). If there is only one appendix section then change the argument to "one" and no counter is printed ("Appendix").
 \appendix
-\section{}
-\subsection{}
-The appendix is an optional section that can contain details and data supplemental to the main text. For example, explanations of experimental details that would disrupt the flow of the main text, but nonetheless remain crucial to understanding and reproducing the research shown; figures of replicates for experiments of which representative data is shown in the main text can be added here if brief, or as Supplementary data. Mathematical proofs of results not central to the paper can be added as an appendix.
+\section{Using the TwinPeaks2018 software}
 
-\section{}
-All appendix sections must be cited in the main text. In the appendixes, Figures, Tables, etc. should be labeled starting with `A', e.g., Figure A1, Figure A2, etc. 
+
+
+%\section{}
+%All appendix sections must be cited in the main text. In the appendixes, Figures, Tables, etc. should be labeled starting with `A', e.g., Figure A1, Figure A2, etc. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Citations and References in Supplementary files are permitted provided that they also appear in the reference list here. 
@@ -900,7 +912,7 @@ All appendix sections must be cited in the main text. In the appendixes, Figures
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% optional
-\sampleavailability{Samples of the compounds ...... are available from the authors.}
+%\sampleavailability{Samples of the compounds ...... are available from the authors.}
 
 %% for journal Sci
 %\reviewreports{\\
