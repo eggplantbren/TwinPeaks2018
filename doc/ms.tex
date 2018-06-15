@@ -509,7 +509,7 @@ are only two objective functions, there is just a probability $p_1$ for
 objective function 1, and $1-p_1$ for objective function 2.
 
 The first distribution is the prior $\pi(\xx)$. Objective function thresholds
-$(\ell_1, \ell_2)_0 = (-\inf, -\inf)$ are assigned.
+$(\ell_1, \ell_2)_0 = (-\infty, -\infty)$ are assigned.
 $N$ particles are generated
 from the prior. Then, an objective function is selected according to the
 probabilities $\{p_k\}$. Suppose the objective function chosen is number $k$.
@@ -518,7 +518,7 @@ and the threshold is updated in the $k$th position only.
 
 Essentially, a `rep' is just Nested Sampling, but where a threshold is
 maintained for all objective functions. At each iteration, the space is
-restricted by only one of the objective functions.
+restricted by the value of only one of the objective functions.
 
 The probability distribution over the objective functions influences the
 proportion of the compressions that are done using each objective function.
