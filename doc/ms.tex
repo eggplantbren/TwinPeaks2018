@@ -555,7 +555,8 @@ distributions are iid normal centered at $(0.5, 0.5, ..., 0.5)$:
 E_1(\xx) &=& \sum_{i=1}^{100} \left(\frac{x_i - 0.5}{0.1}\right)^2.
 \end{eqnarray}
 The second objective function, given by
-\begin{eqnarr \sum_{i=1}^{100}\sin^2(10 \pi x_i),
+\begin{eqnarray}
+E_2(\xx) &=& \sum_{i=1}^{100}\sin^2(10 \pi x_i),
 \end{eqnarray}
 upweights states where coordinates $\{x_i\}$
 are close to 0, 0.1, 0.2, ..., 0.9 and 1.
@@ -656,83 +657,83 @@ and $k=\frac{36 \times 2^{2/3}\epsilon}{\sigma^2}$ has been chosen to match
 the curvature of $U_{\rm LJ}(\boldsymbol{r}_i, \boldsymbol{r}_j)$.
 
 
-\section{Example 3: ``MaxEnt'' image deconvolution example}
+%\section{Example 3: ``MaxEnt'' image deconvolution example}
 
-Problems with more than one objective function can also arise in data
-analysis. Consider, for example, the problem of deblurring a noisy
-image. A common approach to these problems is regularized inversion,
-such as the ``maximum entropy'' technique of \citet{gull}. It is important
-to distinguish between this method and the maximum entropy principle used
-to update or assign probabilities \citep{caticha}.
+%Problems with more than one objective function can also arise in data
+%analysis. Consider, for example, the problem of deblurring a noisy
+%image. A common approach to these problems is regularized inversion,
+%such as the ``maximum entropy'' technique of \citet{gull}. It is important
+%to distinguish between this method and the maximum entropy principle used
+%to update or assign probabilities \citep{caticha}.
 
-The unknown parameters are a set of pixel intensities
-$\{x_i\}_{i=1}^n$ where $n$ is the number of pixels and $x_i \geq 0$.
-The dataset is also a collection of pixel intensities $\{D_i\}_{i=1}^n$.
-The prior for the dataset given the parameters is a normal distribution
-with mean given by the underlying image $\{xi\}$ convolved by
-a point spread function. The standard deviation of each pixel is
-$\sigma$, assumed known. This is usually written as
+%The unknown parameters are a set of pixel intensities
+%$\{x_i\}_{i=1}^n$ where $n$ is the number of pixels and $x_i \geq 0$.
+%The dataset is also a collection of pixel intensities $\{D_i\}_{i=1}^n$.
+%The prior for the dataset given the parameters is a normal distribution
+%with mean given by the underlying image $\{xi\}$ convolved by
+%a point spread function. The standard deviation of each pixel is
+%$\sigma$, assumed known. This is usually written as
 
-\begin{eqnarray}
-\boldsymbol{D} = \boldsymbol{M}\boldsymbol{x} + \boldsymbol{n}
-\end{eqnarray}
-where $\boldsymbol{n}$ is the noise in each pixel and $\boldsymbol{M}$ is
-the blurring operator written in matrix form.
+%\begin{eqnarray}
+%\boldsymbol{D} = \boldsymbol{M}\boldsymbol{x} + \boldsymbol{n}
+%\end{eqnarray}
+%where $\boldsymbol{n}$ is the noise in each pixel and $\boldsymbol{M}$ is
+%the blurring operator written in matrix form.
 
-The prior for the pixel intensities $\{x_i\}$ has an ``entropic'' form,
-where images are upweighted (relative to a uniform prior) if the pixel
-intensities have a low dynamic range. The prior density is defined conditional
-on a hyperparameter $\lambda$:
-\begin{eqnarray}
-p(\boldsymbol{x} | \lambda) &=&
-\frac{\exp\left[\lambda S(\xx)\right]}{\int \exp\left[\lambda S(\xx)\right] \, d\xx}
-\label{eq:entropy_prior}
-\end{eqnarray}
-where
-\begin{eqnarray}
-S(\xx) &=& -\sum_{i=1}^n x_i \ln x_i
-\end{eqnarray}
-is the ``configurational entropy'' of the image (crucially, this is a function of
-an image, and not a function of a probability distribution).
-The denominator in Equation~\ref{eq:entropy_prior} ensures the conditional prior
-is normalized.
+%The prior for the pixel intensities $\{x_i\}$ has an ``entropic'' form,
+%where images are upweighted (relative to a uniform prior) if the pixel
+%intensities have a low dynamic range. The prior density is defined conditional
+%on a hyperparameter $\lambda$:
+%\begin{eqnarray}
+%p(\boldsymbol{x} | \lambda) &=&
+%\frac{\exp\left[\lambda S(\xx)\right]}{\int \exp\left[\lambda S(\xx)\right] \, d\xx}
+%\label{eq:entropy_prior}
+%\end{eqnarray}
+%where
+%\begin{eqnarray}
+%S(\xx) &=& -\sum_{i=1}^n x_i \ln x_i
+%\end{eqnarray}
+%is the ``configurational entropy'' of the image (crucially, this is a function of
+%an image, and not a function of a probability distribution).
+%The denominator in Equation~\ref{eq:entropy_prior} ensures the conditional prior
+%is normalized.
 
-In the 1980s, this prior was thought to have a fundamental status, but this
-is no longer the case \citep{massinf}, although the function $S(\xx)$ does
-have special properties when its argument is a measure \citep{knuth_skilling}.
-However, it is still a prior whose
-consequences we might be interested in.
+%In the 1980s, this prior was thought to have a fundamental status, but this
+%is no longer the case \citep{massinf}, although the function $S(\xx)$ does
+%have special properties when its argument is a measure \citep{knuth_skilling}.
+%However, it is still a prior whose
+%consequences we might be interested in.
 
-Instead, we can consider the configurational
-entropy $S(\xx)$ as simply a function of an image that may
-be relevant somehow, and that we are uncertain about. The joint posterior
-for $\xx$ and $\lambda$ is:
-\begin{eqnarray}
-p(\lambda, \xx | \data) &=&
-\frac{p(\lambda)p(\xx | \lambda)p(\data | \xx)}
-{p(\data)}\\
-&=&
-\frac{p(\lambda)p(\xx | \lambda)p(\data | \xx)}
-{p(\data)}
-\end{eqnarray}
+%Instead, we can consider the configurational
+%entropy $S(\xx)$ as simply a function of an image that may
+%be relevant somehow, and that we are uncertain about. The joint posterior
+%for $\xx$ and $\lambda$ is:
+%\begin{eqnarray}
+%p(\lambda, \xx | \data) &=&
+%\frac{p(\lambda)p(\xx | \lambda)p(\data | \xx)}
+%{p(\data)}\\
+%&=&
+%\frac{p(\lambda)p(\xx | \lambda)p(\data | \xx)}
+%{p(\data)}
+%\end{eqnarray}
 
 
-The posterior for the underlying image given the data is
-\begin{eqnarray}
-p(\boldsymbol{x} | \boldsymbol{D}, \lambda)
-&=& \frac{p(\boldsymbol{x} | \lambda)p(\boldsymbol{D}|\boldsymbol{x}, \lambda)}
-{\int p(\boldsymbol{x}|\lambda)p(\boldsymbol{D}|\boldsymbol{x}, \lambda) \,d^n\boldsymbol{m}}\\
-&=& \frac{\exp\left[-\lambda \sum_i x_i\ln x_i
--\frac{1}{2\sigma^2}\left(D_i - \sum_{j} P_{ij}x_{j}\right)^2\right]}
-{\int \exp\left[-\lambda \sum_i x_i\ln x_i
--\frac{1}{2\sigma^2}\left(D_i - \sum_{j} P_{ij}x_{j}\right)^2\right]\, d^n\boldsymbol{m}}
-\end{eqnarray}
+%The posterior for the underlying image given the data is
+%\begin{eqnarray}
+%p(\boldsymbol{x} | \boldsymbol{D}, \lambda)
+%&=& \frac{p(\boldsymbol{x} | \lambda)p(\boldsymbol{D}|\boldsymbol{x}, \lambda)}
+%{\int p(\boldsymbol{x}|\lambda)p(\boldsymbol{D}|\boldsymbol{x}, \lambda) \,d^n\boldsymbol{m}}\\
+%&=& \frac{\exp\left[-\lambda \sum_i x_i\ln x_i
+%-\frac{1}{2\sigma^2}\left(D_i - \sum_{j} P_{ij}x_{j}\right)^2\right]}
+%{\int \exp\left[-\lambda \sum_i x_i\ln x_i
+%-\frac{1}{2\sigma^2}\left(D_i - \sum_{j} P_{ij}x_{j}\right)^2\right]\, d^n\boldsymbol{m}}
+%\end{eqnarray}
 
-This is a `doubly intractable' problem \citep{murray}, since an integral, whose
-result is a function of the parameters, appears in the {\em denominator} of the
-target density. However, in our case the integral in the
-denominator arises from the prior for the parameters, rather than from the
-likelihood function.
+%This is a `doubly intractable' problem \citep{murray}, since an integral, whose
+%result is a function of the parameters, appears in the {\em denominator} of the
+%target density. However, in our case the integral in the
+%denominator arises from the prior for the parameters, rather than from the
+%likelihood function.
 
 %The introduction should briefly place the study in a broad context and highlight why it is important. It should define the purpose of the work and its significance. The current state of the research field should be reviewed carefully and key publications cited. Please highlight controversial and diverging hypotheses when necessary. Finally, briefly mention the main aim of the work and highlight the principal conclusions. As far as possible, please keep the introduction comprehensible to scientists outside your particular field of research. Citing a journal paper \cite{ref-journal}. And now citing a book reference \cite{ref-book}. Please use the command \citep{ref-journal} for the following MDPI journals, which use author-date citation: Administrative Sciences, Arts, Econometrics, Economies, Genealogy, Humanities, IJFS, JRFM, Languages, Laws, Religions, Risks, Social Sciences.
 % 
@@ -827,7 +828,7 @@ likelihood function.
 %Interventionary studies involving animals or humans, and other studies require ethical approval must list the authority that provided approval and the corresponding ethical approval code. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{Conclusions}
+\section{Conclusions}
 
 %This section is not mandatory, but can be added to the manuscript if the discussion is unusually long or complex.
 
@@ -858,7 +859,8 @@ several attempts at solutions with BJB over the years.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \acknowledgments{BJB acknowledges research and study leave funding from the
-University of Auckland. We would like to thank Gabor Csanyi, Livia B. Partay,
+University of Auckland. We would like to thank Gábor Csányi,
+Livia Bartók-Pártay,
 Rob Salomone, John Skilling, etc etc.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
