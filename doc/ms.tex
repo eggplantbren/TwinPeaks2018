@@ -122,9 +122,13 @@ to accurately calculate $Z(\beta_1, \beta_2)$ numerically using non-Monte-Carlo
 methods, so we can compute the actual error in the reconstructed function
 $Z(\beta_1, \beta_2)$; (ii) a collection of atoms with a potential
 that is intermediate between a Lennard-Jones form and a `polymer' form; and
-(iii) A Bayesian image reconstruction example where the prior for the image
-is defined conditionally on a hyperparameter, but where this prior contains
-an intractable normalizing constant.
+(iii) {\todo decide between a few options: image reconstruction with an
+intractable normalizing constant in the prior, or perhaps the `Potts' example
+which is a compromize between a 2D potts model and a product of many 1D
+Potts models.
+%(iii) A Bayesian image reconstruction example where the prior for the image
+%is defined conditionally on a hyperparameter, but where this prior contains
+%an intractable normalizing constant.
 A free software implementation in C++ and Python is available at
 \url{https://github.com/eggplantbren/TwinPeaks2018}.}
 
