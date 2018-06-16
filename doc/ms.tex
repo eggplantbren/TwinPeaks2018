@@ -492,6 +492,9 @@ MCMC is used to generate new particles. Technically, this property is
 lost if the sequence of distributions is chosen adaptively (a key feature of NS)
 rather than being fixed in advanced. However, this paper demonstrates that the
 algorithm works well in practice despite this limitation.
+{\todo Verify/prove statement about bias, and that it means I can average
+reps the way I'm doing it. Also check this remains the case with the random
+thinning that I'm using.}
 
 The fact that $Z$ estimates can be made unbiased means that separate $Z$
 estimates can be averaged together and the properties of the averaged estimator
@@ -504,15 +507,19 @@ for others. When this happens, the particles from the rep will just have very
 low weights with respect to some canonical distributions.
 
 {\todo A description of the algorithm for a single rep follows}.
-A probability distribution over the objective functions is set up. If there
+For each rep, we set up a probability distribution over the objective functions,
+given by probabilities $\boldsymbol{p} = \{p_1, ..., p_n\}$,
+where $n$ is the number of
+objective functions. If there
 are only two objective functions, there is just a probability $p_1$ for
-objective function 1, and $1-p_1$ for objective function 2.
+objective function 1, and $p_2 = 1-p_1$ for objective function 2.
 
 The first distribution is the prior $\pi(\xx)$. Objective function thresholds
 $(\ell_1, \ell_2)_0 = (-\infty, -\infty)$ are assigned.
 $N$ particles are generated
 from the prior. Then, an objective function is selected according to the
-probabilities $\{p_k\}$. Suppose the objective function chosen is number $k$.
+probability distribution $\boldsymbol{p}$.
+Suppose the objective function chosen is number $k$.
 Then the worst particle wrt that criteron is written to disk and replaced,
 and the threshold is updated in the $k$th position only.
 
@@ -520,11 +527,13 @@ Essentially, a `rep' is just Nested Sampling, but where a threshold is
 maintained for all objective functions. At each iteration, the space is
 restricted by the value of only one of the objective functions.
 
-The probability distribution over the objective functions influences the
+The probability distribution $\boldsymbol{p}$ influences the
 proportion of the compressions that are done using each objective function.
 Different reps ought to have different values for the probability distribution.
 Some reps will mostly increase $L_1$, some will mostly increase $L_2$, and
-some will be in between.
+some will be in between. In the reference implementation
+(Appendix~\ref{sec:software}), the log-probabilities are chosen from a $t$
+distribution with 2 degrees of freedom, exponentiated, and then normalized.
 
 \section{Example 1: Known solution}
 In the software repository, this example is implemented in
@@ -546,11 +555,14 @@ distributions are iid normal centered at $(0.5, 0.5, ..., 0.5)$:
 E_1(\xx) &=& \sum_{i=1}^{100} \left(\frac{x_i - 0.5}{0.1}\right)^2.
 \end{eqnarray}
 The second objective function, given by
-\begin{eqnarray} 
-E_2(\xx) &=& \sin^2(10 \pi x_i),
+\begin{eqnarr \sum_{i=1}^{100}\sin^2(10 \pi x_i),
 \end{eqnarray}
 upweights states where coordinates $\{x_i\}$
 are close to 0, 0.1, 0.2, ..., 0.9 and 1.
+Since both of the objective functions are simple sums over the coordinates,
+the canonical distributions are products of independent distributions for
+each coordinate.
+
 The canonical distributions for this system should draw the coordinates
 towards 0.5 (due to $E_1$) and towards the troughs of $E_2$, with the
 relative importance of these effects determined by the values of the
@@ -935,7 +947,7 @@ Unfortunately, this property breaks down with more than
 one objective function, and (as far as we know) the algorithm given in this
 paper does not satisfy an analogous property.
 
-\section{Using the TwinPeaks2018 software}
+\section{Using the TwinPeaks2018 software}\label{sec:software}
 
 
 
