@@ -580,6 +580,7 @@ common behaviour where lower temperatures correspond to lower values
 of the normalising constant $\log Z$ and higher values of the KL divergence
 $H$. There are no phase changes, which would result in discontinuities.
 
+
 \begin{figure}[!ht]
 \centering
 \includegraphics[scale=0.6]{figures/demo_canonical.pdf}
@@ -602,6 +603,40 @@ the canonical distribution) as a function of two temperatures for the
 test problem.\label{fig:demo_truth}}
 \end{figure}
 
+
+The algorithm was run for 1000 reps, to a `depth' of 500 nats,
+with 100 particles and 1000 MCMC steps per NS iteration per rep.
+Results are given in
+Figures~\ref{fig:demo_logZ_H},~\ref{fig:demo_residuals},
+and~\ref{fig:demo_N_eff}.
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.6]{figures/demo_logZ_H.pdf}
+\caption{The partition function $\ln(Z)$ and information $H$ as a function
+of the two temperatures, reconstructed using the algorithm. Compare with
+Figure~\ref{fig:demo_truth}.
+\label{fig:demo_logZ_H}}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.6]{figures/demo_residuals.pdf}
+\caption{The residuals, i.e., the difference between
+Figures~\ref{fig:demo_logZ_H} and~\ref{fig:demo_truth}.
+\label{fig:demo_residuals}}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.6]{figures/demo_N_eff.pdf}
+\caption{The error in $\ln(Z)$, expressed in terms of an
+`effective number of particles' in a standard NS run that would lead to
+the same error at 1 sigma. No values are below $N_{\rm eff} = 1$.
+\label{fig:demo_N_eff}}
+\end{figure}
 
 %\begin{figure}[ht!]
 %\centering
