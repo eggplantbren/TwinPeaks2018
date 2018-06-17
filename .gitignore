@@ -2,6 +2,7 @@ doc/ms.aux
 doc/ms.log
 doc/ms.out
 doc/ms.pdf
+doc/texput.log
 doc/Definitions/*.pdf
 __pycache__
 TwinPeaks2018
