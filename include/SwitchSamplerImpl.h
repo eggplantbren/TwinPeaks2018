@@ -213,7 +213,7 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     size_t scalar;
     while(true)
     {
-        scalar = rng.rand_int(2);
+        scalar = rng.rand_int(T::num_scalars);
         if(rng.rand() <= direction[scalar])
             break;
     }
