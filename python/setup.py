@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="twinpeaks2018",
-    version="0.0.1",
+    version="0.1.0",
     author="Brendon J. Brewer",
     author_email="brendon.brewer@gmail.com",
     description="The Python package accompanying TwinPeaks2018",
