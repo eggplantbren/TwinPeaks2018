@@ -30,13 +30,13 @@ def postprocess_one_scalar(temperature=1.0):
 
     plt.figure(figsize=(9, 7))
     plt.subplot(2, 1, 1)
-    plt.plot(ln_w, ln_l, ".", markersize=1, alpha=0.3)
+    plt.plot(ln_w, ln_l, ".", markersize=3, alpha=0.3)
     ln_l_sorted = np.sort(ln_l)
     plt.ylim([ln_l_sorted[int(0.05*len(ln_l_sorted))], ln_l_sorted[-1]])
     plt.ylabel("$\\ln(L)$")
 
     plt.subplot(2,1,2)
-    plt.plot(ln_w, W/W.max(), ".", markersize=1, alpha=0.5)
+    plt.plot(ln_w, W/W.max(), ".", markersize=3, alpha=0.5)
     plt.xlabel("$\\ln(w)$")
     plt.ylabel("$W/W_{\\rm max}$")
     plt.savefig("output/likelihood_curve.png", dpi=600)
