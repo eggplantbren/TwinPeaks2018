@@ -331,7 +331,9 @@ where $E(\xx)$ is the energy function (analogous to minus the log likelihood
 in the Bayesian case), and $\pi(\xx)$ is often uniform over
 phase space (the set of possible positions and momenta of a collection of
 particles) or configuration space (the set of possible positions of a collection
-of particles). In this context we usually want to
+of particles).
+
+In this context we usually want to
 compute $Z(\beta)$ as a function of $\beta$, which is called the
 {\it partition function}. When the full phase space of positions and momenta
 is included, the KL-divergence as a function of temperature,
@@ -346,6 +348,7 @@ monotonic transformations of $L$ or $E$ and therefore there we can discuss the
 algorithm in Bayesian or statistical mechanical terms without loss of
 generality.
 
+\subsection{Notation for Objective Functions}
 Throughout this paper we will refer to $L(\xx)$ or
 $-E(\xx)$ as `objective functions',
 by analogy with the terminology used in optimization.
@@ -353,6 +356,15 @@ Although we are interested in sampling rather
 than optimization, we still want to increase the values of $L$ or decrease
 the values of $E$ relative to what is typical of the prior --- just in
 a controlled manner, so we can quantify prior mass as we ascend.
+
+Throughout this paper and the software, there are three
+conventions used to define the objective functions. $L()$ is named by analogy
+with likelihood, and appears multiplicatively as in
+Equation~\ref{eqn:power_posterior}. $E() = -\ln L()$ is named by analogy with
+`energy'. Finally, in the software,
+$S() = \ln L() = -E()$ is often used (the $S$ stands for a
+`{\em S}calar function of $\xx$'). The algorithm ascends $L$ and $S$, but
+descends $E$.
 
 \section{Multiple objective functions}
 In some inference and
