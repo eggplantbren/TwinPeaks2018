@@ -118,6 +118,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     H = np.empty((n, n))
     S0 = np.empty((n, n))
     S1 = np.empty((n, n))
+    ENR = np.empty((n, n))
 
     print("Computing temperature grid. It takes a while (one dot=one pixel)",
           end="", flush=True)
@@ -138,6 +139,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
             # Retrieve normalisation constant and KL divergence
             ln_Z[i, j] = results["ln_Z"]
             H[i, j] = results["H"]
+            ENR[i, j] = results["ENR"]
 
             # Compute expectations
             W = np.exp(results["ln_W"])
@@ -161,6 +163,12 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
 
     plt.savefig("output/ln_Z_H.png", dpi=600)
     print("Saved output/ln_Z_h.png")
+
+    plt.figure(2)
+    plt.imshow(ENR, origin="lower", extent=np.log10(limits))
+    plt.xlabel("$\\log_{10}(T_0)$")
+    plt.ylabel("$\\log_{10}(T_1)$")
+    plt.title("Effective number of contributing reps")
     plt.show()
 
     if residuals:
@@ -198,7 +206,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
         plt.imshow(np.log10(Neff), origin="lower", extent=np.log10(limits))
         plt.xlabel("$\\log_{10}(T_0)$")
         plt.ylabel("$\\log_{10}(T_1)$")
-        plt.title("$\\log_{10} N_{\\rm eff}$ based on $\\ln(Z)$ Residuals")
+        plt.title("$\\log_{10}(N_{\\rm eff})$ based on $\\ln(Z)$ Residuals")
 
 #        plt.subplot(1, 2, 2)
 #        resid = H - truth["H"]
