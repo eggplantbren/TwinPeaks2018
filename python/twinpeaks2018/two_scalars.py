@@ -169,6 +169,8 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     plt.xlabel("$\\log_{10}(T_0)$")
     plt.ylabel("$\\log_{10}(T_1)$")
     plt.title("Effective number of contributing reps")
+    plt.savefig("output/ENR.png", dpi=600)
+    print("Saved output/ENR.png")
     plt.show()
 
     if residuals:
