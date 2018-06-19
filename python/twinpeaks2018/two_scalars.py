@@ -23,7 +23,7 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     if particles_info.shape[0] > 30000:
         thin = particles_info.shape[0] // 30000
 
-    # Use random thinning to avoid putting artifacts into the plot
+    # Use random thinning to avoid putting aliasing artifacts into the plot
     indices = rng.randint(particles_info.shape[0], size=30000)
 
     names = ["scalars[{i}]".format(i=scalars[0]),
@@ -72,10 +72,21 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
     result["H"] = H
     result["ESS"] = np.exp(-np.sum(W*ln_W))
 
+    # Calculate effective number of reps
+    ln_W_rep = np.empty(len(rep_ids))
+    k = 0
+    for rep_id in rep_ids:
+        subset = ln_W[particles_info["rep_id"] == rep_id]
+        ln_W_rep[k] = logsumexp(subset)
+        k += 1
+    W_rep = np.exp(ln_W_rep)
+    result["ENR"] = np.exp(-np.sum(W_rep*ln_W_rep))
+
     if plot_and_save:
         print("ln(Z) = {ln_Z}".format(ln_Z=ln_Z))
         print("H = {H} nats".format(H=H))
         print("Effective sample size = {ESS}".format(ESS=result["ESS"]))
+        print("Effective number of reps = {ENR}".format(ENR=result["ENR"]))
         np.savetxt("output/canonical_weights.txt", W)
 
         plt.figure(figsize=(9, 7))
