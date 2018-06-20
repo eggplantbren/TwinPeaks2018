@@ -15,7 +15,7 @@ class Potts
 
 	private:
 		static constexpr size_t num_colors = 5;
-        static constexpr size_t n = 50;
+        static constexpr size_t n = 32;
 
         // State
 		std::vector<std::vector<int>> x;
