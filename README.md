@@ -45,7 +45,7 @@ Then install the python package:
 
 ```
 cd python
-python setup.py install
+python3 setup.py install
 ```
 
 # Execution
@@ -59,7 +59,7 @@ Then wait a long time. At any time during the run (or after it's completed),
 you can execute
 
 ```
-python showresults.py
+python3 showresults.py
 ```
 
 to see the results.
