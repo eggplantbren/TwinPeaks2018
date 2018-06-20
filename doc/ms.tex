@@ -6,7 +6,9 @@
 %=================================================================
 \documentclass[entropy,article,submit,moreauthors,pdftex,10pt,a4paper]{Definitions/mdpi} 
 
+\usepackage{algorithm2e}
 \usepackage{dsfont}
+\usepackage{setspace}
 
 % If you would like to post an early version of this manuscript as a preprint, you may use preprint as the journal and change 'submit' to 'accept'. The document class line would be, e.g. \documentclass[preprints,article,accept,moreauthors,pdftex,10pt,a4paper]{mdpi}. This is especially recommended for submission to arXiv, where line numbers should be removed before posting. For preprints.org, the editorial staff will make this change immediately prior to posting.
 
@@ -550,6 +552,36 @@ Some reps will mostly increase $L_1$, some will mostly increase $L_2$, and
 some will be in between. In the reference implementation
 (Appendix~\ref{sec:software}), the log-probabilities are chosen from a $t$
 distribution with 2 degrees of freedom, exponentiated, and then normalized.
+
+
+
+
+\begin{algorithm}[!ht]
+    \setstretch{1.35}
+    Set $N$, the number of particles \\
+    Set $M$, the number of reps \\
+    Set $d$, the target depth in nats \\
+    Compute $J = Nd$, the number of NS iterations per rep \\
+    \For{i in 1:$M$}{
+      Set initial threshold $(\ell_1^*, \ell_2^*) = (0, 0)$ \\
+      Generate initial particles $(\xx_1, ..., \xx_N)$ from prior $\pi$ \\
+      Generate a `direction' (probability distribution over objective functions) $\boldsymbol{p}$ \\
+      \For{j in 1:$J$}{
+          Choose an objective function $k$ according to $\boldsymbol{p}$ \\
+          Find $c = \textnormal{argmin}(\lambda C \to L_k(\xx_C))$, the index of the worst particle \\
+          Write out $\xx_c$ to disk as $\xx_{ij}$ with prior weight $w_{ij}$ proportional to $(1 - 1/N)^j$ \\
+          Replace threshold element $\ell_c^*$ with $L_k(\xx_C)$ \\
+          Replace particle $c$ with new particle generated from
+            $\pi\times\mathds{1}(L_1 > \ell_1^*, L_2 > \ell_2^*)$          
+      }
+    }
+
+    Set $(T_1, T_2)$, the temperatures of a canonical distribution of interest \\
+    Compute $\hat{Z}(T_1, T_2) \leftarrow \sum_{ij} w_{ij}\left(L_1(\xx_{ij})/T_1 + L_2(\xx_{ij})/T_2\right) / \sum_{ij} w_{ij}$\\
+  \vspace*{0.5em}
+  \caption{The `Switch Sampling' algorithm.}
+\end{algorithm}
+
 
 \section{Example 1: Known solution}
 In the software repository, this example is implemented in
