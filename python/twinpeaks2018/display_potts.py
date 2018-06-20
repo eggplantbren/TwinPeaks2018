@@ -10,7 +10,7 @@ def display_potts(num=100):
     os.system("rm output/potts*.png")
 
     # Load the particles
-    particles = pd.read_csv("output/particles.csv")
+    particles = pd.read_csv("output/particles.csv", dtype="uint8")
     n = int(np.sqrt(particles.shape[1]))
 
     for i in range(num):
