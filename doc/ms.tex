@@ -577,7 +577,7 @@ distribution with 2 degrees of freedom, exponentiated, and then normalized.
     }
 
     Set $(T_1, T_2)$, the temperatures of a canonical distribution of interest \\
-    Compute $\hat{Z}(T_1, T_2) \leftarrow \sum_{ij} w_{ij}\left(L_1(\xx_{ij})/T_1 + L_2(\xx_{ij})/T_2\right) / \sum_{ij} w_{ij}$\\
+    Compute $\hat{Z}(T_1, T_2) \leftarrow \left(\sum_{ij} w_{ij}L_1(\xx_{ij})^{1/T_1}L_2(\xx_{ij})^{1/T_2}\right) / \sum_{ij} w_{ij}$\\
   \vspace*{0.5em}
   \caption{The `Switch Sampling' algorithm.}
 \end{algorithm}
