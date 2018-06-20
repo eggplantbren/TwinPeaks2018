@@ -1,6 +1,4 @@
 language: generic
-python:
-  - 3.6
 compiler:
   - gcc
 os:
@@ -10,13 +8,12 @@ script:
   - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
   - chmod +x miniconda.sh
   - ./miniconda.sh -b
-  - export PATH=/home/travis/miniconda/bin:$PATH
-  - conda update --yes conda
+  - /home/travis/miniconda/bin/conda update --yes conda
   - sudo rm -rf /dev/shm
   - sudo ln -s /run/shm /dev/shm
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy matplotlib pandas
+  - /home/travis/miniconda/bin/conda install --yes python=$TRAVIS_PYTHON_VERSION numpy matplotlib pandas
   - cd python
-  - python setup.py install
+  - /home/travis/miniconda/bin/python setup.py install
 addons:
   apt_packages:
     - libboost-all-dev
