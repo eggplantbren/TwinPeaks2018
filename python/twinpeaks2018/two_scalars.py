@@ -72,21 +72,21 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
     result["H"] = H
     result["ESS"] = np.exp(-np.sum(W*ln_W))
 
-    # Calculate effective number of reps
-    ln_W_rep = np.empty(len(rep_ids))
-    k = 0
-    for rep_id in rep_ids:
-        subset = ln_W[particles_info["rep_id"] == rep_id]
-        ln_W_rep[k] = logsumexp(subset)
-        k += 1
-    W_rep = np.exp(ln_W_rep)
-    result["ENR"] = np.exp(-np.sum(W_rep*ln_W_rep))
+#    # Calculate effective number of reps
+#    ln_W_rep = np.empty(len(rep_ids))
+#    k = 0
+#    for rep_id in rep_ids:
+#        subset = ln_W[particles_info["rep_id"] == rep_id]
+#        ln_W_rep[k] = logsumexp(subset)
+#        k += 1
+#    W_rep = np.exp(ln_W_rep)
+#    result["ENR"] = np.exp(-np.sum(W_rep*ln_W_rep))
 
     if plot_and_save:
         print("ln(Z) = {ln_Z}".format(ln_Z=ln_Z))
         print("H = {H} nats".format(H=H))
         print("Effective sample size = {ESS}".format(ESS=result["ESS"]))
-        print("Effective number of reps = {ENR}".format(ENR=result["ENR"]))
+#        print("Effective number of reps = {ENR}".format(ENR=result["ENR"]))
         np.savetxt("output/canonical_weights.txt", W)
 
         plt.figure(figsize=(9, 7))
@@ -118,7 +118,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     H = np.empty((n, n))
     S0 = np.empty((n, n))
     S1 = np.empty((n, n))
-    ENR = np.empty((n, n))
+#    ENR = np.empty((n, n))
 
     print("Computing temperature grid. It takes a while (one dot=one pixel)",
           end="", flush=True)
@@ -139,7 +139,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
             # Retrieve normalisation constant and KL divergence
             ln_Z[i, j] = results["ln_Z"]
             H[i, j] = results["H"]
-            ENR[i, j] = results["ENR"]
+#            ENR[i, j] = results["ENR"]
 
             # Compute expectations
             W = np.exp(results["ln_W"])
@@ -163,15 +163,16 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
 
     plt.savefig("output/ln_Z_H.png", dpi=600)
     print("Saved output/ln_Z_h.png")
-
-    plt.figure(2)
-    plt.imshow(ENR, origin="lower", extent=np.log10(limits))
-    plt.xlabel("$\\log_{10}(T_0)$")
-    plt.ylabel("$\\log_{10}(T_1)$")
-    plt.title("Effective number of contributing reps")
-    plt.savefig("output/ENR.png", dpi=600)
-    print("Saved output/ENR.png")
     plt.show()
+
+#    plt.figure(2)
+#    plt.imshow(ENR, origin="lower", extent=np.log10(limits))
+#    plt.xlabel("$\\log_{10}(T_0)$")
+#    plt.ylabel("$\\log_{10}(T_1)$")
+#    plt.title("Effective number of contributing reps")
+#    plt.savefig("output/ENR.png", dpi=600)
+#    print("Saved output/ENR.png")
+
 
     if residuals:
         truth = compute_truth(limits, n)
