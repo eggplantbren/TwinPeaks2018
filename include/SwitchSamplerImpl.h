@@ -261,9 +261,9 @@ void SwitchSampler<T>::run_to_depth(double depth, RNG& rng)
         do_iteration(rng, i != (iterations-1));
 
     files_mutex.lock();
-    std::fstream fout("output/completed_reps.txt",
+    std::fstream fout("output/completed_reps.csv",
                                             std::ios::out | std::ios::app);
-    fout << id << std::endl;
+    fout << id << ',' << Config::global_config.get_mcmc_steps() << std::endl;
     fout.close();
     files_mutex.unlock();
 }
@@ -344,7 +344,8 @@ void prepare_output_files()
         fout << desc << std::endl;
     fout.close();
 
-    fout.open("output/completed_reps.txt", std::ios::out);
+    fout.open("output/completed_reps.csv", std::ios::out);
+    fout << "rep_id,mcmc_steps" << std::endl;
     fout.close();
 }
 
