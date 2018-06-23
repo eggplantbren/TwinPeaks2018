@@ -13,6 +13,7 @@ Config Config::global_config;
 Config::Config()
 :num_particles(100)
 ,mcmc_steps(1000)
+,variable_mcmc_steps(false)
 ,thin(1)
 ,num_threads(1)
 ,switch_sampler_reps(100)
@@ -40,6 +41,7 @@ void Config::load(const char* filename)
 
     num_particles = file["num_particles"].as<size_t>();
     mcmc_steps = file["mcmc_steps"].as<unsigned int>();
+    variable_mcmc_steps = file["variable_mcmc_steps"].as<bool>();
     thin = file["thin"].as<unsigned int>();
     num_threads = file["num_threads"].as<unsigned int>();
     switch_sampler_reps = file["switch_sampler_reps"].as<unsigned int>();

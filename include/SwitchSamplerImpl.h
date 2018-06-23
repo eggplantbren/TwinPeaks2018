@@ -278,6 +278,17 @@ void do_rep(unsigned int id, RNG& rng)
 template<typename T>
 RNGPool do_batch(unsigned int first_id, unsigned int last_id, RNGPool& rngs)
 {
+    // Backup value of mcmc_steps from config file
+    unsigned int orig_mcmc_steps = Config::global_config.get_mcmc_steps();
+
+    // Change the number of mcmc steps, if we're allowing that
+    if(Config::global_config.get_variable_mcmc_steps())
+    {
+        unsigned int s = 1 - orig_mcmc_steps*log(rngs[0].rand());
+        std::cout << orig_mcmc_steps << std::endl;
+        Config::global_config.set_mcmc_steps(s);
+    }
+
     if(last_id < first_id || rngs.size() < (last_id - first_id + 1))
         throw std::invalid_argument("Invalid input to do_reps.");
 
@@ -295,12 +306,15 @@ RNGPool do_batch(unsigned int first_id, unsigned int last_id, RNGPool& rngs)
         for(unsigned int i=first_id; i<=last_id; ++i)
         {
 		    auto func = std::bind(do_rep<T>, i, std::ref(rngs[k]));
-            threads.emplace_back(std::thread(func));
+            threads.emplace_back(func);
             ++k;
         }
         for(auto& thread: threads)
             thread.join();
     #endif
+
+    // Restore original mcmc_steps
+    Config::global_config.set_mcmc_steps(orig_mcmc_steps);
 
     return rngs;
 }
