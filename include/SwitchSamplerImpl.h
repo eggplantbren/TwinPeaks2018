@@ -285,7 +285,6 @@ RNGPool do_batch(unsigned int first_id, unsigned int last_id, RNGPool& rngs)
     if(Config::global_config.get_variable_mcmc_steps())
     {
         unsigned int s = 1 - orig_mcmc_steps*log(rngs[0].rand());
-        std::cout << orig_mcmc_steps << std::endl;
         Config::global_config.set_mcmc_steps(s);
     }
 
