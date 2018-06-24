@@ -37,8 +37,11 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     plt.ylabel("$S_{j}$".format(j=scalars[1]))
     x = np.sort(particles_info[names[0]][indices])
     y = np.sort(particles_info[names[1]][indices])
-    plt.xlim([x[int(0.05*len(x))], x[-1]])
-    plt.ylim([y[int(0.05*len(y))], y[-1]])
+    try:
+        plt.xlim([x[int(0.05*len(x))], x[-1]])
+        plt.ylim([y[int(0.05*len(y))], y[-1]])
+    except:
+        pass
 
     plt.savefig("output/particle_scalars.png", dpi=600)
     print("Saved output/particle_scalars.png")
