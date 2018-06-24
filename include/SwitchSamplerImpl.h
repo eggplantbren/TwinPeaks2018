@@ -56,7 +56,14 @@ void SwitchSampler<T>::initialize(RNG& rng)
 
     // Generate direction
     for(double& d: direction)
-        d = exp(3.0*rng.randt2());
+    {
+        double t;
+        do
+        {
+            t = rng.randt2();
+        }while(std::abs(t) >= 100.0);
+        d = exp(t);
+    }
     double d_max = *max_element(direction.begin(), direction.end());
     for(double& d: direction)
         d /= d_max;    
