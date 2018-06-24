@@ -28,15 +28,18 @@ def load_particles_info():
     completed_reps = np.array(pd.read_csv("output/completed_reps.csv")\
                                             .iloc[:,0])
 
-    if len(completed_reps) == 0:
-        print("There are no completed reps.")
-        return particles_info
+    print("Found {n1} reps, {n2} of which are complete.".format(
+          n1=len(np.unique(particles_info.iloc[:,0])), n2=len(completed_reps)))
+    return particles_info
 
-    print("Found {n} completed reps.\n".format(n=len(completed_reps)))
+#  Old code for using only complete reps
+#    if len(completed_reps) == 0:
+#        print("There are no completed reps.")
+#        return particles_info
+#    # Mark completed reps for keeping
+#    keep = np.zeros(particles_info.shape[0], dtype="bool")
+#    for r in completed_reps:
+#        keep[particles_info["rep_id"] == r] = True
+#    indices = np.nonzero(keep)[0]
+#    return particles_info.iloc[keep, :]
 
-    # Mark completed reps for keeping
-    keep = np.zeros(particles_info.shape[0], dtype="bool")
-    for r in completed_reps:
-        keep[particles_info["rep_id"] == r] = True
-    indices = np.nonzero(keep)[0]
-    return particles_info.iloc[keep, :]
