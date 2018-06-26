@@ -35,9 +35,9 @@ def postprocess_one_scalar(temperature=1.0):
     # Thinning
     if(particles_info.shape[0] > 30000):
         indices = rng.randint(particles_info.shape[0], size=30000)
-    ln_w = ln_w[indices]
-    ln_l = ln_l[indices]
-    W = W[indices]
+        ln_w = ln_w[indices]
+        ln_l = ln_l[indices]
+        W = W[indices]
 
     plt.plot(ln_w, ln_l, ".", markersize=3, alpha=0.3)
     ln_l_sorted = np.sort(ln_l)
