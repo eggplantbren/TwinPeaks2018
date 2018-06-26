@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.random as rng
 import pandas as pd
 from twinpeaks2018.utils import *
 
@@ -30,6 +31,14 @@ def postprocess_one_scalar(temperature=1.0):
 
     plt.figure(figsize=(9, 7))
     plt.subplot(2, 1, 1)
+
+    # Thinning
+    if(particles_info.shape[0] > 30000):
+        indices = rng.randint(particles_info.shape[0], size=30000)
+    ln_w = ln_w[indices]
+    ln_l = ln_l[indices]
+    W = W[indices]
+
     plt.plot(ln_w, ln_l, ".", markersize=3, alpha=0.3)
     ln_l_sorted = np.sort(ln_l)
     plt.ylim([ln_l_sorted[int(0.05*len(ln_l_sorted))], ln_l_sorted[-1]])
