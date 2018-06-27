@@ -190,6 +190,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
         plt.xlabel("$\\log_{10}(T_0)$")
         plt.ylabel("$\\log_{10}(T_1)$")
         plt.title("$\\ln(Z)$ Residuals")
+        print("Range of ln(Z) residuals:", [np.min(resid), np.max(resid)])
 
         plt.subplot(1, 2, 2)
         resid = H - truth["H"]
@@ -199,6 +200,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
                    vmin=-biggest, vmax=biggest, cmap="coolwarm")
         plt.xlabel("$\\log_{10}(T_0)$")
         plt.title("$H$ Residuals")
+        print("Range of H residuals:", [np.min(resid), np.max(resid)])
 
         plt.savefig("output/residuals1.png", dpi=600)
         print("Saved output/residuals1.png")
@@ -208,6 +210,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
 #        plt.subplot(1, 2, 1)
         resid = ln_Z - truth["ln_Z"]
         Neff = truth["H"]/resid**2
+        print("Range of N_eff:", [np.min(Neff), np.max(Neff)])
         Neff[Neff < 1.0] = np.nan
         plt.imshow(np.log10(Neff), origin="lower", extent=np.log10(limits))
         plt.xlabel("$\\log_{10}(T_0)$")
