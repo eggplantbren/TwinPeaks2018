@@ -44,7 +44,7 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
         pass
 
     plt.savefig("output/particle_scalars.png", dpi=600)
-    print("Saved output/particle_scalars.png")
+    print("Saved output/particle_scalars.png\n")
     plt.show()
 
 
@@ -104,7 +104,7 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
         plt.xlabel("$\\ln(w)$")
         plt.ylabel("$W/W_{\\rm max}$")
         plt.savefig("output/likelihood_curve.png", dpi=600)
-        print("Saved output/likelihood_curve.png")
+        print("Saved output/likelihood_curve.png\n")
         plt.show()
 
     return result
@@ -165,7 +165,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     plt.title("$H$")
 
     plt.savefig("output/ln_Z_H.png", dpi=600)
-    print("Saved output/ln_Z_h.png")
+    print("Saved output/ln_Z_h.png\n")
     plt.show()
 
 #    plt.figure(2)
@@ -207,7 +207,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
         print("")
 
         plt.savefig("output/residuals1.png", dpi=600)
-        print("Saved output/residuals1.png")
+        print("Saved output/residuals1.png\n")
         plt.show()
 
         plt.figure(3) #, figsize=(9, 6))
@@ -248,7 +248,7 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
     plt.xlabel("$\\log_{10}(T_0)$")
     plt.title("$\\left<S_1\\right>$")
     plt.savefig("output/expectations_of_scalars.png", dpi=600)
-    print("Saved output/expectations_of_scalars.png")
+    print("Saved output/expectations_of_scalars.png\n")
     plt.show()
 
 
