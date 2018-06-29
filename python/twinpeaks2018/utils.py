@@ -17,6 +17,22 @@ def plot_settings():
     plt.rcParams["font.size"] = 16
     plt.rc("text", usetex=True)
 
+def quantiles(xs):
+    """
+    Calculate some quantiles.
+    """
+
+    # Sort
+    s = np.sort(xs)
+    N = len(xs)
+
+    probs = [0.0, 0.25, 0.50, 0.75, 0.999999]
+    qs = []
+    for prob in probs:
+        qs.append(s[int(prob*N)])
+
+    return qs
+
 def load_particles_info():
     """
     Load all the particles_info file, and return a data frame containing
