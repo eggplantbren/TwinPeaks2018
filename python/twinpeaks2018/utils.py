@@ -33,7 +33,7 @@ def quantiles(xs):
 
     return qs
 
-def load_particles_info():
+def load_particles_info(mcmc_steps_cutoff=0):
     """
     Load all the particles_info file, and return a data frame containing
     only complete runs (unless there aren't any, in which case it just
@@ -43,6 +43,30 @@ def load_particles_info():
     particles_info = pd.read_csv("output/particles_info.csv")
     reps = pd.read_csv("output/reps.csv")
     print("Found {n} reps.".format(n=len(reps)))
+    if mcmc_steps_cutoff > 0:
+        print("Removing reps with mcmc_steps < {cutoff}"\
+                .format(cutoff=mcmc_steps_cutoff), end="...")
+
+        # Mark particles and reps as not good (add column to data frame)
+        particles_info.loc[:, "good_mcmc_steps"] = False
+        reps.loc[:, "good_mcmc_steps"] = False
+
+        # Loop over reps
+        for i in range(reps.shape[0]):
+
+            # If it's a good rep, mark all its particles as good
+            if reps.loc[i, "mcmc_steps"] >= mcmc_steps_cutoff:
+                this_rep = particles_info["rep_id"] == reps["rep_id"][i]
+                particles_info.loc[this_rep, "good_mcmc_steps"] = True
+                reps.loc[i, "good_mcmc_steps"] = True
+        print("done.")
+        print("Ended up with {N} good reps after applying mcmc_steps cutoff."\
+                .format(N=np.sum(reps.loc[:, "good_mcmc_steps"])))
+    else:
+        # Mark particles and reps as good (add column to data frame)
+        particles_info.loc[:, "good_mcmc_steps"] = True
+        reps.loc[:, "good_mcmc_steps"] = True
+
     return particles_info
 
 #  Old code for using only complete reps

@@ -6,11 +6,11 @@ from twinpeaks2018.utils import *
 
 plot_settings()
 
-def postprocess_one_scalar(temperature=1.0):
+def postprocess_one_scalar(mcmc_steps_cutoff=0, temperature=1.0):
     """
     Postprocessing for one scalar
     """
-    particles_info = load_particles_info()
+    particles_info = load_particles_info(mcmc_steps_cutoff)
     ln_w = particles_info["ln_prior_mass"]
     ln_l = particles_info["scalars[0]"]
 

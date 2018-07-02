@@ -253,7 +253,8 @@ def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
 
 
 
-def postprocess_two_scalars(specific_temperatures=[1.0, 1.0],
+def postprocess_two_scalars(mcmc_steps_cutoff=0,
+                            specific_temperatures=[1.0, 1.0],
                             temperature_grid_limits=[0.1, 100.0, 0.1, 100.0],
                             demo=False):
     """
@@ -264,7 +265,7 @@ def postprocess_two_scalars(specific_temperatures=[1.0, 1.0],
     """
 
     # Load the results
-    particles_info = load_particles_info()
+    particles_info = load_particles_info(mcmc_steps_cutoff)
 
     # Compute the properties of a canonical distribution and the requested
     # temperatures.
