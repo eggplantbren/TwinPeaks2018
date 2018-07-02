@@ -263,16 +263,16 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
 template<typename T>
 void SwitchSampler<T>::run_to_depth(double depth, RNG& rng)
 {
-    unsigned int iterations = depth*num_particles;
-    for(unsigned int i=0; i<iterations; ++i)
-        do_iteration(rng, i != (iterations-1));
-
     files_mutex.lock();
-    std::fstream fout("output/completed_reps.csv",
+    std::fstream fout("output/reps.csv",
                                             std::ios::out | std::ios::app);
     fout << id << ',' << Config::global_config.get_mcmc_steps() << std::endl;
     fout.close();
     files_mutex.unlock();
+
+    unsigned int iterations = depth*num_particles;
+    for(unsigned int i=0; i<iterations; ++i)
+        do_iteration(rng, i != (iterations-1));
 }
 
 template<typename T>
@@ -350,7 +350,7 @@ void prepare_output_files()
         fout << desc << std::endl;
     fout.close();
 
-    fout.open("output/completed_reps.csv", std::ios::out);
+    fout.open("output/reps.csv", std::ios::out);
     fout << "rep_id,mcmc_steps" << std::endl;
     fout.close();
 }

@@ -41,11 +41,8 @@ def load_particles_info():
     """
 
     particles_info = pd.read_csv("output/particles_info.csv")
-    completed_reps = np.array(pd.read_csv("output/completed_reps.csv")\
-                                            .iloc[:,0])
-
-    print("Found {n1} reps, {n2} of which are complete.".format(
-          n1=len(np.unique(particles_info.iloc[:,0])), n2=len(completed_reps)))
+    reps = pd.read_csv("output/reps.csv")
+    print("Found {n} reps.".format(n=len(reps)))
     return particles_info
 
 #  Old code for using only complete reps
