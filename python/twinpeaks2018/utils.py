@@ -47,9 +47,9 @@ def load_particles_info(mcmc_steps_cutoff=0):
         print("Removing reps with mcmc_steps < {cutoff}"\
                 .format(cutoff=mcmc_steps_cutoff), end="...")
 
-        # Mark particles and reps as not good (add column to data frame)
-        particles_info.loc[:, "good_mcmc_steps"] = False
-        reps.loc[:, "good_mcmc_steps"] = False
+        # Mark particles and reps as not good
+        particles_good = np.zeros(particles_info.shape[0], dtype="bool")
+        reps_good = np.zeros(reps.shape[0], dtype="bool")
 
         # Loop over reps
         for i in range(reps.shape[0]):
@@ -57,15 +57,15 @@ def load_particles_info(mcmc_steps_cutoff=0):
             # If it's a good rep, mark all its particles as good
             if reps.loc[i, "mcmc_steps"] >= mcmc_steps_cutoff:
                 this_rep = particles_info["rep_id"] == reps["rep_id"][i]
-                particles_info.loc[this_rep, "good_mcmc_steps"] = True
-                reps.loc[i, "good_mcmc_steps"] = True
+                particles_good[this_rep] = True
+                reps_good[i] = True
+
+        # Nullify log-weights of bad reps
+        particles_info.loc[particles_good, "ln_w"] = -1E300
+
         print("done.")
         print("Ended up with {N} good reps after applying mcmc_steps cutoff."\
-                .format(N=np.sum(reps.loc[:, "good_mcmc_steps"])))
-    else:
-        # Mark particles and reps as good (add column to data frame)
-        particles_info.loc[:, "good_mcmc_steps"] = True
-        reps.loc[:, "good_mcmc_steps"] = True
+                .format(N=np.sum(reps_good)))
 
     return particles_info
 
