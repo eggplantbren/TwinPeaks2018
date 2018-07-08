@@ -291,8 +291,10 @@ RNGPool do_batch(unsigned int first_id, unsigned int last_id, RNGPool& rngs)
     // Change the number of mcmc steps, if we're allowing that
     if(Config::global_config.get_variable_mcmc_steps())
     {
-        unsigned int s = 1 + orig_mcmc_steps*(1.0 - log(rngs[0].rand()));
-        Config::global_config.set_mcmc_steps(s);
+        // Pareto (orig_mcmc_steps/2, 2) has a mean of orig_mcmc_steps
+        unsigned int x = (unsigned int)(0.5*orig_mcmc_steps
+                                        /pow(rngs[0].rand(), 0.5));
+        Config::global_config.set_mcmc_steps(x);
     }
 
     if(last_id < first_id || rngs.size() < (last_id - first_id + 1))
