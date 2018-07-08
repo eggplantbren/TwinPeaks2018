@@ -9,11 +9,11 @@ if len(columns) == 5:
     # demo=True makes extra plots based on the ground truth of the demo model.
     # If you leave it in while using another model, you'll get some additional
     # output that will be spurious. You can just ignore it, though.
-    twinpeaks2018.postprocess_two_scalars(demo=True)
+    twinpeaks2018.postprocess_two_scalars(mcmc_steps_cutoff=0, demo=True)
 
 elif len(columns) == 4:
     # One-scalar version
-    twinpeaks2018.postprocess_one_scalar()
+    twinpeaks2018.postprocess_one_scalar(mcmc_steps_cutoff=0)
 
 else:
     print("Unexpected number of columns in output/particles_info.csv.")
