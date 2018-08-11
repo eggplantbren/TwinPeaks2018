@@ -4,7 +4,7 @@
 #include "All.h"
 #include "RNG.h"
 #include "RNGPool.h"
-#include "SwitchSampler.h"
+#include "RectangleSampler.h"
 
 using namespace TwinPeaks2018;
 
@@ -16,8 +16,13 @@ int main()
     // Load the configuration
     Config::global_config.load("config.yaml");
 
-    // Use the SwitchSampler
-    run_switch_sampler<Example>();
+    // RectangleSampler
+    size_t num_particles = Config::global_config.get_num_particles();
+    RectangleSampler<Example> sampler(num_particles);
+
+    // Run with a default RNG for now
+    RNG rng;
+    sampler.run_to_depth(500.0, rng);
 
     return 0;
 }

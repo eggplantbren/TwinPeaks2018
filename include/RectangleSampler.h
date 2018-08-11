@@ -23,6 +23,9 @@ class RectangleSampler
         // Current iteration
         unsigned int iteration;
 
+        // Generate the particles from the prior
+        void initialise(RNG& rng);
+
         // Test whether one tuple is below another
         static bool is_below(const std::tuple<double, double>& s_tb1,
                              const std::tuple<double, double>& s_tb2);
