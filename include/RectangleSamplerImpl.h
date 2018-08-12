@@ -25,7 +25,7 @@ void RectangleSampler<T>::initialise(RNG& rng)
         return;
     }
 
-    std::cout << "Generating " << num_particles << ' ';
+    std::cout << "# Generating " << num_particles << ' ';
     std::cout << "particles from the prior..." << std::flush;
 
     for(size_t i=0; i<num_particles; ++i)
@@ -69,9 +69,38 @@ void RectangleSampler<T>::do_iteration(RNG& rng)
         lcc_grid[rf[i]][rg[i]] += 1;
 
     // Print the lcc_grid
-/*    for(size_t i=0; i<num_particles; ++i)*/
-/*        for(size_t j=0; j<num_particles; ++j)*/
+    for(size_t i=0; i<num_particles; ++i)
+    {
+        for(size_t j=0; j<num_particles; ++j)
+            std::cout << lcc_grid[i][j] << ' ';
+        std::cout << '\n';
+    }
 
+    // Cumulative sum horizontally for each row
+    for(size_t i=0; i<num_particles; ++i)
+    {
+        for(size_t j=1; j<num_particles; ++j)
+            lcc_grid[i][j] = lcc_grid[i][j-1] + lcc_grid[i][j];
+    }
+
+    // Cumulative sum vertically for each column
+    for(size_t j=0; j<num_particles; ++j)
+    {
+        for(int i=(int)num_particles-2; i>=0; --i)
+            lcc_grid[i][j] = lcc_grid[i+1][j] + lcc_grid[i][j];
+    }
+
+
+    // Print the lcc_grid
+    for(size_t i=0; i<num_particles; ++i)
+    {
+        for(size_t j=0; j<num_particles; ++j)
+            std::cout << lcc_grid[i][j] << ' ';
+        std::cout << '\n';
+    }
+
+
+    exit(0);
 }
 
 } // namespace TwinPeaks2018

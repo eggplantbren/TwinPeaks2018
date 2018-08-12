@@ -25,7 +25,7 @@ int main()
     RectangleSampler<Example> sampler(num_particles);
 
     // Run with a default RNG for now
-    RNG rng;
+    RNG rng(time(0));
     sampler.run_to_depth(500.0, rng);
 
     return 0;
