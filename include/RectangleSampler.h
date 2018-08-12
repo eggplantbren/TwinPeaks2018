@@ -18,13 +18,19 @@ class RectangleSampler
 
         // Particles and their scalars
         std::vector<T> particles;
-        std::vector<std::vector<double>> scalars;
+        std::vector<double> fs, gs;
+
+        // LCC grid
+        std::vector<std::vector<unsigned int>> lcc_grid;
 
         // Current iteration
         unsigned int iteration;
 
         // Generate the particles from the prior
         void initialise(RNG& rng);
+
+        // Do one iteration
+        void do_iteration(RNG& rng);
 
         // Test whether one tuple is below another
         static bool is_below(const std::tuple<double, double>& s_tb1,

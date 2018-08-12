@@ -13,6 +13,10 @@ int main()
     // Which example?
     using Example = Demo;
 
+    // Only works on two-scalar problems
+    static_assert(Example::num_scalars == 2,
+                  "Model must have exactly two scalars.");
+
     // Load the configuration
     Config::global_config.load("config.yaml");
 
