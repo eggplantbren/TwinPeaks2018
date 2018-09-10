@@ -103,5 +103,23 @@ void RectangleSampler<T>::print_lcc_grid(std::ostream& out) const
     }
 }
 
+unsigned int lowest_nonzero_value
+        (const std::vector<std::vector<unsigned int>>& xs)
+{
+    // Flatten to 1D and exclude zeroes
+    std::vector<double> ys;
+    for(size_t i=0; i<xs.size(); ++i)
+        for(size_t j=0; j<xs[i].size(); ++j)
+            if(xs[i][j] != 0)
+                ys.push_back(xs[i][j]);
+
+    // Handle empty-vector case
+    if(ys.size() == 0)
+        return 0;
+
+    // Find minimum
+    return *min_element(ys.begin(), ys.end());
+}
+
 } // namespace TwinPeaks2018
 

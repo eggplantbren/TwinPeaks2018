@@ -50,7 +50,15 @@ class RectangleSampler
 
         // Print the LCC grid
         void print_lcc_grid(std::ostream& out) const;
+
+        // Getter
+        const std::vector<std::vector<unsigned int>>& get_lcc_grid() const
+        { return lcc_grid; }
 };
+
+// Find the lowest nonzero value in a vector of vectors
+unsigned int lowest_nonzero_value
+                (const std::vector<std::vector<unsigned int>>& xs);
 
 } // namespace TwinPeaks2018
 
