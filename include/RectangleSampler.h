@@ -32,6 +32,9 @@ class RectangleSampler
         // Do one iteration
         void do_iteration(RNG& rng);
 
+        // Compute the LCC grid
+        void compute_lcc_grid();
+
         // Test whether one tuple is below another
         static bool is_below(const std::tuple<double, double>& s_tb1,
                              const std::tuple<double, double>& s_tb2);
