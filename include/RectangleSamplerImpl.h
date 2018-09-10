@@ -10,6 +10,7 @@ RectangleSampler<T>::RectangleSampler(size_t _num_particles)
 ,particles(num_particles)
 ,fs(num_particles)
 ,gs(num_particles)
+,particle_locations(num_particles, std::vector<int>(num_particles))
 ,lcc_grid(num_particles, std::vector<unsigned int>(num_particles))
 ,iteration(0)
 {
@@ -64,16 +65,24 @@ void RectangleSampler<T>::do_iteration(RNG& rng)
 template<typename T>
 void RectangleSampler<T>::compute_lcc_grid()
 {
-    // Zero the LCC grid
+    // Zero the LCC grid and particle locations
     for(size_t i=0; i<num_particles; ++i)
+    {
         for(size_t j=0; j<num_particles; ++j)
+        {
+            particle_locations[i][j] = -1;
             lcc_grid[i][j] = 0;
+        }
+    }
 
     // Ranks in terms of the two scalars
     auto rf = ranks(fs);
     auto rg = ranks(gs);
     for(size_t i=0; i<num_particles; ++i)
+    {
+        particle_locations[rf[i]][rg[i]] = i;
         lcc_grid[rf[i]][rg[i]] += 1;
+    }
 
     // Cumulative sum horizontally for each row
     for(size_t i=0; i<num_particles; ++i)
@@ -94,7 +103,17 @@ void RectangleSampler<T>::compute_lcc_grid()
 template<typename T>
 void RectangleSampler<T>::print_lcc_grid(std::ostream& out) const
 {
-    // Print the lcc_grid
+    // Print the particle locations and lcc_grid
+    out << "Particle locations:" << std::endl;
+    for(size_t i=0; i<num_particles; ++i)
+    {
+        for(size_t j=0; j<num_particles; ++j)
+            out << particle_locations[i][j] << ' ';
+        out << '\n';
+    }
+    out << '\n';
+
+    out << "LCC grid:" << std::endl;
     for(size_t i=0; i<num_particles; ++i)
     {
         for(size_t j=0; j<num_particles; ++j)

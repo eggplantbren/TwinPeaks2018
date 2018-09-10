@@ -21,7 +21,8 @@ class RectangleSampler
         std::vector<T> particles;
         std::vector<double> fs, gs;
 
-        // LCC grid
+        // Particle locations and LCC grid
+        std::vector<std::vector<int>> particle_locations;
         std::vector<std::vector<unsigned int>> lcc_grid;
 
         // Current iteration

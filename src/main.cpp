@@ -29,7 +29,6 @@ int main()
     sampler.run_to_depth(500.0, rng);
 
     sampler.print_lcc_grid(std::cout);
-    std::cout << lowest_nonzero_value(sampler.get_lcc_grid()) << std::endl;
 
     return 0;
 }
