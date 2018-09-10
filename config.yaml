@@ -1,6 +1,6 @@
 # Configuration file for TwinPeaks2018
 ---
-num_particles: 5
+num_particles: 10
 mcmc_steps: 3000            # Average number of MCMC steps per iteration
 variable_mcmc_steps: true   # Should the number of MCMC steps vary?
 thin: 50
