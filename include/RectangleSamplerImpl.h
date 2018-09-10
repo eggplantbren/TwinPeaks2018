@@ -75,16 +75,6 @@ void RectangleSampler<T>::compute_lcc_grid()
     for(size_t i=0; i<num_particles; ++i)
         lcc_grid[rf[i]][rg[i]] += 1;
 
-/*
-    // Print the lcc_grid
-    for(size_t i=0; i<num_particles; ++i)
-    {
-        for(size_t j=0; j<num_particles; ++j)
-            std::cout << lcc_grid[i][j] << ' ';
-        std::cout << '\n';
-    }
-*/
-
     // Cumulative sum horizontally for each row
     for(size_t i=0; i<num_particles; ++i)
     {
@@ -99,17 +89,18 @@ void RectangleSampler<T>::compute_lcc_grid()
             lcc_grid[i][j] = lcc_grid[i+1][j] + lcc_grid[i][j];
     }
 
+}
 
-/*
+template<typename T>
+void RectangleSampler<T>::print_lcc_grid(std::ostream& out) const
+{
     // Print the lcc_grid
     for(size_t i=0; i<num_particles; ++i)
     {
         for(size_t j=0; j<num_particles; ++j)
-            std::cout << lcc_grid[i][j] << ' ';
-        std::cout << '\n';
+            out << lcc_grid[i][j] << ' ';
+        out << '\n';
     }
-    exit(0);
-*/
 }
 
 } // namespace TwinPeaks2018

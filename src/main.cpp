@@ -28,6 +28,8 @@ int main()
     RNG rng(time(0));
     sampler.run_to_depth(500.0, rng);
 
+    sampler.print_lcc_grid(std::cout);
+
     return 0;
 }
 

@@ -1,6 +1,7 @@
 #ifndef TwinPeaks2018_RectangleSampler_h
 #define TwinPeaks2018_RectangleSampler_h
 
+#include <ostream>
 #include <vector>
 #include "RNG.h"
 
@@ -47,6 +48,8 @@ class RectangleSampler
         // Run to a given depth
         void run_to_depth(double depth, RNG& rng);
 
+        // Print the LCC grid
+        void print_lcc_grid(std::ostream& out) const;
 };
 
 } // namespace TwinPeaks2018
