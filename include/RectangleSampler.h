@@ -20,9 +20,11 @@ class RectangleSampler
         // Particles and their scalars
         std::vector<T> particles;
         std::vector<double> fs, gs;
+        std::vector<double> augmented_uccs; // Augmented with tiebreakers
 
-        // LCC grid
-        std::vector<std::vector<unsigned int>> lcc_grid;
+        // Background particles
+        std::vector<T> background;
+        std::vector<double> background_fs, background_gs;
 
         // Current iteration
         unsigned int iteration;
@@ -30,15 +32,11 @@ class RectangleSampler
         // Generate the particles from the prior
         void initialise(RNG& rng);
 
+        // Compute and augment uccs
+        void compute_uccs(RNG& rng);
+
         // Do one iteration
         void do_iteration(RNG& rng);
-
-        // Compute the LCC grid
-        void compute_lcc_grid();
-
-        // Test whether one tuple is below another
-        static bool is_below(const std::tuple<double, double>& s_tb1,
-                             const std::tuple<double, double>& s_tb2);
 
     public:
 
@@ -47,18 +45,7 @@ class RectangleSampler
 
         // Run to a given depth
         void run_to_depth(double depth, RNG& rng);
-
-        // Print the LCC grid
-        void print_lcc_grid(std::ostream& out) const;
-
-        // Getter
-        const std::vector<std::vector<unsigned int>>& get_lcc_grid() const
-        { return lcc_grid; }
 };
-
-// Find the lowest nonzero value in a vector of vectors
-unsigned int lowest_nonzero_value
-                (const std::vector<std::vector<unsigned int>>& xs);
 
 } // namespace TwinPeaks2018
 

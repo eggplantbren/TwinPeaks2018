@@ -10,7 +10,10 @@ RectangleSampler<T>::RectangleSampler(size_t _num_particles)
 ,particles(num_particles)
 ,fs(num_particles)
 ,gs(num_particles)
-,lcc_grid(num_particles, std::vector<unsigned int>(num_particles))
+,augmented_uccs(num_particles)
+,background(num_particles)
+,background_fs(num_particles)
+,background_gs(num_particles)
 ,iteration(0)
 {
 
@@ -26,7 +29,8 @@ void RectangleSampler<T>::initialise(RNG& rng)
     }
 
     std::cout << "# Generating " << num_particles << ' ';
-    std::cout << "particles from the prior..." << std::flush;
+    std::cout << "particles and " << num_particles << ' ';
+    std::cout << "background particles from the prior..." << std::flush;
 
     for(size_t i=0; i<num_particles; ++i)
     {
@@ -34,11 +38,32 @@ void RectangleSampler<T>::initialise(RNG& rng)
         auto ss = particles[i].scalars();
         fs[i] = ss[0];
         gs[i] = ss[1];
+
+        background[i].from_prior(rng);
+        ss = background[i].scalars();
+        background_fs[i] = ss[0];
+        background_gs[i] = ss[1];
     }
 
-    std::cout << "done." << std::endl;
+    compute_uccs(rng);
 
+    std::cout << "done." << std::endl;
     iteration = 1;
+}
+
+template<typename T>
+void RectangleSampler<T>::compute_uccs(RNG& rng)
+{
+    for(size_t i=0; i<num_particles; ++i)
+    {
+        augmented_uccs[i] = 0.0;
+        for(size_t j=0; j<num_particles; ++j)
+        {
+            if(fs[i] < background_fs[j] && gs[i] < background_gs[j])
+                augmented_uccs[i] += 1.0;
+        }
+        augmented_uccs[i] += rng.rand();
+    }
 }
 
 template<typename T>
@@ -57,69 +82,10 @@ void RectangleSampler<T>::run_to_depth(double depth, RNG& rng)
 template<typename T>
 void RectangleSampler<T>::do_iteration(RNG& rng)
 {
-    // Compute the LCC grid
-    compute_lcc_grid();
-}
 
-template<typename T>
-void RectangleSampler<T>::compute_lcc_grid()
-{
-    // Zero the LCC grid
-    for(size_t i=0; i<num_particles; ++i)
-        for(size_t j=0; j<num_particles; ++j)
-            lcc_grid[i][j] = 0;
-
-    // Ranks in terms of the two scalars
-    auto rf = ranks(fs);
-    auto rg = ranks(gs);
-    for(size_t i=0; i<num_particles; ++i)
-        lcc_grid[rf[i]][rg[i]] += 1;
-
-    // Cumulative sum horizontally for each row
-    for(size_t i=0; i<num_particles; ++i)
-    {
-        for(size_t j=1; j<num_particles; ++j)
-            lcc_grid[i][j] = lcc_grid[i][j-1] + lcc_grid[i][j];
-    }
-
-    // Cumulative sum vertically for each column
-    for(size_t j=0; j<num_particles; ++j)
-    {
-        for(int i=(int)num_particles-2; i>=0; --i)
-            lcc_grid[i][j] = lcc_grid[i+1][j] + lcc_grid[i][j];
-    }
 
 }
 
-template<typename T>
-void RectangleSampler<T>::print_lcc_grid(std::ostream& out) const
-{
-    // Print the lcc_grid
-    for(size_t i=0; i<num_particles; ++i)
-    {
-        for(size_t j=0; j<num_particles; ++j)
-            out << lcc_grid[i][j] << ' ';
-        out << '\n';
-    }
-}
-
-unsigned int lowest_nonzero_value
-        (const std::vector<std::vector<unsigned int>>& xs)
-{
-    // Flatten to 1D and exclude zeroes
-    std::vector<double> ys;
-    for(size_t i=0; i<xs.size(); ++i)
-        for(size_t j=0; j<xs[i].size(); ++j)
-            if(xs[i][j] != 0)
-                ys.push_back(xs[i][j]);
-
-    // Handle empty-vector case
-    if(ys.size() == 0)
-        return 0;
-
-    // Find minimum
-    return *min_element(ys.begin(), ys.end());
-}
 
 } // namespace TwinPeaks2018
 
