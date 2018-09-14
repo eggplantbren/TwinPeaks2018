@@ -83,9 +83,7 @@ template<typename T>
 void RectangleSampler<T>::do_iteration(RNG& rng)
 {
 
-
 }
-
 
 } // namespace TwinPeaks2018
 
