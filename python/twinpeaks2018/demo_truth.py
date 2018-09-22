@@ -4,13 +4,13 @@ from twinpeaks2018.utils import *
 
 plot_settings()
 
-def compute_truth(limits, n=51):
+def compute_truth(limits, n=21):
     T0_min, T0_max, T1_min, T1_max = limits
 
     # Set up grids
     ln_Z = np.empty((n, n))
     H = np.empty((n, n))
-    x = np.linspace(0.0, 1.0, 10001)
+    x = np.linspace(0.0, 1.0, 20001)
     dx = x[1] - x[0]
 
     # Temperature grids
@@ -25,7 +25,7 @@ def compute_truth(limits, n=51):
         for j in range(ln_Z.shape[1]):
 
             ln_y = -((x - 0.5)/0.1)**2 / T0[i, j] - \
-                        (np.sin(10*np.pi*x))**2 / T1[i, j]
+                        (x / 0.1) / T1[i, j]
             ln_Y = ln_y - logsumexp(ln_y + np.log(dx))
             Y = np.exp(ln_Y)
 

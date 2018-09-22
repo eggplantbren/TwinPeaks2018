@@ -110,7 +110,7 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
     return result
 
 
-def evaluate_temperature_grid(particles_info, limits, n=51, residuals=False):
+def evaluate_temperature_grid(particles_info, limits, n=21, residuals=False):
     """
     Evaluate logZ and H on a temperature grid.
     """

@@ -48,7 +48,7 @@ double Demo::g() const
 {
     double result = 0.0;
     for(double x: xs)
-        result += -pow(sin(10*M_PI*x), 2);
+        result += -x/0.1;
     return result;
 }
 
