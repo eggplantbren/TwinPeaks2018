@@ -56,7 +56,6 @@ void SwitchSampler<T>::initialize(RNG& rng)
     messages << "done." << std::endl;
 
     first_scalar = rng.rand_int(2);
-    change_time = rng.rand_int(5000);
 
 /*    // Generate direction*/
 /*    for(double& d: direction)*/
@@ -276,6 +275,10 @@ void SwitchSampler<T>::run_to_depth(double depth, RNG& rng)
     files_mutex.unlock();
 
     unsigned int iterations = depth*num_particles;
+    double f = 5.0*rng.randn();
+    f = exp(f)/(exp(f) + 1.0);
+    change_time = rng.rand_int(f*iterations);
+
     for(unsigned int i=0; i<iterations; ++i)
         do_iteration(rng, i != (iterations-1));
 }

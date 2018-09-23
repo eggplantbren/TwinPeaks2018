@@ -1,10 +1,10 @@
 # Configuration file for TwinPeaks2018
 ---
 num_particles: 1000
-mcmc_steps: 10000            # Average number of MCMC steps per iteration
+mcmc_steps: 1000           # Average number of MCMC steps per iteration
 variable_mcmc_steps: false   # Should the number of MCMC steps vary?
 thin: 100
-num_threads: 8
-depth: 600.0
+num_threads: 1
+depth: 60.0
 rng_seed: "auto"            # Can be "auto" or a non-negative integer
-switch_sampler_reps: 10000   # Number of repetitions of switch sampling
+switch_sampler_reps: 1000   # Number of repetitions of switch sampling

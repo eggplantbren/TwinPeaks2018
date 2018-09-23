@@ -30,8 +30,8 @@ def compute_truth(limits, n=21):
             Y = np.exp(ln_Y)
 
             # Normalisation constant and KL divergence
-            ln_Z[i, j] = 100*logsumexp(ln_y + np.log(dx))
-            H[i, j] = 100*np.sum(Y*ln_Y*dx)
+            ln_Z[i, j] = 10*logsumexp(ln_y + np.log(dx))
+            H[i, j] = 10*np.sum(Y*ln_Y*dx)
 
             print(".", end="", flush=True)
     print("")
