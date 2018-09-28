@@ -193,6 +193,8 @@ def evaluate_temperature_grid(particles_info, limits, n=21, residuals=False):
         print("Quantiles of ln(Z) residuals:")
         print(quantiles(resid.flatten()))
         print("")
+        print("Mean absolute error in ln(Z):",
+              np.mean(np.abs(resid)), "\n")
 
         plt.subplot(1, 2, 2)
         resid = H - truth["H"]
