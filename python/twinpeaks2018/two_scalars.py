@@ -32,7 +32,7 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     plt.figure()
     plt.plot(particles_info[names[0]][indices],
              particles_info[names[1]][indices],
-             "o", alpha=0.2, markersize=1)
+             "o", alpha=0.2, markersize=0.3)
     plt.xlabel("$S_{i}$".format(i=scalars[0]))
     plt.ylabel("$S_{j}$".format(j=scalars[1]))
     x = np.sort(particles_info[names[0]][indices])
