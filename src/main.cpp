@@ -11,7 +11,7 @@ using namespace TwinPeaks2018;
 int main()
 {
     // Which example?
-    using Example = SpikeSlab;
+    using Example = Demo;
     static_assert(Example::num_scalars <= 2,
                   "Model must have two or fewer scalars");
 
