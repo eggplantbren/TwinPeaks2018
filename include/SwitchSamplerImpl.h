@@ -55,7 +55,7 @@ void SwitchSampler<T>::initialize(RNG& rng)
 
     messages << "done." << std::endl;
 
-    first_scalar = rng.rand_int(2);
+    first_scalar = rng.rand_int(T::num_scalars);
 
 /*    // Generate direction*/
 /*    for(double& d: direction)*/
@@ -220,7 +220,12 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
     }
 
     // Choose scalar to ascend
-    size_t scalar = (iteration < change_time)?(first_scalar):(1 - first_scalar);
+    size_t scalar;
+    if(T::num_scalars == 1)
+        scalar = 0;
+    if(T::num_scalars == 2)
+        scalar = (iteration < change_time)?(first_scalar):(1 - first_scalar);
+
 /*    std::cout << iteration << ' ' << change_time << ' ' << scalar << std::endl;*/
 /*    while(true)*/
 /*    {*/

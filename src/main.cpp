@@ -11,7 +11,8 @@ using namespace TwinPeaks2018;
 int main()
 {
     // Which example?
-    using Example = Demo;
+    using Example = SpikeSlab;
+    static_assert(Example::num_scalars <= 2);
 
     // Load the configuration
     Config::global_config.load("config.yaml");
