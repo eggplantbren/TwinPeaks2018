@@ -25,13 +25,13 @@ def compute_truth(limits, n=21):
         for j in range(ln_Z.shape[1]):
 
             ln_y = -((x - 0.5)/0.1)**2 / T0[i, j] - \
-                        (x / 0.1) / T1[i, j]
+                        (np.sin(10.0*np.pi*x)**2) / T1[i, j]
             ln_Y = ln_y - logsumexp(ln_y + np.log(dx))
             Y = np.exp(ln_Y)
 
             # Normalisation constant and KL divergence
-            ln_Z[i, j] = 10*logsumexp(ln_y + np.log(dx))
-            H[i, j] = 10*np.sum(Y*ln_Y*dx)
+            ln_Z[i, j] = 100*logsumexp(ln_y + np.log(dx))
+            H[i, j] = 100*np.sum(Y*ln_Y*dx)
 
             print(".", end="", flush=True)
     print("")
