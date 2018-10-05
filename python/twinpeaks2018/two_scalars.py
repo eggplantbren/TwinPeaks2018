@@ -32,7 +32,7 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
     plt.figure()
     plt.plot(particles_info[names[0]][indices],
              particles_info[names[1]][indices],
-             ".", alpha=0.2, markersize=3)
+             "o", alpha=0.2, markersize=1)
     plt.xlabel("$S_{i}$".format(i=scalars[0]))
     plt.ylabel("$S_{j}$".format(j=scalars[1]))
     x = np.sort(particles_info[names[0]][indices])
@@ -94,13 +94,13 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
 
         plt.figure(figsize=(9, 7))
         plt.subplot(2, 1, 1)
-        plt.plot(ln_w, ln_s, ".", markersize=3, alpha=0.5)
+        plt.plot(ln_w, ln_s, "o", markersize=1, alpha=0.2)
         ln_s_sorted = np.sort(ln_s)
         plt.ylim([ln_s_sorted[int(0.05*len(ln_s_sorted))], ln_s_sorted[-1]])
         plt.ylabel("$\\ln(L)$")
 
         plt.subplot(2,1,2)
-        plt.plot(ln_w, W/W.max(), ".", markersize=3, alpha=0.5)
+        plt.plot(ln_w, W/W.max(), "o", markersize=1, alpha=0.2)
         plt.xlabel("$\\ln(w)$")
         plt.ylabel("$W/W_{\\rm max}$")
         plt.savefig("output/likelihood_curve.png", dpi=600)
