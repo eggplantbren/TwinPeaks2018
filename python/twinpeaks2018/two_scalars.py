@@ -257,7 +257,7 @@ def evaluate_temperature_grid(particles_info, limits, n=21, residuals=False):
 
 def postprocess_two_scalars(mcmc_steps_cutoff=0,
                             specific_temperatures=[1.0, 1.0],
-                            temperature_grid_limits=[0.1, 100.0, 0.1, 100.0],
+                            temperature_grid_limits=[1.0, 1000.0, 1.0, 1000.0],
                             demo=False):
     """
     This is what you'll usually want to call. Use specific_temperatures
@@ -273,11 +273,11 @@ def postprocess_two_scalars(mcmc_steps_cutoff=0,
     # temperatures.
     result = get_canonical(particles_info, specific_temperatures, True)
 
-    if demo:
-        print("For the demo example, the true value of ln(Z) is " + \
-              "-216.865, and H is 129.017 nats.\n")
+#    if demo:
+#        print("For the demo example, the true value of ln(Z) is " + \
+#              "-216.865, and H is 129.017 nats.\n")
 
     plot_particle_scalars(particles_info)
     evaluate_temperature_grid(particles_info, limits=temperature_grid_limits,
-                              residuals=demo)
+                              residuals=demo, n=101)
 

@@ -24,8 +24,8 @@ def compute_truth(limits, n=21):
     for i in range(ln_Z.shape[0]):
         for j in range(ln_Z.shape[1]):
 
-            ln_y = -((x - 0.5)/0.1)**2 / T0[i, j] - \
-                        (np.sin(10.0*np.pi*x)**2) / T1[i, j]
+            ln_y = -((x - 0.5)/0.01)**2 / T0[i, j] - \
+                        np.log(1.0 + ((x - 0.4)/0.01)**2) / T1[i, j]
             ln_Y = ln_y - logsumexp(ln_y + np.log(dx))
             Y = np.exp(ln_Y)
 

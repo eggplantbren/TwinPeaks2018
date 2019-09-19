@@ -40,7 +40,7 @@ double Demo::f() const
 {
     double result = 0.0;
     for(double x: xs)
-        result += -pow((x - 0.5)/0.1, 2);
+        result += -pow((x - 0.5)/0.01, 2);
     return result;
 }
 
@@ -48,7 +48,7 @@ double Demo::g() const
 {
     double result = 0.0;
     for(double x: xs)
-        result += -pow(sin(10.0*M_PI*x), 2);
+        result += -log(1.0 + pow((x - 0.4)/0.01, 2));
     return result;
 }
 
