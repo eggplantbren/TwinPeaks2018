@@ -44,8 +44,8 @@ def plot_particle_scalars(particles_info, scalars=[0, 1]):
         pass
 
     plt.savefig("output/particle_scalars.png", dpi=600)
-    print("Saved output/particle_scalars.png\n")
-    plt.show()
+    print("Saved output/particle_scalars.png")
+#    plt.show()
 
 
 
@@ -104,8 +104,8 @@ def get_canonical(particles_info, temperatures=[1.0, 1.0], plot_and_save=False):
         plt.xlabel("$\\ln(w)$")
         plt.ylabel("$W/W_{\\rm max}$")
         plt.savefig("output/likelihood_curve.png", dpi=600)
-        print("Saved output/likelihood_curve.png\n")
-        plt.show()
+        print("Saved output/likelihood_curve.png")
+#        plt.show()
 
     return result
 
@@ -165,8 +165,8 @@ def evaluate_temperature_grid(particles_info, limits, n=21, residuals=False):
     plt.title("$H$")
 
     plt.savefig("output/ln_Z_H.png", dpi=600)
-    print("Saved output/ln_Z_h.png\n")
-    plt.show()
+    print("Saved output/ln_Z_H.png")
+#    plt.show()
 
 #    plt.figure(2)
 #    plt.imshow(ENR, origin="lower", extent=np.log10(limits))
@@ -190,11 +190,12 @@ def evaluate_temperature_grid(particles_info, limits, n=21, residuals=False):
         plt.xlabel("$\\log_{10}(T_0)$")
         plt.ylabel("$\\log_{10}(T_1)$")
         plt.title("$\\ln(Z)$ Residuals")
-        print("Quantiles of ln(Z) residuals:")
-        print(quantiles(resid.flatten()))
-        print("")
-        print("Mean absolute error in ln(Z):",
-              np.mean(np.abs(resid)), "\n")
+        print("        quantiles_lnZ_residuals:")
+        qs = quantiles(resid.flatten())
+        for q in qs:
+            print("            - " + str(q))
+#        print(quantiles(resid.flatten()))
+        print("        mean_abs_error_lnZ:", np.mean(np.abs(resid)))
 
         plt.subplot(1, 2, 2)
         resid = H - truth["H"]
@@ -204,21 +205,19 @@ def evaluate_temperature_grid(particles_info, limits, n=21, residuals=False):
                    vmin=-biggest, vmax=biggest, cmap="coolwarm")
         plt.xlabel("$\\log_{10}(T_0)$")
         plt.title("$H$ Residuals")
-        print("Quantiles of H residuals:")
-        print(quantiles(resid.flatten()))
-        print("")
+        print("        quantiles_H_residuals:")
+        qs = quantiles(resid.flatten())
+        for q in qs:
+            print("            - " + str(q))
 
         plt.savefig("output/residuals1.png", dpi=600)
-        print("Saved output/residuals1.png\n")
-        plt.show()
+        print("Saved output/residuals1.png")
+#        plt.show()
 
         plt.figure(3) #, figsize=(9, 6))
 #        plt.subplot(1, 2, 1)
         resid = ln_Z - truth["ln_Z"]
         Neff = truth["H"]/resid**2
-        print("Quantiles of N_eff:")
-        print(quantiles(Neff.flatten()))
-        print("")
 
         Neff[Neff < 1.0] = np.nan
         plt.imshow(np.log10(Neff), origin="lower", extent=np.log10(limits))
@@ -234,9 +233,9 @@ def evaluate_temperature_grid(particles_info, limits, n=21, residuals=False):
 #        plt.xlabel("$\\log_{10}(T_0)$")
 #        plt.title("$\\log_{10} N_{\\rm eff}$ based on $H$ Residuals")
 
-#        plt.savefig("output/residuals2.png", dpi=600)
-#        print("Saved output/residuals2.png")
-        plt.show()
+        plt.savefig("output/residuals2.png", dpi=600)
+        print("Saved output/residuals2.png")
+#        plt.show()
 
     plt.figure(3, figsize=(9, 6))
     plt.subplot(1, 2, 1)
@@ -250,8 +249,8 @@ def evaluate_temperature_grid(particles_info, limits, n=21, residuals=False):
     plt.xlabel("$\\log_{10}(T_0)$")
     plt.title("$\\left<S_1\\right>$")
     plt.savefig("output/expectations_of_scalars.png", dpi=600)
-    print("Saved output/expectations_of_scalars.png\n")
-    plt.show()
+    print("Saved output/expectations_of_scalars.png")
+#    plt.show()
 
 
 
