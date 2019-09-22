@@ -25,7 +25,7 @@ SwitchSampler<T>::SwitchSampler(unsigned int _id, size_t _num_particles)
 :id(_id)
 ,num_particles(_num_particles)
 ,ln_compression_ratio(log(((double)num_particles - 1.0)/num_particles))
-/*,direction(T::num_scalars)*/
+,direction(T::num_scalars)
 ,threshold(T::num_scalars, -1E300)
 ,tiebreakers_threshold(T::num_scalars, 0.0)
 ,particles(num_particles)
@@ -55,23 +55,21 @@ void SwitchSampler<T>::initialize(RNG& rng)
 
     messages << "done." << std::endl;
 
-    first_scalar = rng.rand_int(T::num_scalars);
+    // Generate direction
+    for(double& d: direction)
+    {
+        double t;
+        do
+        {
+            t = rng.randt2();
+        }while(std::abs(t) >= 100.0);
+        d = exp(t);
+    }
+    double d_max = *max_element(direction.begin(), direction.end());
+    for(double& d: direction)
+        d /= d_max;    
 
-/*    // Generate direction*/
-/*    for(double& d: direction)*/
-/*    {*/
-/*        double t;*/
-/*        do*/
-/*        {*/
-/*            t = rng.randt2();*/
-/*        }while(std::abs(t) >= 100.0);*/
-/*        d = exp(t);*/
-/*    }*/
-/*    double d_max = *max_element(direction.begin(), direction.end());*/
-/*    for(double& d: direction)*/
-/*        d /= d_max;    */
-
-/*    messages << "    Direction = " << render(direction) << ".\n" << std::endl;*/
+    messages << "    Direction = " << render(direction) << ".\n" << std::endl;
     print_messages();
 }
 
@@ -221,18 +219,12 @@ void SwitchSampler<T>::do_iteration(RNG& rng, bool replace_dead_particle)
 
     // Choose scalar to ascend
     size_t scalar;
-    if(T::num_scalars == 1)
-        scalar = 0;
-    if(T::num_scalars == 2)
-        scalar = (iteration < change_time)?(first_scalar):(1 - first_scalar);
-
-/*    std::cout << iteration << ' ' << change_time << ' ' << scalar << std::endl;*/
-/*    while(true)*/
-/*    {*/
-/*        scalar = rng.rand_int(T::num_scalars);*/
-/*        if(rng.rand() <= direction[scalar])*/
-/*            break;*/
-/*    }*/
+    while(true)
+    {
+        scalar = rng.rand_int(T::num_scalars);
+        if(rng.rand() <= direction[scalar])
+            break;
+    }
 
     // Find worst particle
     size_t kill = find_worst(scalar);
@@ -280,10 +272,6 @@ void SwitchSampler<T>::run_to_depth(double depth, RNG& rng)
     files_mutex.unlock();
 
     unsigned int iterations = depth*num_particles;
-    double f = 5.0*rng.randn();
-    f = exp(f)/(exp(f) + 1.0);
-    change_time = rng.rand_int(f*iterations);
-
     for(unsigned int i=0; i<iterations; ++i)
         do_iteration(rng, i != (iterations-1));
 }

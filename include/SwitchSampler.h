@@ -28,7 +28,7 @@ class SwitchSampler
         // The number of particles and the implied compression factor
         size_t num_particles;
         double ln_compression_ratio;
-        size_t first_scalar, change_time;
+        std::vector<double> direction;
         std::vector<double> threshold;
         std::vector<double> tiebreakers_threshold;
 
